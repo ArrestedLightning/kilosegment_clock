@@ -1,0 +1,589 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 10 10
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+Wire Wire Line
+	2500 1300 2500 1100
+Wire Wire Line
+	2600 1300 2600 1100
+Wire Wire Line
+	2100 1300 2100 1100
+Wire Wire Line
+	2000 1300 2000 1100
+Wire Wire Line
+	2200 1300 2200 1100
+Wire Wire Line
+	2300 1300 2300 1100
+Wire Wire Line
+	2400 1300 2400 1100
+Wire Wire Line
+	1900 1300 1900 1100
+Wire Wire Line
+	1800 2300 1800 2550
+Text Label 2000 1100 3    50   ~ 0
+G
+Text Label 2100 1100 3    50   ~ 0
+F
+Text Label 1800 2550 1    50   ~ 0
+DIG1
+Text Label 2600 1100 3    50   ~ 0
+A
+Text Label 2500 1100 3    50   ~ 0
+B
+Text Label 2200 1100 3    50   ~ 0
+E
+Text Label 2300 1100 3    50   ~ 0
+D
+Text Label 2400 1100 3    50   ~ 0
+C
+Text Label 1900 1100 3    50   ~ 0
+DP
+Wire Wire Line
+	4600 2300 4600 2550
+Text Label 4600 2550 1    50   ~ 0
+DIG5
+Wire Wire Line
+	1800 4050 1800 4350
+Text Label 1800 4350 1    50   ~ 0
+DIG9
+Wire Wire Line
+	4650 4050 4650 4350
+Text Label 4650 4350 1    50   ~ 0
+DIG13
+Wire Wire Line
+	2150 2300 2150 2550
+Text Label 2150 2550 1    50   ~ 0
+DIG2
+Wire Wire Line
+	4950 2300 4950 2550
+Text Label 4950 2550 1    50   ~ 0
+DIG6
+Wire Wire Line
+	2150 4050 2150 4350
+Text Label 2150 4350 1    50   ~ 0
+DIG10
+Wire Wire Line
+	5000 4050 5000 4350
+Text Label 5000 4350 1    50   ~ 0
+DIG14
+Wire Wire Line
+	2300 2300 2300 2550
+Text Label 2300 2550 1    50   ~ 0
+DIG3
+Wire Wire Line
+	5100 2300 5100 2550
+Text Label 5100 2550 1    50   ~ 0
+DIG7
+Wire Wire Line
+	2300 4050 2300 4350
+Text Label 2300 4350 1    50   ~ 0
+DIG11
+Wire Wire Line
+	5150 4050 5150 4350
+Text Label 5150 4350 1    50   ~ 0
+DIG15
+Wire Wire Line
+	2600 2300 2600 2550
+Text Label 2600 2550 1    50   ~ 0
+DIG4
+Wire Wire Line
+	5400 2300 5400 2550
+Text Label 5400 2550 1    50   ~ 0
+DIG8
+Wire Wire Line
+	2600 4050 2600 4350
+Text Label 2600 4350 1    50   ~ 0
+DIG12
+Wire Wire Line
+	5450 4050 5450 4350
+Text Label 5450 4350 1    50   ~ 0
+DIG16
+Wire Wire Line
+	8300 2750 8150 2750
+Wire Wire Line
+	8300 2850 8150 2850
+Wire Wire Line
+	8300 3250 8150 3250
+Wire Wire Line
+	8300 3350 8150 3350
+Wire Wire Line
+	9400 2750 9650 2750
+Text Label 8150 3350 0    50   ~ 0
+G
+Text Label 8150 3250 0    50   ~ 0
+F
+Text Label 9650 2750 2    50   ~ 0
+DIG4
+Text Label 8150 2750 0    50   ~ 0
+A
+Text Label 8150 2850 0    50   ~ 0
+B
+Wire Wire Line
+	8300 3150 8150 3150
+Wire Wire Line
+	8300 3050 8150 3050
+Wire Wire Line
+	8300 2950 8150 2950
+Wire Wire Line
+	9400 3350 9550 3350
+Text Label 8150 3150 0    50   ~ 0
+E
+Text Label 8150 3050 0    50   ~ 0
+D
+Text Label 8150 2950 0    50   ~ 0
+C
+Text Label 9550 3350 2    50   ~ 0
+DP
+Wire Wire Line
+	9400 3050 9650 3050
+Text Label 9650 3050 2    50   ~ 0
+DIG1
+Wire Wire Line
+	9400 2950 9650 2950
+Wire Wire Line
+	9400 2850 9650 2850
+Text Label 9650 2950 2    50   ~ 0
+DIG2
+Text Label 9650 2850 2    50   ~ 0
+DIG3
+$Comp
+L power:GND #PWR0101
+U 1 1 65CAAE34
+P 9850 3150
+AR Path="/65B3594A/65CAAE34" Ref="#PWR0101"  Part="1" 
+AR Path="/65C5A503/65CAAE34" Ref="#PWR0107"  Part="1" 
+AR Path="/65E77961/65CAAE34" Ref="#PWR0113"  Part="1" 
+AR Path="/65E77CCE/65CAAE34" Ref="#PWR0119"  Part="1" 
+AR Path="/65E79B9E/65CAAE34" Ref="#PWR0125"  Part="1" 
+AR Path="/65E79BA3/65CAAE34" Ref="#PWR0131"  Part="1" 
+AR Path="/65E79BB2/65CAAE34" Ref="#PWR0137"  Part="1" 
+AR Path="/65E79BBC/65CAAE34" Ref="#PWR0143"  Part="1" 
+AR Path="/65E7B3E1/65CAAE34" Ref="#PWR0149"  Part="1" 
+F 0 "#PWR0149" H 9850 2900 50  0001 C CNN
+F 1 "GND" V 9855 3022 50  0000 R CNN
+F 2 "" H 9850 3150 50  0001 C CNN
+F 3 "" H 9850 3150 50  0001 C CNN
+	1    9850 3150
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	9850 3150 9400 3150
+$Comp
+L power:GND #PWR0102
+U 1 1 65CB87EC
+P 7850 2250
+AR Path="/65B3594A/65CB87EC" Ref="#PWR0102"  Part="1" 
+AR Path="/65C5A503/65CB87EC" Ref="#PWR0108"  Part="1" 
+AR Path="/65E77961/65CB87EC" Ref="#PWR0114"  Part="1" 
+AR Path="/65E77CCE/65CB87EC" Ref="#PWR0120"  Part="1" 
+AR Path="/65E79B9E/65CB87EC" Ref="#PWR0126"  Part="1" 
+AR Path="/65E79BA3/65CB87EC" Ref="#PWR0132"  Part="1" 
+AR Path="/65E79BB2/65CB87EC" Ref="#PWR0138"  Part="1" 
+AR Path="/65E79BBC/65CB87EC" Ref="#PWR0144"  Part="1" 
+AR Path="/65E7B3E1/65CB87EC" Ref="#PWR0150"  Part="1" 
+F 0 "#PWR0150" H 7850 2000 50  0001 C CNN
+F 1 "GND" V 7855 2122 50  0000 R CNN
+F 2 "" H 7850 2250 50  0001 C CNN
+F 3 "" H 7850 2250 50  0001 C CNN
+	1    7850 2250
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	7850 2250 8300 2250
+$Comp
+L power:+5V #PWR0103
+U 1 1 65CC5EBF
+P 10100 3250
+AR Path="/65B3594A/65CC5EBF" Ref="#PWR0103"  Part="1" 
+AR Path="/65C5A503/65CC5EBF" Ref="#PWR0109"  Part="1" 
+AR Path="/65E77961/65CC5EBF" Ref="#PWR0115"  Part="1" 
+AR Path="/65E77CCE/65CC5EBF" Ref="#PWR0121"  Part="1" 
+AR Path="/65E79B9E/65CC5EBF" Ref="#PWR0127"  Part="1" 
+AR Path="/65E79BA3/65CC5EBF" Ref="#PWR0133"  Part="1" 
+AR Path="/65E79BB2/65CC5EBF" Ref="#PWR0139"  Part="1" 
+AR Path="/65E79BBC/65CC5EBF" Ref="#PWR0145"  Part="1" 
+AR Path="/65E7B3E1/65CC5EBF" Ref="#PWR0151"  Part="1" 
+F 0 "#PWR0151" H 10100 3100 50  0001 C CNN
+F 1 "+5V" V 10115 3378 50  0000 L CNN
+F 2 "" H 10100 3250 50  0001 C CNN
+F 3 "" H 10100 3250 50  0001 C CNN
+	1    10100 3250
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	10100 3250 9400 3250
+Wire Wire Line
+	9400 2350 9650 2350
+Text Label 9650 2350 2    50   ~ 0
+DIG8
+Wire Wire Line
+	9400 2650 9650 2650
+Text Label 9650 2650 2    50   ~ 0
+DIG5
+Wire Wire Line
+	9400 2550 9650 2550
+Wire Wire Line
+	9400 2450 9650 2450
+Text Label 9650 2550 2    50   ~ 0
+DIG6
+Text Label 9650 2450 2    50   ~ 0
+DIG7
+$Comp
+L power:GND #PWR0104
+U 1 1 65CE1952
+P 9850 2250
+AR Path="/65B3594A/65CE1952" Ref="#PWR0104"  Part="1" 
+AR Path="/65C5A503/65CE1952" Ref="#PWR0110"  Part="1" 
+AR Path="/65E77961/65CE1952" Ref="#PWR0116"  Part="1" 
+AR Path="/65E77CCE/65CE1952" Ref="#PWR0122"  Part="1" 
+AR Path="/65E79B9E/65CE1952" Ref="#PWR0128"  Part="1" 
+AR Path="/65E79BA3/65CE1952" Ref="#PWR0134"  Part="1" 
+AR Path="/65E79BB2/65CE1952" Ref="#PWR0140"  Part="1" 
+AR Path="/65E79BBC/65CE1952" Ref="#PWR0146"  Part="1" 
+AR Path="/65E7B3E1/65CE1952" Ref="#PWR0152"  Part="1" 
+F 0 "#PWR0152" H 9850 2000 50  0001 C CNN
+F 1 "GND" V 9855 2122 50  0000 R CNN
+F 2 "" H 9850 2250 50  0001 C CNN
+F 3 "" H 9850 2250 50  0001 C CNN
+	1    9850 2250
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	9850 2250 9400 2250
+Wire Wire Line
+	9400 1850 9650 1850
+Text Label 9650 1850 2    50   ~ 0
+DIG12
+Wire Wire Line
+	9400 2150 9650 2150
+Text Label 9650 2150 2    50   ~ 0
+DIG9
+Wire Wire Line
+	9400 2050 9650 2050
+Wire Wire Line
+	9400 1950 9650 1950
+Text Label 9650 2050 2    50   ~ 0
+DIG10
+Text Label 9650 1950 2    50   ~ 0
+DIG11
+Wire Wire Line
+	8300 2150 8050 2150
+Text Label 8050 2150 0    50   ~ 0
+DIG16
+Wire Wire Line
+	8300 1850 8050 1850
+Text Label 8050 1850 0    50   ~ 0
+DIG13
+Wire Wire Line
+	8300 1950 8050 1950
+Wire Wire Line
+	8300 2050 8050 2050
+Text Label 8050 1950 0    50   ~ 0
+DIG14
+Text Label 8050 2050 0    50   ~ 0
+DIG15
+Wire Wire Line
+	8150 2350 8300 2350
+Wire Wire Line
+	8150 2450 8300 2450
+Wire Wire Line
+	8150 2550 8300 2550
+Text HLabel 8150 2350 0    50   Input ~ 0
+DIN
+Text HLabel 8150 2450 0    50   Input ~ 0
+CLK
+Text HLabel 8150 2550 0    50   Input ~ 0
+STB
+$Comp
+L power:GND #PWR0105
+U 1 1 65E45212
+P 10800 3200
+AR Path="/65B3594A/65E45212" Ref="#PWR0105"  Part="1" 
+AR Path="/65C5A503/65E45212" Ref="#PWR0111"  Part="1" 
+AR Path="/65E77961/65E45212" Ref="#PWR0117"  Part="1" 
+AR Path="/65E77CCE/65E45212" Ref="#PWR0123"  Part="1" 
+AR Path="/65E79B9E/65E45212" Ref="#PWR0129"  Part="1" 
+AR Path="/65E79BA3/65E45212" Ref="#PWR0135"  Part="1" 
+AR Path="/65E79BB2/65E45212" Ref="#PWR0141"  Part="1" 
+AR Path="/65E79BBC/65E45212" Ref="#PWR0147"  Part="1" 
+AR Path="/65E7B3E1/65E45212" Ref="#PWR0153"  Part="1" 
+F 0 "#PWR0153" H 10800 2950 50  0001 C CNN
+F 1 "GND" H 10805 3027 50  0000 C CNN
+F 2 "" H 10800 3200 50  0001 C CNN
+F 3 "" H 10800 3200 50  0001 C CNN
+	1    10800 3200
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR0106
+U 1 1 65E45AF3
+P 10800 2500
+AR Path="/65B3594A/65E45AF3" Ref="#PWR0106"  Part="1" 
+AR Path="/65C5A503/65E45AF3" Ref="#PWR0112"  Part="1" 
+AR Path="/65E77961/65E45AF3" Ref="#PWR0118"  Part="1" 
+AR Path="/65E77CCE/65E45AF3" Ref="#PWR0124"  Part="1" 
+AR Path="/65E79B9E/65E45AF3" Ref="#PWR0130"  Part="1" 
+AR Path="/65E79BA3/65E45AF3" Ref="#PWR0136"  Part="1" 
+AR Path="/65E79BB2/65E45AF3" Ref="#PWR0142"  Part="1" 
+AR Path="/65E79BBC/65E45AF3" Ref="#PWR0148"  Part="1" 
+AR Path="/65E7B3E1/65E45AF3" Ref="#PWR0154"  Part="1" 
+F 0 "#PWR0154" H 10800 2350 50  0001 C CNN
+F 1 "+5V" H 10815 2673 50  0000 C CNN
+F 2 "" H 10800 2500 50  0001 C CNN
+F 3 "" H 10800 2500 50  0001 C CNN
+	1    10800 2500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10800 2500 10800 2700
+Wire Wire Line
+	10800 3000 10800 3200
+Wire Wire Line
+	5300 1300 5300 1100
+Wire Wire Line
+	5400 1300 5400 1100
+Wire Wire Line
+	4900 1300 4900 1100
+Wire Wire Line
+	4800 1300 4800 1100
+Wire Wire Line
+	5000 1300 5000 1100
+Wire Wire Line
+	5100 1300 5100 1100
+Wire Wire Line
+	5200 1300 5200 1100
+Wire Wire Line
+	4700 1300 4700 1100
+Text Label 4800 1100 3    50   ~ 0
+G
+Text Label 4900 1100 3    50   ~ 0
+F
+Text Label 5400 1100 3    50   ~ 0
+A
+Text Label 5300 1100 3    50   ~ 0
+B
+Text Label 5000 1100 3    50   ~ 0
+E
+Text Label 5100 1100 3    50   ~ 0
+D
+Text Label 5200 1100 3    50   ~ 0
+C
+Text Label 4700 1100 3    50   ~ 0
+DP
+Wire Wire Line
+	2500 3050 2500 2850
+Wire Wire Line
+	2600 3050 2600 2850
+Wire Wire Line
+	2100 3050 2100 2850
+Wire Wire Line
+	2000 3050 2000 2850
+Wire Wire Line
+	2200 3050 2200 2850
+Wire Wire Line
+	2300 3050 2300 2850
+Wire Wire Line
+	2400 3050 2400 2850
+Wire Wire Line
+	1900 3050 1900 2850
+Text Label 2000 2850 3    50   ~ 0
+G
+Text Label 2100 2850 3    50   ~ 0
+F
+Text Label 2600 2850 3    50   ~ 0
+A
+Text Label 2500 2850 3    50   ~ 0
+B
+Text Label 2200 2850 3    50   ~ 0
+E
+Text Label 2300 2850 3    50   ~ 0
+D
+Text Label 2400 2850 3    50   ~ 0
+C
+Text Label 1900 2850 3    50   ~ 0
+DP
+Wire Wire Line
+	5350 3050 5350 2850
+Wire Wire Line
+	5450 3050 5450 2850
+Wire Wire Line
+	4950 3050 4950 2850
+Wire Wire Line
+	4850 3050 4850 2850
+Wire Wire Line
+	5050 3050 5050 2850
+Wire Wire Line
+	5150 3050 5150 2850
+Wire Wire Line
+	5250 3050 5250 2850
+Wire Wire Line
+	4750 3050 4750 2850
+Text Label 4850 2850 3    50   ~ 0
+G
+Text Label 4950 2850 3    50   ~ 0
+F
+Text Label 5450 2850 3    50   ~ 0
+A
+Text Label 5350 2850 3    50   ~ 0
+B
+Text Label 5050 2850 3    50   ~ 0
+E
+Text Label 5150 2850 3    50   ~ 0
+D
+Text Label 5250 2850 3    50   ~ 0
+C
+Text Label 4750 2850 3    50   ~ 0
+DP
+$Comp
+L LEDs:FJ5461AHred D6
+U 1 1 6299436C
+P 5150 3650
+AR Path="/65B3594A/6299436C" Ref="D6"  Part="1" 
+AR Path="/65C5A503/6299436C" Ref="D10"  Part="1" 
+AR Path="/65E77961/6299436C" Ref="D14"  Part="1" 
+AR Path="/65E77CCE/6299436C" Ref="D18"  Part="1" 
+AR Path="/65E79B9E/6299436C" Ref="D22"  Part="1" 
+AR Path="/65E79BA3/6299436C" Ref="D26"  Part="1" 
+AR Path="/65E79BB2/6299436C" Ref="D30"  Part="1" 
+AR Path="/65E79BBC/6299436C" Ref="D34"  Part="1" 
+AR Path="/65E7B3E1/6299436C" Ref="D38"  Part="1" 
+F 0 "D38" H 6078 3803 60  0000 L CNN
+F 1 "FJ5461AHred" H 6078 3697 60  0000 L CNN
+F 2 "LED-SEG-TH_FJ5461AH" H 5150 2950 60  0001 C CNN
+F 3 "https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html" H 5150 2750 60  0001 C CNN
+F 4 "ReliaPro" H 5150 3650 0   0001 C CNN "Manufacturer"
+F 5 "C54396" H 5150 3650 0   0001 C CNN "LCSC Part"
+F 6 "Extended Part" H 5150 3650 0   0001 C CNN "JLC Part"
+F 7 "160-1879-ND" H 5150 3650 50  0001 C CNN "Digikey"
+	1    5150 3650
+	1    0    0    -1  
+$EndComp
+$Comp
+L LEDs:FJ5461AHred D5
+U 1 1 62992CEB
+P 2300 3650
+AR Path="/65B3594A/62992CEB" Ref="D5"  Part="1" 
+AR Path="/65C5A503/62992CEB" Ref="D9"  Part="1" 
+AR Path="/65E77961/62992CEB" Ref="D13"  Part="1" 
+AR Path="/65E77CCE/62992CEB" Ref="D17"  Part="1" 
+AR Path="/65E79B9E/62992CEB" Ref="D21"  Part="1" 
+AR Path="/65E79BA3/62992CEB" Ref="D25"  Part="1" 
+AR Path="/65E79BB2/62992CEB" Ref="D29"  Part="1" 
+AR Path="/65E79BBC/62992CEB" Ref="D33"  Part="1" 
+AR Path="/65E7B3E1/62992CEB" Ref="D37"  Part="1" 
+F 0 "D37" H 3228 3803 60  0000 L CNN
+F 1 "FJ5461AHred" H 3228 3697 60  0000 L CNN
+F 2 "LED-SEG-TH_FJ5461AH" H 2300 2950 60  0001 C CNN
+F 3 "https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html" H 2300 2750 60  0001 C CNN
+F 4 "ReliaPro" H 2300 3650 0   0001 C CNN "Manufacturer"
+F 5 "C54396" H 2300 3650 0   0001 C CNN "LCSC Part"
+F 6 "Extended Part" H 2300 3650 0   0001 C CNN "JLC Part"
+F 7 "160-1879-ND" H 2300 3650 50  0001 C CNN "Digikey"
+	1    2300 3650
+	1    0    0    -1  
+$EndComp
+$Comp
+L LEDs:FJ5461AHred D4
+U 1 1 629900BA
+P 5100 1900
+AR Path="/65B3594A/629900BA" Ref="D4"  Part="1" 
+AR Path="/65C5A503/629900BA" Ref="D8"  Part="1" 
+AR Path="/65E77961/629900BA" Ref="D12"  Part="1" 
+AR Path="/65E77CCE/629900BA" Ref="D16"  Part="1" 
+AR Path="/65E79B9E/629900BA" Ref="D20"  Part="1" 
+AR Path="/65E79BA3/629900BA" Ref="D24"  Part="1" 
+AR Path="/65E79BB2/629900BA" Ref="D28"  Part="1" 
+AR Path="/65E79BBC/629900BA" Ref="D32"  Part="1" 
+AR Path="/65E7B3E1/629900BA" Ref="D36"  Part="1" 
+F 0 "D36" H 6028 2053 60  0000 L CNN
+F 1 "FJ5461AHred" H 6028 1947 60  0000 L CNN
+F 2 "LED-SEG-TH_FJ5461AH" H 5100 1200 60  0001 C CNN
+F 3 "https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html" H 5100 1000 60  0001 C CNN
+F 4 "ReliaPro" H 5100 1900 0   0001 C CNN "Manufacturer"
+F 5 "C54396" H 5100 1900 0   0001 C CNN "LCSC Part"
+F 6 "Extended Part" H 5100 1900 0   0001 C CNN "JLC Part"
+F 7 "160-1879-ND" H 5100 1900 50  0001 C CNN "Digikey"
+	1    5100 1900
+	1    0    0    -1  
+$EndComp
+$Comp
+L LEDs:FJ5461AHred D3
+U 1 1 6298EC3B
+P 2300 1900
+AR Path="/65B3594A/6298EC3B" Ref="D3"  Part="1" 
+AR Path="/65C5A503/6298EC3B" Ref="D7"  Part="1" 
+AR Path="/65E77961/6298EC3B" Ref="D11"  Part="1" 
+AR Path="/65E77CCE/6298EC3B" Ref="D15"  Part="1" 
+AR Path="/65E79B9E/6298EC3B" Ref="D19"  Part="1" 
+AR Path="/65E79BA3/6298EC3B" Ref="D23"  Part="1" 
+AR Path="/65E79BB2/6298EC3B" Ref="D27"  Part="1" 
+AR Path="/65E79BBC/6298EC3B" Ref="D31"  Part="1" 
+AR Path="/65E7B3E1/6298EC3B" Ref="D35"  Part="1" 
+F 0 "D35" H 3228 2053 60  0000 L CNN
+F 1 "FJ5461AHred" H 3228 1947 60  0000 L CNN
+F 2 "LED-SEG-TH_FJ5461AH" H 2300 1200 60  0001 C CNN
+F 3 "https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html" H 2300 1000 60  0001 C CNN
+F 4 "ReliaPro" H 2300 1900 0   0001 C CNN "Manufacturer"
+F 5 "C54396" H 2300 1900 0   0001 C CNN "LCSC Part"
+F 6 "Extended Part" H 2300 1900 0   0001 C CNN "JLC Part"
+F 7 "160-1879-ND" H 2300 1900 50  0001 C CNN "Digikey"
+	1    2300 1900
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C1
+U 1 1 65E44DA3
+P 10800 2850
+AR Path="/65B3594A/65E44DA3" Ref="C1"  Part="1" 
+AR Path="/65C5A503/65E44DA3" Ref="C2"  Part="1" 
+AR Path="/65E77961/65E44DA3" Ref="C3"  Part="1" 
+AR Path="/65E77CCE/65E44DA3" Ref="C4"  Part="1" 
+AR Path="/65E79B9E/65E44DA3" Ref="C5"  Part="1" 
+AR Path="/65E79BA3/65E44DA3" Ref="C6"  Part="1" 
+AR Path="/65E79BB2/65E44DA3" Ref="C7"  Part="1" 
+AR Path="/65E79BBC/65E44DA3" Ref="C8"  Part="1" 
+AR Path="/65E7B3E1/65E44DA3" Ref="C9"  Part="1" 
+F 0 "C9" H 10915 2896 50  0000 L CNN
+F 1 "1uF" H 10915 2805 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder" H 10838 2700 50  0001 C CNN
+F 3 "~" H 10800 2850 50  0001 C CNN
+F 4 "1276-1026-1-ND" H 10800 2850 50  0001 C CNN "Digikey"
+F 5 "C28323" H 10800 2850 50  0001 C CNN "LCSC Part"
+	1    10800 2850
+	1    0    0    -1  
+$EndComp
+$Comp
+L pwr_ic:GN6932 U0
+U 1 1 65B37074
+P 8850 2600
+AR Path="/65B3594A/65B37074" Ref="U0"  Part="1" 
+AR Path="/65C5A503/65B37074" Ref="U1"  Part="1" 
+AR Path="/65E77961/65B37074" Ref="U2"  Part="1" 
+AR Path="/65E77CCE/65B37074" Ref="U3"  Part="1" 
+AR Path="/65E79B9E/65B37074" Ref="U4"  Part="1" 
+AR Path="/65E79BA3/65B37074" Ref="U5"  Part="1" 
+AR Path="/65E79BB2/65B37074" Ref="U6"  Part="1" 
+AR Path="/65E79BBC/65B37074" Ref="U7"  Part="1" 
+AR Path="/65E7B3E1/65B37074" Ref="U8"  Part="1" 
+F 0 "U8" H 8850 3637 60  0000 C CNN
+F 1 "GN6932" H 8850 3531 60  0000 C CNN
+F 2 "AL_Footprints:SOP-32_L21.0-W7.5-P1.27-LS10.4-BL" H 8850 1550 60  0001 C CNN
+F 3 "" H 8850 2600 50  0001 C CNN
+F 4 "GN" H 8850 2600 0   0001 C CNN "Manufacturer"
+F 5 "C265476" H 8850 2600 0   0001 C CNN "LCSC Part"
+F 6 "Extended Part" H 8850 2600 0   0001 C CNN "JLC Part"
+	1    8850 2600
+	1    0    0    -1  
+$EndComp
+$EndSCHEMATC

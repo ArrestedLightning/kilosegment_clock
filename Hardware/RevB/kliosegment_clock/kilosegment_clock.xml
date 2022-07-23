@@ -1,0 +1,3588 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="D">
+  <design>
+    <source>/home/jjlange/Nextcloud/Projects/kilosegment_clock/Hardware/RevB/kilosegment_clock/kilosegment_clock.sch</source>
+    <date>Thu 02 Jun 2022 10:56:37 PM CDT</date>
+    <tool>Eeschema 5.1.12-84ad8e8a86~92~ubuntu20.04.1</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>kiloseggment_clock.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+    <sheet number="2" name="/Sheet65B35949/" tstamps="/65B3594A/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>sevensegblock.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+    <sheet number="3" name="/sheet65C5A503/" tstamps="/65C5A503/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>sevensegblock.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+    <sheet number="4" name="/sheet65E77961/" tstamps="/65E77961/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>sevensegblock.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+    <sheet number="5" name="/sheet65E77CCE/" tstamps="/65E77CCE/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>sevensegblock.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+    <sheet number="6" name="/sheet65E79B9E/" tstamps="/65E79B9E/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>sevensegblock.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+    <sheet number="7" name="/sheet65E79BA3/" tstamps="/65E79BA3/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>sevensegblock.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+    <sheet number="8" name="/sheet65E79BB2/" tstamps="/65E79BB2/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>sevensegblock.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+    <sheet number="9" name="/sheet65E79BBC/" tstamps="/65E79BBC/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>sevensegblock.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+    <sheet number="10" name="/sheet65E7B3E1/" tstamps="/65E7B3E1/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>sevensegblock.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="U10">
+      <value>STM32F103C8T6</value>
+      <footprint>Package_QFP:LQFP-48_7x7mm_P0.5mm</footprint>
+      <fields>
+        <field name="Digikey">497-11517-ND</field>
+        <field name="LCSC Part">C77994</field>
+      </fields>
+      <libsource lib="cpus" part="STM32F103C8T6" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65E9B610</tstamp>
+    </comp>
+    <comp ref="J3">
+      <value>USB_C_Receptacle_USB2.0</value>
+      <footprint>Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12</footprint>
+      <datasheet>https://www.usb.org/sites/default/files/documents/usb_type-c.zip</datasheet>
+      <fields>
+        <field name="Digikey">664-12402012E212ACT-ND</field>
+        <field name="LCSC Part">C165948</field>
+      </fields>
+      <libsource lib="Connector" part="USB_C_Receptacle_USB2.0" description="USB 2.0-only Type-C Receptacle connector"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65E9CA0B</tstamp>
+    </comp>
+    <comp ref="R4">
+      <value>5.1K</value>
+      <footprint>Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">RMCF0805FT5K10CT-ND</field>
+        <field name="LCSC Part">C27834</field>
+      </fields>
+      <libsource lib="Device" part="R_US" description="Resistor, US symbol"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65EA060D</tstamp>
+    </comp>
+    <comp ref="R5">
+      <value>5.1K</value>
+      <footprint>Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">RMCF0805FT5K10CT-ND</field>
+        <field name="LCSC Part">C27834</field>
+      </fields>
+      <libsource lib="Device" part="R_US" description="Resistor, US symbol"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65EA0CE3</tstamp>
+    </comp>
+    <comp ref="BT1">
+      <value>Battery_Cell</value>
+      <footprint>AL_Footprints:BatteryHolder_CR2032-BS-6-1_1x2032</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">BH-49A-5-T-BK</field>
+        <field name="LCSC Part">C964764</field>
+      </fields>
+      <libsource lib="Device" part="Battery_Cell" description="Single-cell battery"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65EAACA2</tstamp>
+    </comp>
+    <comp ref="Y1">
+      <value>32.768KHz</value>
+      <footprint>Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">9H03200031-ND</field>
+        <field name="LCSC Part">C32346</field>
+      </fields>
+      <libsource lib="Device" part="Crystal_Small" description="Two pin crystal, small symbol"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65EAB974</tstamp>
+    </comp>
+    <comp ref="Y2">
+      <value>8MHz</value>
+      <footprint>Crystal:Crystal_SMD_5032-2Pin_5.0x3.2mm_HandSoldering</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">XC2103CT-ND</field>
+        <field name="LCSC Part">C115962</field>
+      </fields>
+      <libsource lib="Device" part="Crystal_Small" description="Two pin crystal, small symbol"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65EAC299</tstamp>
+    </comp>
+    <comp ref="SW1">
+      <value>SW_Push</value>
+      <footprint>Button_Switch_SMD:SW_SPST_TL3342</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">CKN12222-1-ND</field>
+        <field name="LCSC Part">C318886</field>
+      </fields>
+      <libsource lib="Switch" part="SW_Push" description="Push button switch, generic, two pins"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65EAD2D3</tstamp>
+    </comp>
+    <comp ref="SW2">
+      <value>SW_Push</value>
+      <footprint>Button_Switch_SMD:SW_SPST_TL3342</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">CKN12222-1-ND</field>
+        <field name="LCSC Part">C318886</field>
+      </fields>
+      <libsource lib="Switch" part="SW_Push" description="Push button switch, generic, two pins"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65EAD96B</tstamp>
+    </comp>
+    <comp ref="SW3">
+      <value>SW_Push</value>
+      <footprint>Button_Switch_SMD:SW_SPST_TL3342</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">CKN12222-1-ND</field>
+        <field name="LCSC Part">C318886</field>
+      </fields>
+      <libsource lib="Switch" part="SW_Push" description="Push button switch, generic, two pins"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65EADE23</tstamp>
+    </comp>
+    <comp ref="U9">
+      <value>HT7533-1-SOT89</value>
+      <footprint>Package_TO_SOT_SMD:SOT-89-3</footprint>
+      <datasheet>https://www.holtek.com/documents/10179/116711/HT75xx-1v250.pdf</datasheet>
+      <fields>
+        <field name="Digikey">2129-RH5RL33AA-T1-FECT-ND</field>
+        <field name="LCSC Part">C14289</field>
+      </fields>
+      <libsource lib="Regulator_Linear" part="HT75xx-1-SOT89" description="100mA Low Dropout Voltage Regulator, Fixed Output, SOT89"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65EAE6C7</tstamp>
+    </comp>
+    <comp ref="C14">
+      <value>1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1026-1-ND</field>
+        <field name="LCSC Part">C28323</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65EB330B</tstamp>
+    </comp>
+    <comp ref="C15">
+      <value>1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1026-1-ND</field>
+        <field name="LCSC Part">C28323</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65EB3AA6</tstamp>
+    </comp>
+    <comp ref="C16">
+      <value>12pF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">CML0805C0G120JT50V</field>
+        <field name="LCSC Part">C1792</field>
+      </fields>
+      <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65EB4284</tstamp>
+    </comp>
+    <comp ref="C10">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1003-1-ND</field>
+        <field name="LCSC Part">C49678</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65EB487F</tstamp>
+    </comp>
+    <comp ref="C11">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1003-1-ND</field>
+        <field name="LCSC Part">C49678</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65EB4C4E</tstamp>
+    </comp>
+    <comp ref="C12">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1003-1-ND</field>
+        <field name="LCSC Part">C49678</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65EB4E3D</tstamp>
+    </comp>
+    <comp ref="C13">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1003-1-ND</field>
+        <field name="LCSC Part">C49678</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65EB4F25</tstamp>
+    </comp>
+    <comp ref="D1">
+      <value>LED</value>
+      <footprint>LED_SMD:LED_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">754-1132-1-ND</field>
+        <field name="LCSC Part">C84256</field>
+      </fields>
+      <libsource lib="Device" part="LED" description="Light emitting diode"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65EB5976</tstamp>
+    </comp>
+    <comp ref="H3">
+      <value>MountingHole</value>
+      <footprint>AL_Footprints:pcb_nut_m3</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Mechanical" part="MountingHole" description="Mounting Hole without connection"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65ED6D4D</tstamp>
+    </comp>
+    <comp ref="H1">
+      <value>MountingHole</value>
+      <footprint>AL_Footprints:pcb_nut_m3</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Mechanical" part="MountingHole" description="Mounting Hole without connection"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65ED715D</tstamp>
+    </comp>
+    <comp ref="H2">
+      <value>MountingHole</value>
+      <footprint>AL_Footprints:pcb_nut_m3</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Mechanical" part="MountingHole" description="Mounting Hole without connection"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65ED7418</tstamp>
+    </comp>
+    <comp ref="H4">
+      <value>MountingHole</value>
+      <footprint>AL_Footprints:pcb_nut_m3</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Mechanical" part="MountingHole" description="Mounting Hole without connection"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65ED75E3</tstamp>
+    </comp>
+    <comp ref="H5">
+      <value>MountingHole</value>
+      <footprint>AL_Footprints:pcb_nut_m3</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Mechanical" part="MountingHole" description="Mounting Hole without connection"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65ED8DA1</tstamp>
+    </comp>
+    <comp ref="SW4">
+      <value>SW_Push</value>
+      <footprint>Button_Switch_SMD:SW_SPST_TL3342</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">CKN12222-1-ND</field>
+        <field name="LCSC Part">C318886</field>
+      </fields>
+      <libsource lib="Switch" part="SW_Push" description="Push button switch, generic, two pins"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65ED993D</tstamp>
+    </comp>
+    <comp ref="C17">
+      <value>12pF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">CML0805C0G120JT50V</field>
+        <field name="LCSC Part">C1792</field>
+      </fields>
+      <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65EFB750</tstamp>
+    </comp>
+    <comp ref="C18">
+      <value>20pF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">738-CML0805C0G200JT50VCT-ND</field>
+        <field name="LCSC Part">C1798</field>
+      </fields>
+      <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65EFBDE6</tstamp>
+    </comp>
+    <comp ref="C19">
+      <value>20pF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">738-CML0805C0G200JT50VCT-ND</field>
+        <field name="LCSC Part">C1798</field>
+      </fields>
+      <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65EFC378</tstamp>
+    </comp>
+    <comp ref="R3">
+      <value>0</value>
+      <footprint>Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">RMCF0805ZT0R00CT-ND</field>
+        <field name="LCSC Part">C17477</field>
+      </fields>
+      <libsource lib="Device" part="R_US" description="Resistor, US symbol"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65F91374</tstamp>
+    </comp>
+    <comp ref="IC1">
+      <value>LM75BDP</value>
+      <footprint>Package_SO:MSOP-8_3x3mm_P0.65mm</footprint>
+      <fields>
+        <field name="Digikey">568-4768-1-ND</field>
+        <field name="LCSC Part">C2837470</field>
+      </fields>
+      <libsource lib="sensors" part="LM75BDP" description="LM75B temp sensor -40  +125 C +/-1C Serial-I2C, SMBus, 8-Pin MSOP"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65FD6C8D</tstamp>
+    </comp>
+    <comp ref="J2">
+      <value>Conn_01x05</value>
+      <footprint>Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Connector_Generic" part="Conn_01x05" description="Generic connector, single row, 01x05, script generated (kicad-library-utils/schlib/autogen/connector/)"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>66084087</tstamp>
+    </comp>
+    <comp ref="R1">
+      <value>2.7K</value>
+      <footprint>Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">RMCF0805FT2K70CT-ND</field>
+        <field name="LCSC Part">C17530</field>
+      </fields>
+      <libsource lib="Device" part="R_US" description="Resistor, US symbol"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>660A40C0</tstamp>
+    </comp>
+    <comp ref="R2">
+      <value>2.7K</value>
+      <footprint>Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">RMCF0805FT2K70CT-ND</field>
+        <field name="LCSC Part">C17530</field>
+      </fields>
+      <libsource lib="Device" part="R_US" description="Resistor, US symbol"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>660A4989</tstamp>
+    </comp>
+    <comp ref="J4">
+      <value>Conn_01x04</value>
+      <footprint>Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Connector_Generic" part="Conn_01x04" description="Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>660AD3A3</tstamp>
+    </comp>
+    <comp ref="C20">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1003-1-ND</field>
+        <field name="LCSC Part">C49678</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>661B666C</tstamp>
+    </comp>
+    <comp ref="U13">
+      <value>LTR-303ALS-01</value>
+      <footprint>Package_TO_SOT_SMD:SOT-363_SC-70-6_Handsoldering</footprint>
+      <datasheet>https://lcsc.com/product-detail/Others_Lite-On-LTR-303ALS-01_C364577.html</datasheet>
+      <fields>
+        <field name="Digikey">160-2161-1-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C364577</field>
+        <field name="Manufacturer">Lite-On</field>
+      </fields>
+      <libsource lib="sensors" part="LTR-303ALS-01" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>66281BDB</tstamp>
+    </comp>
+    <comp ref="C21">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1003-1-ND</field>
+        <field name="LCSC Part">C49678</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>662F5FE2</tstamp>
+    </comp>
+    <comp ref="U12">
+      <value>SN74ACT244PWRG4</value>
+      <footprint>Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm</footprint>
+      <datasheet>https://lcsc.com/product-detail/74-Series_TI_SN74ACT244PWRG4_SN74ACT244PWRG4_C6930.html</datasheet>
+      <fields>
+        <field name="Digikey">74ACT244MTCXCT-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C6930</field>
+        <field name="Manufacturer">TI</field>
+      </fields>
+      <libsource lib="logic" part="SN74ACT244PWRG4" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>663282DB</tstamp>
+    </comp>
+    <comp ref="U11">
+      <value>SN74ACT244PWRG4</value>
+      <footprint>Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm</footprint>
+      <datasheet>https://lcsc.com/product-detail/74-Series_TI_SN74ACT244PWRG4_SN74ACT244PWRG4_C6930.html</datasheet>
+      <fields>
+        <field name="Digikey">74ACT244MTCXCT-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C6930</field>
+        <field name="Manufacturer">TI</field>
+      </fields>
+      <libsource lib="logic" part="SN74ACT244PWRG4" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>664C743F</tstamp>
+    </comp>
+    <comp ref="Q1">
+      <value>AO3400A</value>
+      <footprint>Package_TO_SOT_SMD:SOT-23_Handsoldering</footprint>
+      <fields>
+        <field name="Digikey">SI3404-TPMSCT-ND
+</field>
+        <field name="LCSC Part">C20917</field>
+      </fields>
+      <libsource lib="Transistor_FET" part="AO3400A" description="30V Vds, 5.7A Id, N-Channel MOSFET, SOT-23"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>66676579</tstamp>
+    </comp>
+    <comp ref="R7">
+      <value>1K</value>
+      <footprint>Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">RMCF0805FT1K00CT-ND</field>
+        <field name="LCSC Part">C17513</field>
+      </fields>
+      <libsource lib="Device" part="R_US" description="Resistor, US symbol"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>66687B47</tstamp>
+    </comp>
+    <comp ref="C22">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1003-1-ND</field>
+        <field name="LCSC Part">C49678</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>666CBC23</tstamp>
+    </comp>
+    <comp ref="C24">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1003-1-ND</field>
+        <field name="LCSC Part">C49678</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>66A3318B</tstamp>
+    </comp>
+    <comp ref="C23">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1003-1-ND</field>
+        <field name="LCSC Part">C49678</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>66A46107</tstamp>
+    </comp>
+    <comp ref="H6">
+      <value>MountingHole</value>
+      <footprint>AL_Footprints:pcb_nut_m3</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Mechanical" part="MountingHole" description="Mounting Hole without connection"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>66A7AA4D</tstamp>
+    </comp>
+    <comp ref="J1">
+      <value>Conn_01x03</value>
+      <footprint>Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Connector_Generic" part="Conn_01x03" description="Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>66A7E689</tstamp>
+    </comp>
+    <comp ref="H9">
+      <value>MountingHole</value>
+      <footprint>AL_Footprints:pcb_nut_m3</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Mechanical" part="MountingHole" description="Mounting Hole without connection"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>629A6E16</tstamp>
+    </comp>
+    <comp ref="H10">
+      <value>MountingHole</value>
+      <footprint>AL_Footprints:pcb_nut_m3</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Mechanical" part="MountingHole" description="Mounting Hole without connection"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>629A75AC</tstamp>
+    </comp>
+    <comp ref="C25">
+      <value>1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1026-1-ND</field>
+        <field name="LCSC Part">C28323</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>62E672BE</tstamp>
+    </comp>
+    <comp ref="R8">
+      <value>0</value>
+      <footprint>Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">RMCF0805ZT0R00CT-ND</field>
+        <field name="LCSC Part">C17477</field>
+      </fields>
+      <libsource lib="Device" part="R_US" description="Resistor, US symbol"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>62EA35E5</tstamp>
+    </comp>
+    <comp ref="D2">
+      <value>DNP_D</value>
+      <footprint>Diode_SMD:D_SOD-123</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="D_Schottky_Small" description="Schottky diode, small symbol"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>62ECDEDC</tstamp>
+    </comp>
+    <comp ref="LS1">
+      <value>Speaker</value>
+      <footprint>AL_Footprints:BUZ-TH_PKM13EPYH4002-B0</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">490-4697-ND</field>
+        <field name="LCSC Part">C128650</field>
+      </fields>
+      <libsource lib="Device" part="Speaker" description="Speaker"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>65FD9FCE</tstamp>
+    </comp>
+    <comp ref="R6">
+      <value>1K</value>
+      <footprint>Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">RMCF0805FT1K00CT-ND</field>
+        <field name="LCSC Part">C17513</field>
+      </fields>
+      <libsource lib="Device" part="R_US" description="Resistor, US symbol"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>66007C11</tstamp>
+    </comp>
+    <comp ref="J5">
+      <value>Conn_01x02</value>
+      <footprint>Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Connector_Generic" part="Conn_01x02" description="Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>63096096</tstamp>
+    </comp>
+    <comp ref="R9">
+      <value>5.1K</value>
+      <footprint>Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">RMCF0805FT5K10CT-ND</field>
+        <field name="LCSC Part">C27834</field>
+      </fields>
+      <libsource lib="Device" part="R_US" description="Resistor, US symbol"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>630F3927</tstamp>
+    </comp>
+    <comp ref="D6">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/Sheet65B35949/" tstamps="/65B3594A/"/>
+      <tstamp>6299436C</tstamp>
+    </comp>
+    <comp ref="D5">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/Sheet65B35949/" tstamps="/65B3594A/"/>
+      <tstamp>62992CEB</tstamp>
+    </comp>
+    <comp ref="D4">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/Sheet65B35949/" tstamps="/65B3594A/"/>
+      <tstamp>629900BA</tstamp>
+    </comp>
+    <comp ref="D3">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/Sheet65B35949/" tstamps="/65B3594A/"/>
+      <tstamp>6298EC3B</tstamp>
+    </comp>
+    <comp ref="C1">
+      <value>1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1026-1-ND</field>
+        <field name="LCSC Part">C28323</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/Sheet65B35949/" tstamps="/65B3594A/"/>
+      <tstamp>65E44DA3</tstamp>
+    </comp>
+    <comp ref="U0">
+      <value>GN6932</value>
+      <footprint>AL_Footprints:SOP-32_L21.0-W7.5-P1.27-LS10.4-BL</footprint>
+      <fields>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C265476</field>
+        <field name="Manufacturer">GN</field>
+      </fields>
+      <libsource lib="pwr_ic" part="GN6932" description=""/>
+      <sheetpath names="/Sheet65B35949/" tstamps="/65B3594A/"/>
+      <tstamp>65B37074</tstamp>
+    </comp>
+    <comp ref="D10">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65C5A503/" tstamps="/65C5A503/"/>
+      <tstamp>6299436C</tstamp>
+    </comp>
+    <comp ref="D9">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65C5A503/" tstamps="/65C5A503/"/>
+      <tstamp>62992CEB</tstamp>
+    </comp>
+    <comp ref="D8">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65C5A503/" tstamps="/65C5A503/"/>
+      <tstamp>629900BA</tstamp>
+    </comp>
+    <comp ref="D7">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65C5A503/" tstamps="/65C5A503/"/>
+      <tstamp>6298EC3B</tstamp>
+    </comp>
+    <comp ref="C2">
+      <value>1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1026-1-ND</field>
+        <field name="LCSC Part">C28323</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/sheet65C5A503/" tstamps="/65C5A503/"/>
+      <tstamp>65E44DA3</tstamp>
+    </comp>
+    <comp ref="U1">
+      <value>GN6932</value>
+      <footprint>AL_Footprints:SOP-32_L21.0-W7.5-P1.27-LS10.4-BL</footprint>
+      <fields>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C265476</field>
+        <field name="Manufacturer">GN</field>
+      </fields>
+      <libsource lib="pwr_ic" part="GN6932" description=""/>
+      <sheetpath names="/sheet65C5A503/" tstamps="/65C5A503/"/>
+      <tstamp>65B37074</tstamp>
+    </comp>
+    <comp ref="D14">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E77961/" tstamps="/65E77961/"/>
+      <tstamp>6299436C</tstamp>
+    </comp>
+    <comp ref="D13">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E77961/" tstamps="/65E77961/"/>
+      <tstamp>62992CEB</tstamp>
+    </comp>
+    <comp ref="D12">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E77961/" tstamps="/65E77961/"/>
+      <tstamp>629900BA</tstamp>
+    </comp>
+    <comp ref="D11">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E77961/" tstamps="/65E77961/"/>
+      <tstamp>6298EC3B</tstamp>
+    </comp>
+    <comp ref="C3">
+      <value>1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1026-1-ND</field>
+        <field name="LCSC Part">C28323</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/sheet65E77961/" tstamps="/65E77961/"/>
+      <tstamp>65E44DA3</tstamp>
+    </comp>
+    <comp ref="U2">
+      <value>GN6932</value>
+      <footprint>AL_Footprints:SOP-32_L21.0-W7.5-P1.27-LS10.4-BL</footprint>
+      <fields>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C265476</field>
+        <field name="Manufacturer">GN</field>
+      </fields>
+      <libsource lib="pwr_ic" part="GN6932" description=""/>
+      <sheetpath names="/sheet65E77961/" tstamps="/65E77961/"/>
+      <tstamp>65B37074</tstamp>
+    </comp>
+    <comp ref="D18">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E77CCE/" tstamps="/65E77CCE/"/>
+      <tstamp>6299436C</tstamp>
+    </comp>
+    <comp ref="D17">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E77CCE/" tstamps="/65E77CCE/"/>
+      <tstamp>62992CEB</tstamp>
+    </comp>
+    <comp ref="D16">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E77CCE/" tstamps="/65E77CCE/"/>
+      <tstamp>629900BA</tstamp>
+    </comp>
+    <comp ref="D15">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E77CCE/" tstamps="/65E77CCE/"/>
+      <tstamp>6298EC3B</tstamp>
+    </comp>
+    <comp ref="C4">
+      <value>1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1026-1-ND</field>
+        <field name="LCSC Part">C28323</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/sheet65E77CCE/" tstamps="/65E77CCE/"/>
+      <tstamp>65E44DA3</tstamp>
+    </comp>
+    <comp ref="U3">
+      <value>GN6932</value>
+      <footprint>AL_Footprints:SOP-32_L21.0-W7.5-P1.27-LS10.4-BL</footprint>
+      <fields>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C265476</field>
+        <field name="Manufacturer">GN</field>
+      </fields>
+      <libsource lib="pwr_ic" part="GN6932" description=""/>
+      <sheetpath names="/sheet65E77CCE/" tstamps="/65E77CCE/"/>
+      <tstamp>65B37074</tstamp>
+    </comp>
+    <comp ref="D22">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E79B9E/" tstamps="/65E79B9E/"/>
+      <tstamp>6299436C</tstamp>
+    </comp>
+    <comp ref="D21">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E79B9E/" tstamps="/65E79B9E/"/>
+      <tstamp>62992CEB</tstamp>
+    </comp>
+    <comp ref="D20">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E79B9E/" tstamps="/65E79B9E/"/>
+      <tstamp>629900BA</tstamp>
+    </comp>
+    <comp ref="D19">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E79B9E/" tstamps="/65E79B9E/"/>
+      <tstamp>6298EC3B</tstamp>
+    </comp>
+    <comp ref="C5">
+      <value>1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1026-1-ND</field>
+        <field name="LCSC Part">C28323</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/sheet65E79B9E/" tstamps="/65E79B9E/"/>
+      <tstamp>65E44DA3</tstamp>
+    </comp>
+    <comp ref="U4">
+      <value>GN6932</value>
+      <footprint>AL_Footprints:SOP-32_L21.0-W7.5-P1.27-LS10.4-BL</footprint>
+      <fields>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C265476</field>
+        <field name="Manufacturer">GN</field>
+      </fields>
+      <libsource lib="pwr_ic" part="GN6932" description=""/>
+      <sheetpath names="/sheet65E79B9E/" tstamps="/65E79B9E/"/>
+      <tstamp>65B37074</tstamp>
+    </comp>
+    <comp ref="D26">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E79BA3/" tstamps="/65E79BA3/"/>
+      <tstamp>6299436C</tstamp>
+    </comp>
+    <comp ref="D25">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E79BA3/" tstamps="/65E79BA3/"/>
+      <tstamp>62992CEB</tstamp>
+    </comp>
+    <comp ref="D24">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E79BA3/" tstamps="/65E79BA3/"/>
+      <tstamp>629900BA</tstamp>
+    </comp>
+    <comp ref="D23">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E79BA3/" tstamps="/65E79BA3/"/>
+      <tstamp>6298EC3B</tstamp>
+    </comp>
+    <comp ref="C6">
+      <value>1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1026-1-ND</field>
+        <field name="LCSC Part">C28323</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/sheet65E79BA3/" tstamps="/65E79BA3/"/>
+      <tstamp>65E44DA3</tstamp>
+    </comp>
+    <comp ref="U5">
+      <value>GN6932</value>
+      <footprint>AL_Footprints:SOP-32_L21.0-W7.5-P1.27-LS10.4-BL</footprint>
+      <fields>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C265476</field>
+        <field name="Manufacturer">GN</field>
+      </fields>
+      <libsource lib="pwr_ic" part="GN6932" description=""/>
+      <sheetpath names="/sheet65E79BA3/" tstamps="/65E79BA3/"/>
+      <tstamp>65B37074</tstamp>
+    </comp>
+    <comp ref="D30">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E79BB2/" tstamps="/65E79BB2/"/>
+      <tstamp>6299436C</tstamp>
+    </comp>
+    <comp ref="D29">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E79BB2/" tstamps="/65E79BB2/"/>
+      <tstamp>62992CEB</tstamp>
+    </comp>
+    <comp ref="D28">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E79BB2/" tstamps="/65E79BB2/"/>
+      <tstamp>629900BA</tstamp>
+    </comp>
+    <comp ref="D27">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E79BB2/" tstamps="/65E79BB2/"/>
+      <tstamp>6298EC3B</tstamp>
+    </comp>
+    <comp ref="C7">
+      <value>1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1026-1-ND</field>
+        <field name="LCSC Part">C28323</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/sheet65E79BB2/" tstamps="/65E79BB2/"/>
+      <tstamp>65E44DA3</tstamp>
+    </comp>
+    <comp ref="U6">
+      <value>GN6932</value>
+      <footprint>AL_Footprints:SOP-32_L21.0-W7.5-P1.27-LS10.4-BL</footprint>
+      <fields>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C265476</field>
+        <field name="Manufacturer">GN</field>
+      </fields>
+      <libsource lib="pwr_ic" part="GN6932" description=""/>
+      <sheetpath names="/sheet65E79BB2/" tstamps="/65E79BB2/"/>
+      <tstamp>65B37074</tstamp>
+    </comp>
+    <comp ref="D34">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E79BBC/" tstamps="/65E79BBC/"/>
+      <tstamp>6299436C</tstamp>
+    </comp>
+    <comp ref="D33">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E79BBC/" tstamps="/65E79BBC/"/>
+      <tstamp>62992CEB</tstamp>
+    </comp>
+    <comp ref="D32">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E79BBC/" tstamps="/65E79BBC/"/>
+      <tstamp>629900BA</tstamp>
+    </comp>
+    <comp ref="D31">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E79BBC/" tstamps="/65E79BBC/"/>
+      <tstamp>6298EC3B</tstamp>
+    </comp>
+    <comp ref="C8">
+      <value>1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1026-1-ND</field>
+        <field name="LCSC Part">C28323</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/sheet65E79BBC/" tstamps="/65E79BBC/"/>
+      <tstamp>65E44DA3</tstamp>
+    </comp>
+    <comp ref="U7">
+      <value>GN6932</value>
+      <footprint>AL_Footprints:SOP-32_L21.0-W7.5-P1.27-LS10.4-BL</footprint>
+      <fields>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C265476</field>
+        <field name="Manufacturer">GN</field>
+      </fields>
+      <libsource lib="pwr_ic" part="GN6932" description=""/>
+      <sheetpath names="/sheet65E79BBC/" tstamps="/65E79BBC/"/>
+      <tstamp>65B37074</tstamp>
+    </comp>
+    <comp ref="D38">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E7B3E1/" tstamps="/65E7B3E1/"/>
+      <tstamp>6299436C</tstamp>
+    </comp>
+    <comp ref="D37">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E7B3E1/" tstamps="/65E7B3E1/"/>
+      <tstamp>62992CEB</tstamp>
+    </comp>
+    <comp ref="D36">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E7B3E1/" tstamps="/65E7B3E1/"/>
+      <tstamp>629900BA</tstamp>
+    </comp>
+    <comp ref="D35">
+      <value>FJ5461AHred</value>
+      <footprint>LED-SEG-TH_FJ5461AH</footprint>
+      <datasheet>https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</datasheet>
+      <fields>
+        <field name="Digikey">160-1879-ND</field>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="Manufacturer">ReliaPro</field>
+      </fields>
+      <libsource lib="LEDs" part="FJ5461AHred" description=""/>
+      <sheetpath names="/sheet65E7B3E1/" tstamps="/65E7B3E1/"/>
+      <tstamp>6298EC3B</tstamp>
+    </comp>
+    <comp ref="C9">
+      <value>1uF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Digikey">1276-1026-1-ND</field>
+        <field name="LCSC Part">C28323</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/sheet65E7B3E1/" tstamps="/65E7B3E1/"/>
+      <tstamp>65E44DA3</tstamp>
+    </comp>
+    <comp ref="U8">
+      <value>GN6932</value>
+      <footprint>AL_Footprints:SOP-32_L21.0-W7.5-P1.27-LS10.4-BL</footprint>
+      <fields>
+        <field name="JLC Part">Extended Part</field>
+        <field name="LCSC Part">C265476</field>
+        <field name="Manufacturer">GN</field>
+      </fields>
+      <libsource lib="pwr_ic" part="GN6932" description=""/>
+      <sheetpath names="/sheet65E7B3E1/" tstamps="/65E7B3E1/"/>
+      <tstamp>65B37074</tstamp>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="Connector" part="USB_C_Receptacle_USB2.0">
+      <description>USB 2.0-only Type-C Receptacle connector</description>
+      <docs>https://www.usb.org/sites/default/files/documents/usb_type-c.zip</docs>
+      <footprints>
+        <fp>USB*C*Receptacle*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">USB_C_Receptacle_USB2.0</field>
+      </fields>
+      <pins>
+        <pin num="A1" name="GND" type="passive"/>
+        <pin num="A4" name="VBUS" type="passive"/>
+        <pin num="A5" name="CC1" type="BiDi"/>
+        <pin num="A6" name="D+" type="BiDi"/>
+        <pin num="A7" name="D-" type="BiDi"/>
+        <pin num="A8" name="SBU1" type="BiDi"/>
+        <pin num="A9" name="VBUS" type="passive"/>
+        <pin num="A12" name="GND" type="passive"/>
+        <pin num="B1" name="GND" type="passive"/>
+        <pin num="B4" name="VBUS" type="passive"/>
+        <pin num="B5" name="CC2" type="BiDi"/>
+        <pin num="B6" name="D+" type="BiDi"/>
+        <pin num="B7" name="D-" type="BiDi"/>
+        <pin num="B8" name="SBU2" type="BiDi"/>
+        <pin num="B9" name="VBUS" type="passive"/>
+        <pin num="B12" name="GND" type="passive"/>
+        <pin num="S1" name="SHIELD" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Connector_Generic" part="Conn_01x02">
+      <description>Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Connector*:*_1x??_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn_01x02</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+        <pin num="2" name="Pin_2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Connector_Generic" part="Conn_01x03">
+      <description>Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Connector*:*_1x??_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn_01x03</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+        <pin num="2" name="Pin_2" type="passive"/>
+        <pin num="3" name="Pin_3" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Connector_Generic" part="Conn_01x04">
+      <description>Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Connector*:*_1x??_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn_01x04</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+        <pin num="2" name="Pin_2" type="passive"/>
+        <pin num="3" name="Pin_3" type="passive"/>
+        <pin num="4" name="Pin_4" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Connector_Generic" part="Conn_01x05">
+      <description>Generic connector, single row, 01x05, script generated (kicad-library-utils/schlib/autogen/connector/)</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Connector*:*_1x??_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn_01x05</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+        <pin num="2" name="Pin_2" type="passive"/>
+        <pin num="3" name="Pin_3" type="passive"/>
+        <pin num="4" name="Pin_4" type="passive"/>
+        <pin num="5" name="Pin_5" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="Battery_Cell">
+      <description>Single-cell battery</description>
+      <docs>~</docs>
+      <fields>
+        <field name="Reference">BT</field>
+        <field name="Value">Battery_Cell</field>
+      </fields>
+      <pins>
+        <pin num="1" name="+" type="passive"/>
+        <pin num="2" name="-" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="C">
+      <description>Unpolarized capacitor</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>C_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">C</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="C_Small">
+      <description>Unpolarized capacitor, small symbol</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>C_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">C_Small</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="Crystal_Small">
+      <description>Two pin crystal, small symbol</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Crystal*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">Y</field>
+        <field name="Value">Crystal_Small</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="D_Schottky_Small">
+      <description>Schottky diode, small symbol</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>TO-???*</fp>
+        <fp>*_Diode_*</fp>
+        <fp>*SingleDiode*</fp>
+        <fp>D_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">D</field>
+        <field name="Value">D_Schottky_Small</field>
+      </fields>
+      <pins>
+        <pin num="1" name="K" type="passive"/>
+        <pin num="2" name="A" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="LED">
+      <description>Light emitting diode</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>LED*</fp>
+        <fp>LED_SMD:*</fp>
+        <fp>LED_THT:*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">D</field>
+        <field name="Value">LED</field>
+      </fields>
+      <pins>
+        <pin num="1" name="K" type="passive"/>
+        <pin num="2" name="A" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="R_US">
+      <description>Resistor, US symbol</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>R_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">R_US</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="Speaker">
+      <description>Speaker</description>
+      <docs>~</docs>
+      <fields>
+        <field name="Reference">LS</field>
+        <field name="Value">Speaker</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="input"/>
+        <pin num="2" name="2" type="input"/>
+      </pins>
+    </libpart>
+    <libpart lib="LEDs" part="FJ5461AHred">
+      <fields>
+        <field name="Reference">D?</field>
+        <field name="Value">FJ5461AHred</field>
+        <field name="Footprint">LED-SEG-TH_FJ5461AH</field>
+        <field name="Datasheet">https://lcsc.com/product-detail/Led-Segment-Display_4Bit0-56Inch-red-digital-LED-RHOS_C54396.html</field>
+        <field name="Manufacturer">ReliaPro</field>
+        <field name="LCSC Part">C54396</field>
+        <field name="JLC Part">Extended Part</field>
+      </fields>
+      <pins>
+        <pin num="1" name="E" type="input"/>
+        <pin num="2" name="D" type="input"/>
+        <pin num="3" name="DP" type="input"/>
+        <pin num="4" name="C" type="input"/>
+        <pin num="5" name="G" type="input"/>
+        <pin num="6" name="DIG4" type="input"/>
+        <pin num="7" name="B" type="input"/>
+        <pin num="8" name="DIG3" type="input"/>
+        <pin num="9" name="DIG2" type="input"/>
+        <pin num="10" name="F" type="input"/>
+        <pin num="11" name="A" type="input"/>
+        <pin num="12" name="DIG1" type="input"/>
+      </pins>
+    </libpart>
+    <libpart lib="Mechanical" part="MountingHole">
+      <description>Mounting Hole without connection</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>MountingHole*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">H</field>
+        <field name="Value">MountingHole</field>
+      </fields>
+    </libpart>
+    <libpart lib="Regulator_Linear" part="HT75xx-1-SOT89">
+      <description>100mA Low Dropout Voltage Regulator, Fixed Output, SOT89</description>
+      <docs>https://www.holtek.com/documents/10179/116711/HT75xx-1v250.pdf</docs>
+      <footprints>
+        <fp>SOT?89*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">HT75xx-1-SOT89</field>
+        <field name="Footprint">Package_TO_SOT_SMD:SOT-89-3</field>
+      </fields>
+      <pins>
+        <pin num="1" name="GND" type="power_in"/>
+        <pin num="2" name="VIN" type="power_in"/>
+        <pin num="3" name="VOUT" type="power_out"/>
+      </pins>
+    </libpart>
+    <libpart lib="Switch" part="SW_Push">
+      <description>Push button switch, generic, two pins</description>
+      <docs>~</docs>
+      <fields>
+        <field name="Reference">SW</field>
+        <field name="Value">SW_Push</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Transistor_FET" part="BSS138">
+      <aliases>
+        <alias>2N7002</alias>
+        <alias>2N7002E</alias>
+        <alias>2N7002H</alias>
+        <alias>2N7002K</alias>
+        <alias>BS170F</alias>
+        <alias>BS870</alias>
+        <alias>BSN20</alias>
+        <alias>BSS123</alias>
+        <alias>BSS127S</alias>
+        <alias>DMG2302U</alias>
+        <alias>DMG3402L</alias>
+        <alias>DMG3404L</alias>
+        <alias>DMG3406L</alias>
+        <alias>DMG3414U</alias>
+        <alias>DMG3418L</alias>
+        <alias>DMN10H220L</alias>
+        <alias>DMN10H700S</alias>
+        <alias>DMN13H750S</alias>
+        <alias>DMN2041L</alias>
+        <alias>DMN2050L</alias>
+        <alias>DMN2056U</alias>
+        <alias>DMN2058U</alias>
+        <alias>DMN2075U</alias>
+        <alias>DMN2230U</alias>
+        <alias>DMN24H11DS</alias>
+        <alias>DMN24H3D5L</alias>
+        <alias>DMN3042L</alias>
+        <alias>DMN3051L</alias>
+        <alias>DMN30H4D0L</alias>
+        <alias>DMN3110S</alias>
+        <alias>DMN3150L</alias>
+        <alias>DMN3300U</alias>
+        <alias>DMN3404L</alias>
+        <alias>DMN6075S</alias>
+        <alias>DMN6140L</alias>
+        <alias>DMN67D7L</alias>
+        <alias>DMN67D8L</alias>
+        <alias>MMBF170</alias>
+        <alias>VN10LF</alias>
+        <alias>ZVN3306F</alias>
+        <alias>ZVN3310F</alias>
+        <alias>ZVN3320F</alias>
+        <alias>ZVN4106F</alias>
+        <alias>ZXM61N02F</alias>
+        <alias>ZXM61N03F</alias>
+        <alias>ZXMN10A07F</alias>
+        <alias>ZXMN2A01F</alias>
+        <alias>ZXMN2A14F</alias>
+        <alias>ZXMN2B01F</alias>
+        <alias>ZXMN2B14FH</alias>
+        <alias>ZXMN2F30FH</alias>
+        <alias>ZXMN2F34FH</alias>
+        <alias>ZXMN3A01F</alias>
+        <alias>ZXMN3A14F</alias>
+        <alias>ZXMN3B01F</alias>
+        <alias>ZXMN3B14F</alias>
+        <alias>ZXMN3F30FH</alias>
+        <alias>ZXMN6A07F</alias>
+        <alias>IRLML0030</alias>
+        <alias>IRLML2060</alias>
+        <alias>TSM2302CX</alias>
+        <alias>AO3400A</alias>
+      </aliases>
+      <description>50V Vds, 0.22A Id, N-Channel MOSFET, SOT-23</description>
+      <docs>https://www.onsemi.com/pub/Collateral/BSS138-D.PDF</docs>
+      <footprints>
+        <fp>SOT?23*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">Q</field>
+        <field name="Value">BSS138</field>
+        <field name="Footprint">Package_TO_SOT_SMD:SOT-23</field>
+      </fields>
+      <pins>
+        <pin num="1" name="G" type="input"/>
+        <pin num="2" name="S" type="passive"/>
+        <pin num="3" name="D" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="cpus" part="STM32F103C8T6">
+      <aliases>
+        <alias>GD32F103C8T6</alias>
+        <alias>GD32F103CBT6</alias>
+        <alias>STM32F103CBT6</alias>
+      </aliases>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">STM32F103C8T6</field>
+      </fields>
+      <pins>
+        <pin num="1" name="VBAT" type="BiDi"/>
+        <pin num="2" name="PC13-TAMPER-RTC" type="BiDi"/>
+        <pin num="3" name="PC14-0SC32_IN" type="BiDi"/>
+        <pin num="4" name="PC15-OSC32_OUT" type="BiDi"/>
+        <pin num="5" name="PD0-OSC_IN" type="BiDi"/>
+        <pin num="6" name="PD1-OSC_OUT" type="BiDi"/>
+        <pin num="7" name="NRST" type="BiDi"/>
+        <pin num="8" name="VSSA" type="power_in"/>
+        <pin num="9" name="VDDA" type="power_in"/>
+        <pin num="10" name="PA0-WKUP" type="BiDi"/>
+        <pin num="11" name="PA1" type="BiDi"/>
+        <pin num="12" name="PA2" type="BiDi"/>
+        <pin num="13" name="PA3" type="BiDi"/>
+        <pin num="14" name="PA4" type="BiDi"/>
+        <pin num="15" name="PA5" type="BiDi"/>
+        <pin num="16" name="PA6" type="BiDi"/>
+        <pin num="17" name="PA7" type="BiDi"/>
+        <pin num="18" name="PB0" type="BiDi"/>
+        <pin num="19" name="PB1" type="BiDi"/>
+        <pin num="20" name="PB2/BOOT1" type="BiDi"/>
+        <pin num="21" name="PB10" type="BiDi"/>
+        <pin num="22" name="PB11" type="BiDi"/>
+        <pin num="23" name="VSS_1" type="power_in"/>
+        <pin num="24" name="VDD_1" type="power_in"/>
+        <pin num="25" name="PB12" type="BiDi"/>
+        <pin num="26" name="PB13" type="BiDi"/>
+        <pin num="27" name="PB14" type="BiDi"/>
+        <pin num="28" name="PB15" type="BiDi"/>
+        <pin num="29" name="PA8/USART1_CK/MCO" type="BiDi"/>
+        <pin num="30" name="PA9/USART1_TX" type="BiDi"/>
+        <pin num="31" name="PA10.USART1_RX" type="BiDi"/>
+        <pin num="32" name="PA11/USART1_CTS/USBDM" type="BiDi"/>
+        <pin num="33" name="PA12/USART1_RTS/USBDP" type="BiDi"/>
+        <pin num="34" name="PA13/JTMS-SWDIO" type="BiDi"/>
+        <pin num="35" name="VSS_2" type="power_in"/>
+        <pin num="36" name="VDD_2" type="power_in"/>
+        <pin num="37" name="PA14/JTCK/SWCLK" type="BiDi"/>
+        <pin num="38" name="PA15/JTDI" type="BiDi"/>
+        <pin num="39" name="PB3/JTDO" type="BiDi"/>
+        <pin num="40" name="PB4/JNTRST" type="BiDi"/>
+        <pin num="41" name="PB5/I2C_SMBA" type="BiDi"/>
+        <pin num="42" name="PB6/I2C_SCL" type="BiDi"/>
+        <pin num="43" name="PB7/I2C_SDA" type="BiDi"/>
+        <pin num="44" name="BOOT0" type="BiDi"/>
+        <pin num="45" name="PB8" type="BiDi"/>
+        <pin num="46" name="PB9" type="BiDi"/>
+        <pin num="47" name="VSS_3" type="power_in"/>
+        <pin num="48" name="VDD_3" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="logic" part="SN74ACT244PWRG4">
+      <fields>
+        <field name="Reference">U?</field>
+        <field name="Value">SN74ACT244PWRG4</field>
+        <field name="Footprint">Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm</field>
+        <field name="Datasheet">https://lcsc.com/product-detail/74-Series_TI_SN74ACT244PWRG4_SN74ACT244PWRG4_C6930.html</field>
+        <field name="Manufacturer">TI</field>
+        <field name="LCSC Part">C6930</field>
+        <field name="JLC Part">Extended Part</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~1OE" type="unspc"/>
+        <pin num="2" name="1A1" type="unspc"/>
+        <pin num="3" name="2Y4" type="unspc"/>
+        <pin num="4" name="1A2" type="unspc"/>
+        <pin num="5" name="2Y3" type="unspc"/>
+        <pin num="6" name="1A3" type="unspc"/>
+        <pin num="7" name="2Y2" type="unspc"/>
+        <pin num="8" name="1A4" type="unspc"/>
+        <pin num="9" name="2Y1" type="unspc"/>
+        <pin num="10" name="GND" type="unspc"/>
+        <pin num="11" name="2A1" type="unspc"/>
+        <pin num="12" name="1Y4" type="unspc"/>
+        <pin num="13" name="2A2" type="unspc"/>
+        <pin num="14" name="1Y3" type="unspc"/>
+        <pin num="15" name="2A3" type="unspc"/>
+        <pin num="16" name="1Y2" type="unspc"/>
+        <pin num="17" name="2A4" type="unspc"/>
+        <pin num="18" name="1Y1" type="unspc"/>
+        <pin num="19" name="~2OE" type="unspc"/>
+        <pin num="20" name="VCC" type="unspc"/>
+      </pins>
+    </libpart>
+    <libpart lib="pwr_ic" part="GN6932">
+      <fields>
+        <field name="Reference">U?</field>
+        <field name="Value">GN6932</field>
+        <field name="Footprint">SOP-32_L21.0-W7.5-P1.27-LS10.4-BL</field>
+        <field name="Manufacturer">GN</field>
+        <field name="LCSC Part">C265476</field>
+        <field name="JLC Part">Extended Part</field>
+      </fields>
+      <pins>
+        <pin num="1" name="GRID13" type="unspc"/>
+        <pin num="2" name="GRID14" type="unspc"/>
+        <pin num="3" name="GRID15" type="unspc"/>
+        <pin num="4" name="GRID16" type="unspc"/>
+        <pin num="5" name="GND" type="unspc"/>
+        <pin num="6" name="DIN" type="unspc"/>
+        <pin num="7" name="CLK" type="unspc"/>
+        <pin num="8" name="STB" type="unspc"/>
+        <pin num="9" name="NC" type="unspc"/>
+        <pin num="10" name="SEG1" type="unspc"/>
+        <pin num="11" name="SEG2" type="unspc"/>
+        <pin num="12" name="SEG3" type="unspc"/>
+        <pin num="13" name="SEG4" type="unspc"/>
+        <pin num="14" name="SEG5" type="unspc"/>
+        <pin num="15" name="SEG6" type="unspc"/>
+        <pin num="16" name="SEG7" type="unspc"/>
+        <pin num="17" name="SEG8" type="unspc"/>
+        <pin num="18" name="VDD" type="unspc"/>
+        <pin num="19" name="GND" type="unspc"/>
+        <pin num="20" name="GRID1" type="unspc"/>
+        <pin num="21" name="GRID2" type="unspc"/>
+        <pin num="22" name="GRID3" type="unspc"/>
+        <pin num="23" name="GRID4" type="unspc"/>
+        <pin num="24" name="GRID5" type="unspc"/>
+        <pin num="25" name="GRID6" type="unspc"/>
+        <pin num="26" name="GRID7" type="unspc"/>
+        <pin num="27" name="GRID8" type="unspc"/>
+        <pin num="28" name="GND" type="unspc"/>
+        <pin num="29" name="GRID9" type="unspc"/>
+        <pin num="30" name="GRID10" type="unspc"/>
+        <pin num="31" name="GRID11" type="unspc"/>
+        <pin num="32" name="GRID12" type="unspc"/>
+      </pins>
+    </libpart>
+    <libpart lib="sensors" part="LM75BDP">
+      <description>LM75B temp sensor -40  +125 C +/-1C Serial-I2C, SMBus, 8-Pin MSOP</description>
+      <fields>
+        <field name="Reference">IC</field>
+        <field name="Value">LM75BDP</field>
+        <field name="Footprint">Package_SO:MSOP-8_3x3mm_P0.65mm</field>
+        <field name="Description">Microchip MCP9808T-E/MS, Temperature Converter -40  +125 C +/-1C Serial-I2C, SMBus, 8-Pin MSOP</field>
+        <field name="Height">1.1</field>
+        <field name="JLCPCB">C2837470</field>
+      </fields>
+      <pins>
+        <pin num="1" name="SDA" type="BiDi"/>
+        <pin num="2" name="SCL" type="input"/>
+        <pin num="3" name="ALERT" type="output"/>
+        <pin num="4" name="GND" type="power_in"/>
+        <pin num="5" name="A2" type="input"/>
+        <pin num="6" name="A1" type="input"/>
+        <pin num="7" name="A0" type="input"/>
+        <pin num="8" name="VDD" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="sensors" part="LTR-303ALS-01">
+      <docs>https://lcsc.com/product-detail/Others_Lite-On-LTR-303ALS-01_C364577.html</docs>
+      <fields>
+        <field name="Reference">U?</field>
+        <field name="Value">LTR-303ALS-01</field>
+        <field name="Footprint">Package_TO_SOT_SMD:SOT-363_SC-70-6_Handsoldering</field>
+        <field name="Manufacturer">Lite-On</field>
+        <field name="LCSC Part">C364577</field>
+        <field name="JLC Part">Extended Part</field>
+      </fields>
+      <pins>
+        <pin num="1" name="VDD" type="unspc"/>
+        <pin num="2" name="NC" type="unspc"/>
+        <pin num="3" name="GND" type="unspc"/>
+        <pin num="4" name="SCL" type="unspc"/>
+        <pin num="5" name="INT" type="unspc"/>
+        <pin num="6" name="SDA" type="unspc"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="Connector">
+      <uri>/usr/share/kicad/library/Connector.lib</uri>
+    </library>
+    <library logical="Connector_Generic">
+      <uri>/usr/share/kicad/library/Connector_Generic.lib</uri>
+    </library>
+    <library logical="Device">
+      <uri>/usr/share/kicad/library/Device.lib</uri>
+    </library>
+    <library logical="LEDs">
+      <uri>/home/jjlange/Nextcloud/Projects/KiCAD Libraries/AL_Libraries/LEDs/LEDs.lib</uri>
+    </library>
+    <library logical="Mechanical">
+      <uri>/usr/share/kicad/library/Mechanical.lib</uri>
+    </library>
+    <library logical="Regulator_Linear">
+      <uri>/usr/share/kicad/library/Regulator_Linear.lib</uri>
+    </library>
+    <library logical="Switch">
+      <uri>/usr/share/kicad/library/Switch.lib</uri>
+    </library>
+    <library logical="Transistor_FET">
+      <uri>/usr/share/kicad/library/Transistor_FET.lib</uri>
+    </library>
+    <library logical="cpus">
+      <uri>/home/jjlange/Nextcloud/Projects/al_kicad_libraries/CPUs/cpus.lib</uri>
+    </library>
+    <library logical="logic">
+      <uri>/home/jjlange/Nextcloud/Projects/al_kicad_libraries/Logic/logic.lib</uri>
+    </library>
+    <library logical="pwr_ic">
+      <uri>/home/jjlange/Nextcloud/Projects/al_kicad_libraries/Power ICs/pwr_ic.lib</uri>
+    </library>
+    <library logical="sensors">
+      <uri>/home/jjlange/Nextcloud/Projects/al_kicad_libraries/Sensors/sensors.lib</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="GND">
+      <node ref="Q1" pin="2"/>
+      <node ref="U11" pin="11"/>
+      <node ref="U11" pin="10"/>
+      <node ref="U11" pin="1"/>
+      <node ref="U12" pin="10"/>
+      <node ref="C8" pin="2"/>
+      <node ref="U7" pin="5"/>
+      <node ref="J3" pin="A12"/>
+      <node ref="U8" pin="19"/>
+      <node ref="C24" pin="2"/>
+      <node ref="U6" pin="28"/>
+      <node ref="U6" pin="19"/>
+      <node ref="U6" pin="5"/>
+      <node ref="R9" pin="1"/>
+      <node ref="U3" pin="19"/>
+      <node ref="C6" pin="2"/>
+      <node ref="U7" pin="28"/>
+      <node ref="U11" pin="8"/>
+      <node ref="U7" pin="19"/>
+      <node ref="U11" pin="13"/>
+      <node ref="U11" pin="19"/>
+      <node ref="U11" pin="17"/>
+      <node ref="U8" pin="28"/>
+      <node ref="U11" pin="15"/>
+      <node ref="C11" pin="2"/>
+      <node ref="C7" pin="2"/>
+      <node ref="U1" pin="19"/>
+      <node ref="C1" pin="2"/>
+      <node ref="U0" pin="5"/>
+      <node ref="U1" pin="28"/>
+      <node ref="U1" pin="5"/>
+      <node ref="C2" pin="2"/>
+      <node ref="R5" pin="1"/>
+      <node ref="R4" pin="1"/>
+      <node ref="SW2" pin="1"/>
+      <node ref="SW3" pin="1"/>
+      <node ref="U9" pin="1"/>
+      <node ref="SW1" pin="1"/>
+      <node ref="BT1" pin="2"/>
+      <node ref="C17" pin="1"/>
+      <node ref="C18" pin="1"/>
+      <node ref="C19" pin="1"/>
+      <node ref="U10" pin="20"/>
+      <node ref="U0" pin="19"/>
+      <node ref="U0" pin="28"/>
+      <node ref="U10" pin="35"/>
+      <node ref="U2" pin="19"/>
+      <node ref="U2" pin="28"/>
+      <node ref="U2" pin="5"/>
+      <node ref="U10" pin="23"/>
+      <node ref="J3" pin="B12"/>
+      <node ref="J3" pin="B1"/>
+      <node ref="C3" pin="2"/>
+      <node ref="SW4" pin="1"/>
+      <node ref="C13" pin="2"/>
+      <node ref="J3" pin="A1"/>
+      <node ref="U10" pin="8"/>
+      <node ref="C9" pin="2"/>
+      <node ref="U10" pin="47"/>
+      <node ref="C12" pin="2"/>
+      <node ref="U8" pin="5"/>
+      <node ref="J3" pin="S1"/>
+      <node ref="IC1" pin="4"/>
+      <node ref="C5" pin="2"/>
+      <node ref="J4" pin="1"/>
+      <node ref="C20" pin="2"/>
+      <node ref="C14" pin="2"/>
+      <node ref="U12" pin="19"/>
+      <node ref="C15" pin="2"/>
+      <node ref="U12" pin="1"/>
+      <node ref="C16" pin="1"/>
+      <node ref="IC1" pin="7"/>
+      <node ref="C4" pin="2"/>
+      <node ref="U13" pin="3"/>
+      <node ref="U4" pin="19"/>
+      <node ref="U4" pin="28"/>
+      <node ref="U4" pin="5"/>
+      <node ref="IC1" pin="6"/>
+      <node ref="IC1" pin="5"/>
+      <node ref="C25" pin="2"/>
+      <node ref="C23" pin="2"/>
+      <node ref="U3" pin="5"/>
+      <node ref="U3" pin="28"/>
+      <node ref="U5" pin="19"/>
+      <node ref="U5" pin="28"/>
+      <node ref="J1" pin="1"/>
+      <node ref="U5" pin="5"/>
+      <node ref="J2" pin="3"/>
+      <node ref="C10" pin="2"/>
+      <node ref="C21" pin="2"/>
+    </net>
+    <net code="2" name="+3V3">
+      <node ref="C15" pin="1"/>
+      <node ref="C20" pin="1"/>
+      <node ref="IC1" pin="8"/>
+      <node ref="U10" pin="36"/>
+      <node ref="R1" pin="1"/>
+      <node ref="C21" pin="1"/>
+      <node ref="U9" pin="3"/>
+      <node ref="U13" pin="1"/>
+      <node ref="D1" pin="2"/>
+      <node ref="C10" pin="1"/>
+      <node ref="U10" pin="9"/>
+      <node ref="C13" pin="1"/>
+      <node ref="U10" pin="48"/>
+      <node ref="R2" pin="1"/>
+      <node ref="J2" pin="1"/>
+      <node ref="U10" pin="24"/>
+      <node ref="C11" pin="1"/>
+      <node ref="C12" pin="1"/>
+      <node ref="J5" pin="1"/>
+      <node ref="J4" pin="2"/>
+    </net>
+    <net code="3" name="/CS3">
+      <node ref="U12" pin="12"/>
+      <node ref="U3" pin="8"/>
+    </net>
+    <net code="4" name="/CS1">
+      <node ref="U12" pin="16"/>
+      <node ref="U1" pin="8"/>
+    </net>
+    <net code="5" name="/CS0">
+      <node ref="U0" pin="8"/>
+      <node ref="U12" pin="18"/>
+    </net>
+    <net code="6" name="/CS0_3V">
+      <node ref="U12" pin="2"/>
+      <node ref="U10" pin="10"/>
+    </net>
+    <net code="7" name="/SCL">
+      <node ref="U10" pin="42"/>
+      <node ref="IC1" pin="2"/>
+      <node ref="J4" pin="4"/>
+      <node ref="U13" pin="4"/>
+      <node ref="R1" pin="2"/>
+    </net>
+    <net code="8" name="Net-(U13-Pad2)">
+      <node ref="U13" pin="2"/>
+    </net>
+    <net code="9" name="Net-(U13-Pad5)">
+      <node ref="U13" pin="5"/>
+    </net>
+    <net code="10" name="/SDA">
+      <node ref="J4" pin="3"/>
+      <node ref="R2" pin="2"/>
+      <node ref="IC1" pin="1"/>
+      <node ref="U10" pin="43"/>
+      <node ref="U13" pin="6"/>
+    </net>
+    <net code="11" name="/CS4_3V">
+      <node ref="U10" pin="14"/>
+      <node ref="U12" pin="11"/>
+    </net>
+    <net code="12" name="/CS7_3V">
+      <node ref="U10" pin="17"/>
+      <node ref="U12" pin="17"/>
+    </net>
+    <net code="13" name="/CS6_3V">
+      <node ref="U12" pin="15"/>
+      <node ref="U10" pin="16"/>
+    </net>
+    <net code="14" name="/CS5_3V">
+      <node ref="U10" pin="15"/>
+      <node ref="U12" pin="13"/>
+    </net>
+    <net code="15" name="/CS2">
+      <node ref="U12" pin="14"/>
+      <node ref="U2" pin="8"/>
+    </net>
+    <net code="16" name="/CS3_3V">
+      <node ref="U12" pin="8"/>
+      <node ref="U10" pin="13"/>
+    </net>
+    <net code="17" name="/CS2_3V">
+      <node ref="U10" pin="12"/>
+      <node ref="U12" pin="6"/>
+    </net>
+    <net code="18" name="/CS1_3V">
+      <node ref="U12" pin="4"/>
+      <node ref="U10" pin="11"/>
+    </net>
+    <net code="19" name="/CS7">
+      <node ref="U12" pin="3"/>
+      <node ref="U7" pin="8"/>
+    </net>
+    <net code="20" name="/CS8">
+      <node ref="U8" pin="8"/>
+      <node ref="U11" pin="18"/>
+    </net>
+    <net code="21" name="/CS6">
+      <node ref="U6" pin="8"/>
+      <node ref="U12" pin="5"/>
+    </net>
+    <net code="22" name="/CS5">
+      <node ref="U12" pin="7"/>
+      <node ref="U5" pin="8"/>
+    </net>
+    <net code="23" name="/CS4">
+      <node ref="U4" pin="8"/>
+      <node ref="U12" pin="9"/>
+    </net>
+    <net code="24" name="/~RESET">
+      <node ref="J2" pin="5"/>
+      <node ref="U10" pin="7"/>
+    </net>
+    <net code="25" name="/CLK">
+      <node ref="U0" pin="7"/>
+      <node ref="U3" pin="7"/>
+      <node ref="U4" pin="7"/>
+      <node ref="U7" pin="7"/>
+      <node ref="U8" pin="7"/>
+      <node ref="U1" pin="7"/>
+      <node ref="U6" pin="7"/>
+      <node ref="U5" pin="7"/>
+      <node ref="U2" pin="7"/>
+      <node ref="U11" pin="14"/>
+    </net>
+    <net code="26" name="/SW_ENTER">
+      <node ref="U10" pin="21"/>
+      <node ref="SW3" pin="2"/>
+    </net>
+    <net code="27" name="/SW_CLOCK">
+      <node ref="SW4" pin="2"/>
+      <node ref="U10" pin="39"/>
+    </net>
+    <net code="28" name="/SW_UP">
+      <node ref="U10" pin="18"/>
+      <node ref="SW1" pin="2"/>
+    </net>
+    <net code="29" name="/SW_DOWN">
+      <node ref="U10" pin="19"/>
+      <node ref="SW2" pin="2"/>
+    </net>
+    <net code="30" name="/DIN">
+      <node ref="U0" pin="6"/>
+      <node ref="U5" pin="6"/>
+      <node ref="U2" pin="6"/>
+      <node ref="U3" pin="6"/>
+      <node ref="U6" pin="6"/>
+      <node ref="U8" pin="6"/>
+      <node ref="U4" pin="6"/>
+      <node ref="U11" pin="16"/>
+      <node ref="U7" pin="6"/>
+      <node ref="U1" pin="6"/>
+    </net>
+    <net code="31" name="/SWCLK">
+      <node ref="J2" pin="2"/>
+      <node ref="U10" pin="37"/>
+    </net>
+    <net code="32" name="/SWDIO">
+      <node ref="U10" pin="34"/>
+      <node ref="J2" pin="4"/>
+    </net>
+    <net code="33" name="/RXD">
+      <node ref="J1" pin="2"/>
+      <node ref="U10" pin="31"/>
+    </net>
+    <net code="34" name="/TXD">
+      <node ref="J1" pin="3"/>
+      <node ref="U10" pin="30"/>
+    </net>
+    <net code="35" name="/BUZZER">
+      <node ref="R8" pin="2"/>
+      <node ref="C22" pin="2"/>
+      <node ref="U10" pin="46"/>
+    </net>
+    <net code="36" name="/HB">
+      <node ref="U10" pin="38"/>
+      <node ref="R6" pin="1"/>
+    </net>
+    <net code="37" name="+5V">
+      <node ref="C2" pin="1"/>
+      <node ref="C6" pin="1"/>
+      <node ref="U12" pin="20"/>
+      <node ref="U3" pin="18"/>
+      <node ref="U5" pin="18"/>
+      <node ref="U1" pin="18"/>
+      <node ref="C4" pin="1"/>
+      <node ref="J3" pin="B9"/>
+      <node ref="U6" pin="18"/>
+      <node ref="C5" pin="1"/>
+      <node ref="U4" pin="18"/>
+      <node ref="C25" pin="1"/>
+      <node ref="C1" pin="1"/>
+      <node ref="C23" pin="1"/>
+      <node ref="C9" pin="1"/>
+      <node ref="J3" pin="A4"/>
+      <node ref="LS1" pin="1"/>
+      <node ref="U9" pin="2"/>
+      <node ref="C3" pin="1"/>
+      <node ref="J3" pin="A9"/>
+      <node ref="J3" pin="B4"/>
+      <node ref="C8" pin="1"/>
+      <node ref="U8" pin="18"/>
+      <node ref="U7" pin="18"/>
+      <node ref="R7" pin="2"/>
+      <node ref="U11" pin="20"/>
+      <node ref="U2" pin="18"/>
+      <node ref="U0" pin="18"/>
+      <node ref="C24" pin="1"/>
+      <node ref="C14" pin="1"/>
+      <node ref="D2" pin="1"/>
+      <node ref="C7" pin="1"/>
+    </net>
+    <net code="38" name="/BOOT">
+      <node ref="R9" pin="2"/>
+      <node ref="J5" pin="2"/>
+      <node ref="U10" pin="44"/>
+    </net>
+    <net code="39" name="Net-(D1-Pad1)">
+      <node ref="D1" pin="1"/>
+      <node ref="R6" pin="2"/>
+    </net>
+    <net code="40" name="/CLK_3V">
+      <node ref="U10" pin="26"/>
+      <node ref="U11" pin="6"/>
+    </net>
+    <net code="41" name="Net-(U11-Pad3)">
+      <node ref="U11" pin="3"/>
+    </net>
+    <net code="42" name="/DIN_3V">
+      <node ref="U10" pin="28"/>
+      <node ref="U11" pin="4"/>
+    </net>
+    <net code="43" name="Net-(U11-Pad5)">
+      <node ref="U11" pin="5"/>
+    </net>
+    <net code="44" name="Net-(U11-Pad7)">
+      <node ref="U11" pin="7"/>
+    </net>
+    <net code="45" name="Net-(U11-Pad9)">
+      <node ref="U11" pin="9"/>
+    </net>
+    <net code="46" name="/CS8_3V">
+      <node ref="U10" pin="29"/>
+      <node ref="U11" pin="2"/>
+    </net>
+    <net code="47" name="Net-(U11-Pad12)">
+      <node ref="U11" pin="12"/>
+    </net>
+    <net code="48" name="Net-(D2-Pad2)">
+      <node ref="D2" pin="2"/>
+      <node ref="R7" pin="1"/>
+      <node ref="Q1" pin="3"/>
+      <node ref="LS1" pin="2"/>
+    </net>
+    <net code="49" name="Net-(C22-Pad1)">
+      <node ref="C22" pin="1"/>
+      <node ref="R8" pin="1"/>
+      <node ref="Q1" pin="1"/>
+    </net>
+    <net code="50" name="Net-(U10-Pad45)">
+      <node ref="U10" pin="45"/>
+    </net>
+    <net code="51" name="Net-(J3-PadA8)">
+      <node ref="J3" pin="A8"/>
+    </net>
+    <net code="52" name="/USB-">
+      <node ref="U10" pin="32"/>
+      <node ref="J3" pin="B7"/>
+      <node ref="J3" pin="A7"/>
+    </net>
+    <net code="53" name="Net-(U10-Pad22)">
+      <node ref="U10" pin="22"/>
+    </net>
+    <net code="54" name="Net-(U10-Pad25)">
+      <node ref="U10" pin="25"/>
+    </net>
+    <net code="55" name="Net-(U10-Pad27)">
+      <node ref="U10" pin="27"/>
+    </net>
+    <net code="56" name="Net-(C16-Pad2)">
+      <node ref="U10" pin="3"/>
+      <node ref="C16" pin="2"/>
+      <node ref="Y1" pin="1"/>
+    </net>
+    <net code="57" name="/USB+">
+      <node ref="U10" pin="33"/>
+      <node ref="J3" pin="B6"/>
+      <node ref="J3" pin="A6"/>
+    </net>
+    <net code="58" name="Net-(U10-Pad40)">
+      <node ref="U10" pin="40"/>
+    </net>
+    <net code="59" name="Net-(U10-Pad41)">
+      <node ref="U10" pin="41"/>
+    </net>
+    <net code="60" name="Net-(J3-PadB8)">
+      <node ref="J3" pin="B8"/>
+    </net>
+    <net code="61" name="Net-(J3-PadA5)">
+      <node ref="J3" pin="A5"/>
+      <node ref="R4" pin="2"/>
+    </net>
+    <net code="62" name="Net-(J3-PadB5)">
+      <node ref="R5" pin="2"/>
+      <node ref="J3" pin="B5"/>
+    </net>
+    <net code="63" name="Net-(U10-Pad2)">
+      <node ref="U10" pin="2"/>
+    </net>
+    <net code="64" name="Net-(IC1-Pad3)">
+      <node ref="IC1" pin="3"/>
+    </net>
+    <net code="65" name="Net-(R3-Pad1)">
+      <node ref="R3" pin="1"/>
+      <node ref="U10" pin="1"/>
+    </net>
+    <net code="66" name="Net-(BT1-Pad1)">
+      <node ref="BT1" pin="1"/>
+      <node ref="R3" pin="2"/>
+    </net>
+    <net code="67" name="Net-(C19-Pad2)">
+      <node ref="U10" pin="6"/>
+      <node ref="C19" pin="2"/>
+      <node ref="Y2" pin="2"/>
+    </net>
+    <net code="68" name="Net-(C17-Pad2)">
+      <node ref="U10" pin="4"/>
+      <node ref="C17" pin="2"/>
+      <node ref="Y1" pin="2"/>
+    </net>
+    <net code="69" name="Net-(C18-Pad2)">
+      <node ref="Y2" pin="1"/>
+      <node ref="U10" pin="5"/>
+      <node ref="C18" pin="2"/>
+    </net>
+    <net code="70" name="/Sheet65B35949/DIG13">
+      <node ref="D6" pin="12"/>
+      <node ref="U0" pin="1"/>
+    </net>
+    <net code="71" name="/Sheet65B35949/D">
+      <node ref="D5" pin="2"/>
+      <node ref="D6" pin="2"/>
+      <node ref="U0" pin="13"/>
+      <node ref="D3" pin="2"/>
+      <node ref="D4" pin="2"/>
+    </net>
+    <net code="72" name="/Sheet65B35949/DP">
+      <node ref="U0" pin="17"/>
+      <node ref="D6" pin="3"/>
+      <node ref="D3" pin="3"/>
+      <node ref="D5" pin="3"/>
+      <node ref="D4" pin="3"/>
+    </net>
+    <net code="73" name="/Sheet65B35949/C">
+      <node ref="U0" pin="12"/>
+      <node ref="D3" pin="4"/>
+      <node ref="D6" pin="4"/>
+      <node ref="D5" pin="4"/>
+      <node ref="D4" pin="4"/>
+    </net>
+    <net code="74" name="/Sheet65B35949/E">
+      <node ref="D4" pin="1"/>
+      <node ref="D3" pin="1"/>
+      <node ref="D6" pin="1"/>
+      <node ref="U0" pin="14"/>
+      <node ref="D5" pin="1"/>
+    </net>
+    <net code="75" name="/Sheet65B35949/A">
+      <node ref="D3" pin="11"/>
+      <node ref="D5" pin="11"/>
+      <node ref="D6" pin="11"/>
+      <node ref="D4" pin="11"/>
+      <node ref="U0" pin="10"/>
+    </net>
+    <net code="76" name="/Sheet65B35949/F">
+      <node ref="D3" pin="10"/>
+      <node ref="D4" pin="10"/>
+      <node ref="U0" pin="15"/>
+      <node ref="D6" pin="10"/>
+      <node ref="D5" pin="10"/>
+    </net>
+    <net code="77" name="/Sheet65B35949/G">
+      <node ref="D4" pin="5"/>
+      <node ref="U0" pin="16"/>
+      <node ref="D5" pin="5"/>
+      <node ref="D3" pin="5"/>
+      <node ref="D6" pin="5"/>
+    </net>
+    <net code="78" name="/Sheet65B35949/DIG16">
+      <node ref="U0" pin="4"/>
+      <node ref="D6" pin="6"/>
+    </net>
+    <net code="79" name="/Sheet65B35949/B">
+      <node ref="D5" pin="7"/>
+      <node ref="U0" pin="11"/>
+      <node ref="D3" pin="7"/>
+      <node ref="D4" pin="7"/>
+      <node ref="D6" pin="7"/>
+    </net>
+    <net code="80" name="/Sheet65B35949/DIG15">
+      <node ref="U0" pin="3"/>
+      <node ref="D6" pin="8"/>
+    </net>
+    <net code="81" name="/Sheet65B35949/DIG14">
+      <node ref="U0" pin="2"/>
+      <node ref="D6" pin="9"/>
+    </net>
+    <net code="82" name="/Sheet65B35949/DIG9">
+      <node ref="D5" pin="12"/>
+      <node ref="U0" pin="29"/>
+    </net>
+    <net code="83" name="Net-(U0-Pad9)">
+      <node ref="U0" pin="9"/>
+    </net>
+    <net code="84" name="/Sheet65B35949/DIG6">
+      <node ref="U0" pin="25"/>
+      <node ref="D4" pin="9"/>
+    </net>
+    <net code="85" name="/Sheet65B35949/DIG11">
+      <node ref="D5" pin="8"/>
+      <node ref="U0" pin="31"/>
+    </net>
+    <net code="86" name="/Sheet65B35949/DIG5">
+      <node ref="U0" pin="24"/>
+      <node ref="D4" pin="12"/>
+    </net>
+    <net code="87" name="/Sheet65B35949/DIG8">
+      <node ref="U0" pin="27"/>
+      <node ref="D4" pin="6"/>
+    </net>
+    <net code="88" name="/Sheet65B35949/DIG7">
+      <node ref="D4" pin="8"/>
+      <node ref="U0" pin="26"/>
+    </net>
+    <net code="89" name="/Sheet65B35949/DIG1">
+      <node ref="D3" pin="12"/>
+      <node ref="U0" pin="20"/>
+    </net>
+    <net code="90" name="/Sheet65B35949/DIG4">
+      <node ref="U0" pin="23"/>
+      <node ref="D3" pin="6"/>
+    </net>
+    <net code="91" name="/Sheet65B35949/DIG3">
+      <node ref="D3" pin="8"/>
+      <node ref="U0" pin="22"/>
+    </net>
+    <net code="92" name="/Sheet65B35949/DIG2">
+      <node ref="U0" pin="21"/>
+      <node ref="D3" pin="9"/>
+    </net>
+    <net code="93" name="/Sheet65B35949/DIG12">
+      <node ref="U0" pin="32"/>
+      <node ref="D5" pin="6"/>
+    </net>
+    <net code="94" name="/Sheet65B35949/DIG10">
+      <node ref="U0" pin="30"/>
+      <node ref="D5" pin="9"/>
+    </net>
+    <net code="95" name="/sheet65C5A503/DP">
+      <node ref="D10" pin="3"/>
+      <node ref="D9" pin="3"/>
+      <node ref="U1" pin="17"/>
+      <node ref="D8" pin="3"/>
+      <node ref="D7" pin="3"/>
+    </net>
+    <net code="96" name="/sheet65C5A503/C">
+      <node ref="D10" pin="4"/>
+      <node ref="D8" pin="4"/>
+      <node ref="U1" pin="12"/>
+      <node ref="D9" pin="4"/>
+      <node ref="D7" pin="4"/>
+    </net>
+    <net code="97" name="/sheet65C5A503/D">
+      <node ref="D7" pin="2"/>
+      <node ref="D8" pin="2"/>
+      <node ref="D10" pin="2"/>
+      <node ref="D9" pin="2"/>
+      <node ref="U1" pin="13"/>
+    </net>
+    <net code="98" name="/sheet65C5A503/E">
+      <node ref="D8" pin="1"/>
+      <node ref="D10" pin="1"/>
+      <node ref="D7" pin="1"/>
+      <node ref="D9" pin="1"/>
+      <node ref="U1" pin="14"/>
+    </net>
+    <net code="99" name="/sheet65C5A503/A">
+      <node ref="D8" pin="11"/>
+      <node ref="D9" pin="11"/>
+      <node ref="D7" pin="11"/>
+      <node ref="U1" pin="10"/>
+      <node ref="D10" pin="11"/>
+    </net>
+    <net code="100" name="/sheet65C5A503/F">
+      <node ref="D7" pin="10"/>
+      <node ref="D9" pin="10"/>
+      <node ref="U1" pin="15"/>
+      <node ref="D8" pin="10"/>
+      <node ref="D10" pin="10"/>
+    </net>
+    <net code="101" name="/sheet65C5A503/DIG13">
+      <node ref="U1" pin="1"/>
+      <node ref="D10" pin="12"/>
+    </net>
+    <net code="102" name="/sheet65C5A503/G">
+      <node ref="D9" pin="5"/>
+      <node ref="D7" pin="5"/>
+      <node ref="D10" pin="5"/>
+      <node ref="U1" pin="16"/>
+      <node ref="D8" pin="5"/>
+    </net>
+    <net code="103" name="/sheet65C5A503/DIG16">
+      <node ref="U1" pin="4"/>
+      <node ref="D10" pin="6"/>
+    </net>
+    <net code="104" name="/sheet65C5A503/B">
+      <node ref="D9" pin="7"/>
+      <node ref="U1" pin="11"/>
+      <node ref="D8" pin="7"/>
+      <node ref="D7" pin="7"/>
+      <node ref="D10" pin="7"/>
+    </net>
+    <net code="105" name="/sheet65C5A503/DIG15">
+      <node ref="D10" pin="8"/>
+      <node ref="U1" pin="3"/>
+    </net>
+    <net code="106" name="/sheet65C5A503/DIG14">
+      <node ref="D10" pin="9"/>
+      <node ref="U1" pin="2"/>
+    </net>
+    <net code="107" name="/sheet65C5A503/DIG9">
+      <node ref="U1" pin="29"/>
+      <node ref="D9" pin="12"/>
+    </net>
+    <net code="108" name="Net-(U1-Pad9)">
+      <node ref="U1" pin="9"/>
+    </net>
+    <net code="109" name="/sheet65C5A503/DIG6">
+      <node ref="U1" pin="25"/>
+      <node ref="D8" pin="9"/>
+    </net>
+    <net code="110" name="/sheet65C5A503/DIG11">
+      <node ref="U1" pin="31"/>
+      <node ref="D9" pin="8"/>
+    </net>
+    <net code="111" name="/sheet65C5A503/DIG5">
+      <node ref="U1" pin="24"/>
+      <node ref="D8" pin="12"/>
+    </net>
+    <net code="112" name="/sheet65C5A503/DIG8">
+      <node ref="U1" pin="27"/>
+      <node ref="D8" pin="6"/>
+    </net>
+    <net code="113" name="/sheet65C5A503/DIG7">
+      <node ref="U1" pin="26"/>
+      <node ref="D8" pin="8"/>
+    </net>
+    <net code="114" name="/sheet65C5A503/DIG1">
+      <node ref="D7" pin="12"/>
+      <node ref="U1" pin="20"/>
+    </net>
+    <net code="115" name="/sheet65C5A503/DIG4">
+      <node ref="D7" pin="6"/>
+      <node ref="U1" pin="23"/>
+    </net>
+    <net code="116" name="/sheet65C5A503/DIG3">
+      <node ref="D7" pin="8"/>
+      <node ref="U1" pin="22"/>
+    </net>
+    <net code="117" name="/sheet65C5A503/DIG2">
+      <node ref="U1" pin="21"/>
+      <node ref="D7" pin="9"/>
+    </net>
+    <net code="118" name="/sheet65C5A503/DIG12">
+      <node ref="D9" pin="6"/>
+      <node ref="U1" pin="32"/>
+    </net>
+    <net code="119" name="/sheet65C5A503/DIG10">
+      <node ref="D9" pin="9"/>
+      <node ref="U1" pin="30"/>
+    </net>
+    <net code="120" name="/sheet65E77961/DP">
+      <node ref="U2" pin="17"/>
+      <node ref="D14" pin="3"/>
+      <node ref="D11" pin="3"/>
+      <node ref="D12" pin="3"/>
+      <node ref="D13" pin="3"/>
+    </net>
+    <net code="121" name="/sheet65E77961/C">
+      <node ref="D13" pin="4"/>
+      <node ref="D11" pin="4"/>
+      <node ref="D12" pin="4"/>
+      <node ref="D14" pin="4"/>
+      <node ref="U2" pin="12"/>
+    </net>
+    <net code="122" name="/sheet65E77961/D">
+      <node ref="U2" pin="13"/>
+      <node ref="D12" pin="2"/>
+      <node ref="D11" pin="2"/>
+      <node ref="D14" pin="2"/>
+      <node ref="D13" pin="2"/>
+    </net>
+    <net code="123" name="/sheet65E77961/E">
+      <node ref="D11" pin="1"/>
+      <node ref="D12" pin="1"/>
+      <node ref="D13" pin="1"/>
+      <node ref="D14" pin="1"/>
+      <node ref="U2" pin="14"/>
+    </net>
+    <net code="124" name="/sheet65E77961/A">
+      <node ref="D14" pin="11"/>
+      <node ref="U2" pin="10"/>
+      <node ref="D12" pin="11"/>
+      <node ref="D13" pin="11"/>
+      <node ref="D11" pin="11"/>
+    </net>
+    <net code="125" name="/sheet65E77961/F">
+      <node ref="D14" pin="10"/>
+      <node ref="D13" pin="10"/>
+      <node ref="U2" pin="15"/>
+      <node ref="D11" pin="10"/>
+      <node ref="D12" pin="10"/>
+    </net>
+    <net code="126" name="/sheet65E77961/DIG13">
+      <node ref="U2" pin="1"/>
+      <node ref="D14" pin="12"/>
+    </net>
+    <net code="127" name="/sheet65E77961/G">
+      <node ref="U2" pin="16"/>
+      <node ref="D14" pin="5"/>
+      <node ref="D12" pin="5"/>
+      <node ref="D13" pin="5"/>
+      <node ref="D11" pin="5"/>
+    </net>
+    <net code="128" name="/sheet65E77961/DIG16">
+      <node ref="D14" pin="6"/>
+      <node ref="U2" pin="4"/>
+    </net>
+    <net code="129" name="/sheet65E77961/B">
+      <node ref="D11" pin="7"/>
+      <node ref="U2" pin="11"/>
+      <node ref="D14" pin="7"/>
+      <node ref="D13" pin="7"/>
+      <node ref="D12" pin="7"/>
+    </net>
+    <net code="130" name="/sheet65E77961/DIG15">
+      <node ref="U2" pin="3"/>
+      <node ref="D14" pin="8"/>
+    </net>
+    <net code="131" name="/sheet65E77961/DIG14">
+      <node ref="U2" pin="2"/>
+      <node ref="D14" pin="9"/>
+    </net>
+    <net code="132" name="/sheet65E77961/DIG9">
+      <node ref="U2" pin="29"/>
+      <node ref="D13" pin="12"/>
+    </net>
+    <net code="133" name="Net-(U2-Pad9)">
+      <node ref="U2" pin="9"/>
+    </net>
+    <net code="134" name="/sheet65E77961/DIG6">
+      <node ref="U2" pin="25"/>
+      <node ref="D12" pin="9"/>
+    </net>
+    <net code="135" name="/sheet65E77961/DIG11">
+      <node ref="U2" pin="31"/>
+      <node ref="D13" pin="8"/>
+    </net>
+    <net code="136" name="/sheet65E77961/DIG5">
+      <node ref="U2" pin="24"/>
+      <node ref="D12" pin="12"/>
+    </net>
+    <net code="137" name="/sheet65E77961/DIG8">
+      <node ref="U2" pin="27"/>
+      <node ref="D12" pin="6"/>
+    </net>
+    <net code="138" name="/sheet65E77961/DIG7">
+      <node ref="U2" pin="26"/>
+      <node ref="D12" pin="8"/>
+    </net>
+    <net code="139" name="/sheet65E77961/DIG1">
+      <node ref="D11" pin="12"/>
+      <node ref="U2" pin="20"/>
+    </net>
+    <net code="140" name="/sheet65E77961/DIG4">
+      <node ref="D11" pin="6"/>
+      <node ref="U2" pin="23"/>
+    </net>
+    <net code="141" name="/sheet65E77961/DIG3">
+      <node ref="U2" pin="22"/>
+      <node ref="D11" pin="8"/>
+    </net>
+    <net code="142" name="/sheet65E77961/DIG2">
+      <node ref="U2" pin="21"/>
+      <node ref="D11" pin="9"/>
+    </net>
+    <net code="143" name="/sheet65E77961/DIG12">
+      <node ref="U2" pin="32"/>
+      <node ref="D13" pin="6"/>
+    </net>
+    <net code="144" name="/sheet65E77961/DIG10">
+      <node ref="U2" pin="30"/>
+      <node ref="D13" pin="9"/>
+    </net>
+    <net code="145" name="/sheet65E77CCE/DIG13">
+      <node ref="D18" pin="12"/>
+      <node ref="U3" pin="1"/>
+    </net>
+    <net code="146" name="/sheet65E77CCE/DP">
+      <node ref="D15" pin="3"/>
+      <node ref="D18" pin="3"/>
+      <node ref="D17" pin="3"/>
+      <node ref="D16" pin="3"/>
+      <node ref="U3" pin="17"/>
+    </net>
+    <net code="147" name="/sheet65E77CCE/C">
+      <node ref="U3" pin="12"/>
+      <node ref="D18" pin="4"/>
+      <node ref="D16" pin="4"/>
+      <node ref="D17" pin="4"/>
+      <node ref="D15" pin="4"/>
+    </net>
+    <net code="148" name="/sheet65E77CCE/D">
+      <node ref="D18" pin="2"/>
+      <node ref="D16" pin="2"/>
+      <node ref="D15" pin="2"/>
+      <node ref="D17" pin="2"/>
+      <node ref="U3" pin="13"/>
+    </net>
+    <net code="149" name="/sheet65E77CCE/E">
+      <node ref="D16" pin="1"/>
+      <node ref="D15" pin="1"/>
+      <node ref="U3" pin="14"/>
+      <node ref="D18" pin="1"/>
+      <node ref="D17" pin="1"/>
+    </net>
+    <net code="150" name="/sheet65E77CCE/A">
+      <node ref="D18" pin="11"/>
+      <node ref="D15" pin="11"/>
+      <node ref="D16" pin="11"/>
+      <node ref="U3" pin="10"/>
+      <node ref="D17" pin="11"/>
+    </net>
+    <net code="151" name="/sheet65E77CCE/F">
+      <node ref="D16" pin="10"/>
+      <node ref="D18" pin="10"/>
+      <node ref="U3" pin="15"/>
+      <node ref="D15" pin="10"/>
+      <node ref="D17" pin="10"/>
+    </net>
+    <net code="152" name="/sheet65E77CCE/G">
+      <node ref="D16" pin="5"/>
+      <node ref="D15" pin="5"/>
+      <node ref="U3" pin="16"/>
+      <node ref="D17" pin="5"/>
+      <node ref="D18" pin="5"/>
+    </net>
+    <net code="153" name="/sheet65E77CCE/DIG16">
+      <node ref="U3" pin="4"/>
+      <node ref="D18" pin="6"/>
+    </net>
+    <net code="154" name="/sheet65E77CCE/B">
+      <node ref="U3" pin="11"/>
+      <node ref="D18" pin="7"/>
+      <node ref="D16" pin="7"/>
+      <node ref="D15" pin="7"/>
+      <node ref="D17" pin="7"/>
+    </net>
+    <net code="155" name="/sheet65E77CCE/DIG15">
+      <node ref="U3" pin="3"/>
+      <node ref="D18" pin="8"/>
+    </net>
+    <net code="156" name="/sheet65E77CCE/DIG9">
+      <node ref="U3" pin="29"/>
+      <node ref="D17" pin="12"/>
+    </net>
+    <net code="157" name="Net-(U3-Pad9)">
+      <node ref="U3" pin="9"/>
+    </net>
+    <net code="158" name="/sheet65E77CCE/DIG11">
+      <node ref="U3" pin="31"/>
+      <node ref="D17" pin="8"/>
+    </net>
+    <net code="159" name="/sheet65E77CCE/DIG10">
+      <node ref="U3" pin="30"/>
+      <node ref="D17" pin="9"/>
+    </net>
+    <net code="160" name="/sheet65E77CCE/DIG5">
+      <node ref="U3" pin="24"/>
+      <node ref="D16" pin="12"/>
+    </net>
+    <net code="161" name="/sheet65E77CCE/DIG8">
+      <node ref="D16" pin="6"/>
+      <node ref="U3" pin="27"/>
+    </net>
+    <net code="162" name="/sheet65E77CCE/DIG7">
+      <node ref="U3" pin="26"/>
+      <node ref="D16" pin="8"/>
+    </net>
+    <net code="163" name="/sheet65E77CCE/DIG6">
+      <node ref="D16" pin="9"/>
+      <node ref="U3" pin="25"/>
+    </net>
+    <net code="164" name="/sheet65E77CCE/DIG12">
+      <node ref="U3" pin="32"/>
+      <node ref="D17" pin="6"/>
+    </net>
+    <net code="165" name="/sheet65E77CCE/DIG1">
+      <node ref="D15" pin="12"/>
+      <node ref="U3" pin="20"/>
+    </net>
+    <net code="166" name="/sheet65E77CCE/DIG4">
+      <node ref="U3" pin="23"/>
+      <node ref="D15" pin="6"/>
+    </net>
+    <net code="167" name="/sheet65E77CCE/DIG3">
+      <node ref="D15" pin="8"/>
+      <node ref="U3" pin="22"/>
+    </net>
+    <net code="168" name="/sheet65E77CCE/DIG2">
+      <node ref="D15" pin="9"/>
+      <node ref="U3" pin="21"/>
+    </net>
+    <net code="169" name="/sheet65E77CCE/DIG14">
+      <node ref="D18" pin="9"/>
+      <node ref="U3" pin="2"/>
+    </net>
+    <net code="170" name="/sheet65E79B9E/DIG13">
+      <node ref="U4" pin="1"/>
+      <node ref="D22" pin="12"/>
+    </net>
+    <net code="171" name="/sheet65E79B9E/DP">
+      <node ref="D22" pin="3"/>
+      <node ref="D21" pin="3"/>
+      <node ref="U4" pin="17"/>
+      <node ref="D19" pin="3"/>
+      <node ref="D20" pin="3"/>
+    </net>
+    <net code="172" name="/sheet65E79B9E/C">
+      <node ref="D19" pin="4"/>
+      <node ref="D21" pin="4"/>
+      <node ref="D22" pin="4"/>
+      <node ref="D20" pin="4"/>
+      <node ref="U4" pin="12"/>
+    </net>
+    <net code="173" name="/sheet65E79B9E/D">
+      <node ref="U4" pin="13"/>
+      <node ref="D19" pin="2"/>
+      <node ref="D20" pin="2"/>
+      <node ref="D21" pin="2"/>
+      <node ref="D22" pin="2"/>
+    </net>
+    <net code="174" name="/sheet65E79B9E/E">
+      <node ref="D21" pin="1"/>
+      <node ref="U4" pin="14"/>
+      <node ref="D22" pin="1"/>
+      <node ref="D20" pin="1"/>
+      <node ref="D19" pin="1"/>
+    </net>
+    <net code="175" name="/sheet65E79B9E/A">
+      <node ref="U4" pin="10"/>
+      <node ref="D19" pin="11"/>
+      <node ref="D22" pin="11"/>
+      <node ref="D20" pin="11"/>
+      <node ref="D21" pin="11"/>
+    </net>
+    <net code="176" name="/sheet65E79B9E/F">
+      <node ref="D22" pin="10"/>
+      <node ref="D21" pin="10"/>
+      <node ref="D19" pin="10"/>
+      <node ref="U4" pin="15"/>
+      <node ref="D20" pin="10"/>
+    </net>
+    <net code="177" name="/sheet65E79B9E/G">
+      <node ref="D21" pin="5"/>
+      <node ref="D22" pin="5"/>
+      <node ref="D19" pin="5"/>
+      <node ref="D20" pin="5"/>
+      <node ref="U4" pin="16"/>
+    </net>
+    <net code="178" name="/sheet65E79B9E/DIG16">
+      <node ref="D22" pin="6"/>
+      <node ref="U4" pin="4"/>
+    </net>
+    <net code="179" name="/sheet65E79B9E/B">
+      <node ref="D20" pin="7"/>
+      <node ref="D22" pin="7"/>
+      <node ref="D21" pin="7"/>
+      <node ref="D19" pin="7"/>
+      <node ref="U4" pin="11"/>
+    </net>
+    <net code="180" name="/sheet65E79B9E/DIG15">
+      <node ref="D22" pin="8"/>
+      <node ref="U4" pin="3"/>
+    </net>
+    <net code="181" name="/sheet65E79B9E/DIG9">
+      <node ref="D21" pin="12"/>
+      <node ref="U4" pin="29"/>
+    </net>
+    <net code="182" name="Net-(U4-Pad9)">
+      <node ref="U4" pin="9"/>
+    </net>
+    <net code="183" name="/sheet65E79B9E/DIG11">
+      <node ref="D21" pin="8"/>
+      <node ref="U4" pin="31"/>
+    </net>
+    <net code="184" name="/sheet65E79B9E/DIG10">
+      <node ref="D21" pin="9"/>
+      <node ref="U4" pin="30"/>
+    </net>
+    <net code="185" name="/sheet65E79B9E/DIG5">
+      <node ref="U4" pin="24"/>
+      <node ref="D20" pin="12"/>
+    </net>
+    <net code="186" name="/sheet65E79B9E/DIG8">
+      <node ref="D20" pin="6"/>
+      <node ref="U4" pin="27"/>
+    </net>
+    <net code="187" name="/sheet65E79B9E/DIG7">
+      <node ref="D20" pin="8"/>
+      <node ref="U4" pin="26"/>
+    </net>
+    <net code="188" name="/sheet65E79B9E/DIG6">
+      <node ref="U4" pin="25"/>
+      <node ref="D20" pin="9"/>
+    </net>
+    <net code="189" name="/sheet65E79B9E/DIG12">
+      <node ref="U4" pin="32"/>
+      <node ref="D21" pin="6"/>
+    </net>
+    <net code="190" name="/sheet65E79B9E/DIG1">
+      <node ref="U4" pin="20"/>
+      <node ref="D19" pin="12"/>
+    </net>
+    <net code="191" name="/sheet65E79B9E/DIG4">
+      <node ref="U4" pin="23"/>
+      <node ref="D19" pin="6"/>
+    </net>
+    <net code="192" name="/sheet65E79B9E/DIG3">
+      <node ref="U4" pin="22"/>
+      <node ref="D19" pin="8"/>
+    </net>
+    <net code="193" name="/sheet65E79B9E/DIG2">
+      <node ref="U4" pin="21"/>
+      <node ref="D19" pin="9"/>
+    </net>
+    <net code="194" name="/sheet65E79B9E/DIG14">
+      <node ref="U4" pin="2"/>
+      <node ref="D22" pin="9"/>
+    </net>
+    <net code="195" name="/sheet65E79BA3/DP">
+      <node ref="U5" pin="17"/>
+      <node ref="D24" pin="3"/>
+      <node ref="D23" pin="3"/>
+      <node ref="D26" pin="3"/>
+      <node ref="D25" pin="3"/>
+    </net>
+    <net code="196" name="/sheet65E79BA3/C">
+      <node ref="U5" pin="12"/>
+      <node ref="D24" pin="4"/>
+      <node ref="D25" pin="4"/>
+      <node ref="D26" pin="4"/>
+      <node ref="D23" pin="4"/>
+    </net>
+    <net code="197" name="/sheet65E79BA3/D">
+      <node ref="D26" pin="2"/>
+      <node ref="D25" pin="2"/>
+      <node ref="D24" pin="2"/>
+      <node ref="D23" pin="2"/>
+      <node ref="U5" pin="13"/>
+    </net>
+    <net code="198" name="/sheet65E79BA3/E">
+      <node ref="U5" pin="14"/>
+      <node ref="D24" pin="1"/>
+      <node ref="D26" pin="1"/>
+      <node ref="D25" pin="1"/>
+      <node ref="D23" pin="1"/>
+    </net>
+    <net code="199" name="/sheet65E79BA3/A">
+      <node ref="D25" pin="11"/>
+      <node ref="D26" pin="11"/>
+      <node ref="D23" pin="11"/>
+      <node ref="U5" pin="10"/>
+      <node ref="D24" pin="11"/>
+    </net>
+    <net code="200" name="/sheet65E79BA3/F">
+      <node ref="D24" pin="10"/>
+      <node ref="D25" pin="10"/>
+      <node ref="D23" pin="10"/>
+      <node ref="D26" pin="10"/>
+      <node ref="U5" pin="15"/>
+    </net>
+    <net code="201" name="/sheet65E79BA3/DIG13">
+      <node ref="D26" pin="12"/>
+      <node ref="U5" pin="1"/>
+    </net>
+    <net code="202" name="/sheet65E79BA3/G">
+      <node ref="U5" pin="16"/>
+      <node ref="D24" pin="5"/>
+      <node ref="D26" pin="5"/>
+      <node ref="D25" pin="5"/>
+      <node ref="D23" pin="5"/>
+    </net>
+    <net code="203" name="/sheet65E79BA3/DIG16">
+      <node ref="D26" pin="6"/>
+      <node ref="U5" pin="4"/>
+    </net>
+    <net code="204" name="/sheet65E79BA3/B">
+      <node ref="D23" pin="7"/>
+      <node ref="U5" pin="11"/>
+      <node ref="D26" pin="7"/>
+      <node ref="D25" pin="7"/>
+      <node ref="D24" pin="7"/>
+    </net>
+    <net code="205" name="/sheet65E79BA3/DIG15">
+      <node ref="U5" pin="3"/>
+      <node ref="D26" pin="8"/>
+    </net>
+    <net code="206" name="/sheet65E79BA3/DIG14">
+      <node ref="U5" pin="2"/>
+      <node ref="D26" pin="9"/>
+    </net>
+    <net code="207" name="/sheet65E79BA3/DIG9">
+      <node ref="U5" pin="29"/>
+      <node ref="D25" pin="12"/>
+    </net>
+    <net code="208" name="Net-(U5-Pad9)">
+      <node ref="U5" pin="9"/>
+    </net>
+    <net code="209" name="/sheet65E79BA3/DIG6">
+      <node ref="D24" pin="9"/>
+      <node ref="U5" pin="25"/>
+    </net>
+    <net code="210" name="/sheet65E79BA3/DIG11">
+      <node ref="D25" pin="8"/>
+      <node ref="U5" pin="31"/>
+    </net>
+    <net code="211" name="/sheet65E79BA3/DIG5">
+      <node ref="U5" pin="24"/>
+      <node ref="D24" pin="12"/>
+    </net>
+    <net code="212" name="/sheet65E79BA3/DIG8">
+      <node ref="D24" pin="6"/>
+      <node ref="U5" pin="27"/>
+    </net>
+    <net code="213" name="/sheet65E79BA3/DIG7">
+      <node ref="D24" pin="8"/>
+      <node ref="U5" pin="26"/>
+    </net>
+    <net code="214" name="/sheet65E79BA3/DIG1">
+      <node ref="D23" pin="12"/>
+      <node ref="U5" pin="20"/>
+    </net>
+    <net code="215" name="/sheet65E79BA3/DIG4">
+      <node ref="U5" pin="23"/>
+      <node ref="D23" pin="6"/>
+    </net>
+    <net code="216" name="/sheet65E79BA3/DIG3">
+      <node ref="U5" pin="22"/>
+      <node ref="D23" pin="8"/>
+    </net>
+    <net code="217" name="/sheet65E79BA3/DIG2">
+      <node ref="U5" pin="21"/>
+      <node ref="D23" pin="9"/>
+    </net>
+    <net code="218" name="/sheet65E79BA3/DIG12">
+      <node ref="U5" pin="32"/>
+      <node ref="D25" pin="6"/>
+    </net>
+    <net code="219" name="/sheet65E79BA3/DIG10">
+      <node ref="U5" pin="30"/>
+      <node ref="D25" pin="9"/>
+    </net>
+    <net code="220" name="/sheet65E79BB2/DIG13">
+      <node ref="U6" pin="1"/>
+      <node ref="D30" pin="12"/>
+    </net>
+    <net code="221" name="/sheet65E79BB2/DP">
+      <node ref="D27" pin="3"/>
+      <node ref="D30" pin="3"/>
+      <node ref="D29" pin="3"/>
+      <node ref="U6" pin="17"/>
+      <node ref="D28" pin="3"/>
+    </net>
+    <net code="222" name="/sheet65E79BB2/C">
+      <node ref="D29" pin="4"/>
+      <node ref="U6" pin="12"/>
+      <node ref="D28" pin="4"/>
+      <node ref="D30" pin="4"/>
+      <node ref="D27" pin="4"/>
+    </net>
+    <net code="223" name="/sheet65E79BB2/D">
+      <node ref="U6" pin="13"/>
+      <node ref="D29" pin="2"/>
+      <node ref="D30" pin="2"/>
+      <node ref="D28" pin="2"/>
+      <node ref="D27" pin="2"/>
+    </net>
+    <net code="224" name="/sheet65E79BB2/E">
+      <node ref="U6" pin="14"/>
+      <node ref="D30" pin="1"/>
+      <node ref="D29" pin="1"/>
+      <node ref="D28" pin="1"/>
+      <node ref="D27" pin="1"/>
+    </net>
+    <net code="225" name="/sheet65E79BB2/A">
+      <node ref="D30" pin="11"/>
+      <node ref="D29" pin="11"/>
+      <node ref="D28" pin="11"/>
+      <node ref="D27" pin="11"/>
+      <node ref="U6" pin="10"/>
+    </net>
+    <net code="226" name="/sheet65E79BB2/F">
+      <node ref="D28" pin="10"/>
+      <node ref="D27" pin="10"/>
+      <node ref="D29" pin="10"/>
+      <node ref="U6" pin="15"/>
+      <node ref="D30" pin="10"/>
+    </net>
+    <net code="227" name="/sheet65E79BB2/G">
+      <node ref="D28" pin="5"/>
+      <node ref="D29" pin="5"/>
+      <node ref="D27" pin="5"/>
+      <node ref="D30" pin="5"/>
+      <node ref="U6" pin="16"/>
+    </net>
+    <net code="228" name="/sheet65E79BB2/B">
+      <node ref="U6" pin="11"/>
+      <node ref="D29" pin="7"/>
+      <node ref="D28" pin="7"/>
+      <node ref="D27" pin="7"/>
+      <node ref="D30" pin="7"/>
+    </net>
+    <net code="229" name="/sheet65E79BB2/DIG15">
+      <node ref="U6" pin="3"/>
+      <node ref="D30" pin="8"/>
+    </net>
+    <net code="230" name="/sheet65E79BB2/DIG14">
+      <node ref="U6" pin="2"/>
+      <node ref="D30" pin="9"/>
+    </net>
+    <net code="231" name="/sheet65E79BB2/DIG9">
+      <node ref="U6" pin="29"/>
+      <node ref="D29" pin="12"/>
+    </net>
+    <net code="232" name="Net-(U6-Pad9)">
+      <node ref="U6" pin="9"/>
+    </net>
+    <net code="233" name="/sheet65E79BB2/DIG11">
+      <node ref="D29" pin="8"/>
+      <node ref="U6" pin="31"/>
+    </net>
+    <net code="234" name="/sheet65E79BB2/DIG10">
+      <node ref="D29" pin="9"/>
+      <node ref="U6" pin="30"/>
+    </net>
+    <net code="235" name="/sheet65E79BB2/DIG5">
+      <node ref="U6" pin="24"/>
+      <node ref="D28" pin="12"/>
+    </net>
+    <net code="236" name="/sheet65E79BB2/DIG8">
+      <node ref="U6" pin="27"/>
+      <node ref="D28" pin="6"/>
+    </net>
+    <net code="237" name="/sheet65E79BB2/DIG7">
+      <node ref="D28" pin="8"/>
+      <node ref="U6" pin="26"/>
+    </net>
+    <net code="238" name="/sheet65E79BB2/DIG6">
+      <node ref="U6" pin="25"/>
+      <node ref="D28" pin="9"/>
+    </net>
+    <net code="239" name="/sheet65E79BB2/DIG12">
+      <node ref="D29" pin="6"/>
+      <node ref="U6" pin="32"/>
+    </net>
+    <net code="240" name="/sheet65E79BB2/DIG1">
+      <node ref="D27" pin="12"/>
+      <node ref="U6" pin="20"/>
+    </net>
+    <net code="241" name="/sheet65E79BB2/DIG4">
+      <node ref="D27" pin="6"/>
+      <node ref="U6" pin="23"/>
+    </net>
+    <net code="242" name="/sheet65E79BB2/DIG3">
+      <node ref="U6" pin="22"/>
+      <node ref="D27" pin="8"/>
+    </net>
+    <net code="243" name="/sheet65E79BB2/DIG2">
+      <node ref="D27" pin="9"/>
+      <node ref="U6" pin="21"/>
+    </net>
+    <net code="244" name="/sheet65E79BB2/DIG16">
+      <node ref="D30" pin="6"/>
+      <node ref="U6" pin="4"/>
+    </net>
+    <net code="245" name="/sheet65E79BBC/C">
+      <node ref="D31" pin="4"/>
+      <node ref="D32" pin="4"/>
+      <node ref="D34" pin="4"/>
+      <node ref="U7" pin="12"/>
+      <node ref="D33" pin="4"/>
+    </net>
+    <net code="246" name="/sheet65E79BBC/DIG13">
+      <node ref="U7" pin="1"/>
+      <node ref="D34" pin="12"/>
+    </net>
+    <net code="247" name="/sheet65E79BBC/DP">
+      <node ref="D34" pin="3"/>
+      <node ref="D33" pin="3"/>
+      <node ref="D31" pin="3"/>
+      <node ref="D32" pin="3"/>
+      <node ref="U7" pin="17"/>
+    </net>
+    <net code="248" name="/sheet65E79BBC/D">
+      <node ref="D32" pin="2"/>
+      <node ref="D34" pin="2"/>
+      <node ref="D31" pin="2"/>
+      <node ref="U7" pin="13"/>
+      <node ref="D33" pin="2"/>
+    </net>
+    <net code="249" name="/sheet65E79BBC/E">
+      <node ref="D33" pin="1"/>
+      <node ref="D31" pin="1"/>
+      <node ref="U7" pin="14"/>
+      <node ref="D34" pin="1"/>
+      <node ref="D32" pin="1"/>
+    </net>
+    <net code="250" name="/sheet65E79BBC/A">
+      <node ref="D33" pin="11"/>
+      <node ref="D32" pin="11"/>
+      <node ref="U7" pin="10"/>
+      <node ref="D34" pin="11"/>
+      <node ref="D31" pin="11"/>
+    </net>
+    <net code="251" name="/sheet65E79BBC/F">
+      <node ref="U7" pin="15"/>
+      <node ref="D33" pin="10"/>
+      <node ref="D34" pin="10"/>
+      <node ref="D32" pin="10"/>
+      <node ref="D31" pin="10"/>
+    </net>
+    <net code="252" name="/sheet65E79BBC/G">
+      <node ref="U7" pin="16"/>
+      <node ref="D33" pin="5"/>
+      <node ref="D31" pin="5"/>
+      <node ref="D32" pin="5"/>
+      <node ref="D34" pin="5"/>
+    </net>
+    <net code="253" name="/sheet65E79BBC/DIG16">
+      <node ref="D34" pin="6"/>
+      <node ref="U7" pin="4"/>
+    </net>
+    <net code="254" name="/sheet65E79BBC/B">
+      <node ref="U7" pin="11"/>
+      <node ref="D33" pin="7"/>
+      <node ref="D31" pin="7"/>
+      <node ref="D32" pin="7"/>
+      <node ref="D34" pin="7"/>
+    </net>
+    <net code="255" name="/sheet65E79BBC/DIG15">
+      <node ref="D34" pin="8"/>
+      <node ref="U7" pin="3"/>
+    </net>
+    <net code="256" name="/sheet65E79BBC/DIG14">
+      <node ref="U7" pin="2"/>
+      <node ref="D34" pin="9"/>
+    </net>
+    <net code="257" name="/sheet65E79BBC/DIG9">
+      <node ref="D33" pin="12"/>
+      <node ref="U7" pin="29"/>
+    </net>
+    <net code="258" name="Net-(U7-Pad9)">
+      <node ref="U7" pin="9"/>
+    </net>
+    <net code="259" name="/sheet65E79BBC/DIG11">
+      <node ref="D33" pin="8"/>
+      <node ref="U7" pin="31"/>
+    </net>
+    <net code="260" name="/sheet65E79BBC/DIG5">
+      <node ref="U7" pin="24"/>
+      <node ref="D32" pin="12"/>
+    </net>
+    <net code="261" name="/sheet65E79BBC/DIG8">
+      <node ref="D32" pin="6"/>
+      <node ref="U7" pin="27"/>
+    </net>
+    <net code="262" name="/sheet65E79BBC/DIG7">
+      <node ref="D32" pin="8"/>
+      <node ref="U7" pin="26"/>
+    </net>
+    <net code="263" name="/sheet65E79BBC/DIG6">
+      <node ref="U7" pin="25"/>
+      <node ref="D32" pin="9"/>
+    </net>
+    <net code="264" name="/sheet65E79BBC/DIG1">
+      <node ref="U7" pin="20"/>
+      <node ref="D31" pin="12"/>
+    </net>
+    <net code="265" name="/sheet65E79BBC/DIG4">
+      <node ref="D31" pin="6"/>
+      <node ref="U7" pin="23"/>
+    </net>
+    <net code="266" name="/sheet65E79BBC/DIG3">
+      <node ref="U7" pin="22"/>
+      <node ref="D31" pin="8"/>
+    </net>
+    <net code="267" name="/sheet65E79BBC/DIG2">
+      <node ref="D31" pin="9"/>
+      <node ref="U7" pin="21"/>
+    </net>
+    <net code="268" name="/sheet65E79BBC/DIG12">
+      <node ref="U7" pin="32"/>
+      <node ref="D33" pin="6"/>
+    </net>
+    <net code="269" name="/sheet65E79BBC/DIG10">
+      <node ref="U7" pin="30"/>
+      <node ref="D33" pin="9"/>
+    </net>
+    <net code="270" name="/sheet65E7B3E1/DP">
+      <node ref="D35" pin="3"/>
+      <node ref="U8" pin="17"/>
+      <node ref="D36" pin="3"/>
+      <node ref="D37" pin="3"/>
+      <node ref="D38" pin="3"/>
+    </net>
+    <net code="271" name="/sheet65E7B3E1/C">
+      <node ref="D38" pin="4"/>
+      <node ref="D36" pin="4"/>
+      <node ref="U8" pin="12"/>
+      <node ref="D37" pin="4"/>
+      <node ref="D35" pin="4"/>
+    </net>
+    <net code="272" name="/sheet65E7B3E1/D">
+      <node ref="D36" pin="2"/>
+      <node ref="D37" pin="2"/>
+      <node ref="U8" pin="13"/>
+      <node ref="D38" pin="2"/>
+      <node ref="D35" pin="2"/>
+    </net>
+    <net code="273" name="/sheet65E7B3E1/E">
+      <node ref="D37" pin="1"/>
+      <node ref="D36" pin="1"/>
+      <node ref="D38" pin="1"/>
+      <node ref="U8" pin="14"/>
+      <node ref="D35" pin="1"/>
+    </net>
+    <net code="274" name="/sheet65E7B3E1/A">
+      <node ref="D36" pin="11"/>
+      <node ref="D35" pin="11"/>
+      <node ref="D38" pin="11"/>
+      <node ref="D37" pin="11"/>
+      <node ref="U8" pin="10"/>
+    </net>
+    <net code="275" name="/sheet65E7B3E1/F">
+      <node ref="D36" pin="10"/>
+      <node ref="D37" pin="10"/>
+      <node ref="D38" pin="10"/>
+      <node ref="U8" pin="15"/>
+      <node ref="D35" pin="10"/>
+    </net>
+    <net code="276" name="/sheet65E7B3E1/DIG13">
+      <node ref="D38" pin="12"/>
+      <node ref="U8" pin="1"/>
+    </net>
+    <net code="277" name="/sheet65E7B3E1/G">
+      <node ref="D35" pin="5"/>
+      <node ref="U8" pin="16"/>
+      <node ref="D37" pin="5"/>
+      <node ref="D36" pin="5"/>
+      <node ref="D38" pin="5"/>
+    </net>
+    <net code="278" name="/sheet65E7B3E1/DIG16">
+      <node ref="D38" pin="6"/>
+      <node ref="U8" pin="4"/>
+    </net>
+    <net code="279" name="/sheet65E7B3E1/B">
+      <node ref="D35" pin="7"/>
+      <node ref="U8" pin="11"/>
+      <node ref="D36" pin="7"/>
+      <node ref="D37" pin="7"/>
+      <node ref="D38" pin="7"/>
+    </net>
+    <net code="280" name="/sheet65E7B3E1/DIG15">
+      <node ref="D38" pin="8"/>
+      <node ref="U8" pin="3"/>
+    </net>
+    <net code="281" name="/sheet65E7B3E1/DIG9">
+      <node ref="U8" pin="29"/>
+      <node ref="D37" pin="12"/>
+    </net>
+    <net code="282" name="Net-(U8-Pad9)">
+      <node ref="U8" pin="9"/>
+    </net>
+    <net code="283" name="/sheet65E7B3E1/DIG6">
+      <node ref="U8" pin="25"/>
+      <node ref="D36" pin="9"/>
+    </net>
+    <net code="284" name="/sheet65E7B3E1/DIG12">
+      <node ref="U8" pin="32"/>
+      <node ref="D37" pin="6"/>
+    </net>
+    <net code="285" name="/sheet65E7B3E1/DIG11">
+      <node ref="U8" pin="31"/>
+      <node ref="D37" pin="8"/>
+    </net>
+    <net code="286" name="/sheet65E7B3E1/DIG10">
+      <node ref="D37" pin="9"/>
+      <node ref="U8" pin="30"/>
+    </net>
+    <net code="287" name="/sheet65E7B3E1/DIG5">
+      <node ref="D36" pin="12"/>
+      <node ref="U8" pin="24"/>
+    </net>
+    <net code="288" name="/sheet65E7B3E1/DIG8">
+      <node ref="D36" pin="6"/>
+      <node ref="U8" pin="27"/>
+    </net>
+    <net code="289" name="/sheet65E7B3E1/DIG7">
+      <node ref="D36" pin="8"/>
+      <node ref="U8" pin="26"/>
+    </net>
+    <net code="290" name="/sheet65E7B3E1/DIG1">
+      <node ref="U8" pin="20"/>
+      <node ref="D35" pin="12"/>
+    </net>
+    <net code="291" name="/sheet65E7B3E1/DIG4">
+      <node ref="D35" pin="6"/>
+      <node ref="U8" pin="23"/>
+    </net>
+    <net code="292" name="/sheet65E7B3E1/DIG3">
+      <node ref="U8" pin="22"/>
+      <node ref="D35" pin="8"/>
+    </net>
+    <net code="293" name="/sheet65E7B3E1/DIG2">
+      <node ref="U8" pin="21"/>
+      <node ref="D35" pin="9"/>
+    </net>
+    <net code="294" name="/sheet65E7B3E1/DIG14">
+      <node ref="D38" pin="9"/>
+      <node ref="U8" pin="2"/>
+    </net>
+  </nets>
+</export>
