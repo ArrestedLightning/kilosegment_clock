@@ -23,7 +23,7 @@
 #include <TimeLib.h>
 #include <DS1302RTC.h>
 #include <EEPROM.h>
-#include "button.h"
+#include "Button.h"
 #include "Tunes.h"
 #include "Digits.h"
 
