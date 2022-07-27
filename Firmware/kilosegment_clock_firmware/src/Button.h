@@ -15,33 +15,33 @@ Purpose: Arduino library to handle buttons
 
 class Button
 {
-	public:
-	//Simple constructor
-	Button(int pin);
-	Button(int name, int pin);
-	Button(int name, int pin, int analogLow, int analogHigh, bool activeLow = true);
+  public:
+    //Simple constructor
+    Button(int pin);
+    Button(int name, int pin);
+    Button(int name, int pin, int analogLow, int analogHigh, bool activeLow = true);
 
   //Background function called when in a wait or repeat loop
   void Background(void (*pBackgroundFunction)());
-	//Repeat function called when button is pressed
+  //Repeat function called when button is pressed
   void Repeat(void (*pRepeatFunction)());
-	//Test if button is pressed
-	bool IsDown(void);
-	//Test whether button is pressed and released
-	//Will call repeat function if one is provided
-	bool Pressed();
-	//Return button state (HIGH or LOW) - LOW = Pressed
-	int State();
+  //Test if button is pressed
+  bool IsDown(void);
+  //Test whether button is pressed and released
+  //Will call repeat function if one is provided
+  bool Pressed();
+  //Return button state (HIGH or LOW) - LOW = Pressed
+  int State();
   //Return button name
   int Name();
 
-	private:
-		int _name;
-		int _pin;
-		bool _range;
-		int _low;
-		int _high;
-		bool _activeLow;
-		void (*_repeatCallback)(void);
-		void (*_backgroundCallback)(void);
+  private:
+    int _name;
+    int _pin;
+    bool _range;
+    int _low;
+    int _high;
+    bool _activeLow;
+    void (*_repeatCallback)(void);
+    void (*_backgroundCallback)(void);
 };

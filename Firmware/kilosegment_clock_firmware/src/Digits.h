@@ -5,97 +5,47 @@
  
 #pragma once
 
-//---------------------------------------------------
-// Standard MAX7219 wiring
-// Digit order 0,1,2,3,4,5
 
-/*
-// Segment order _ a b c d e f g
+// Segment order _ g f e d c b a
 #define _______ B00000000
-#define __cd___ B00011000
-#define _bcde_g B00111101
+#define __cd___ B00001100
+#define _bcde_g B01011110
 #define abcdefg B01111111
-#define __cdefg B00011111
-#define __c____ B00010000
-#define ab__efg B01100111
-#define abcd_fg B01111011
-#define abcde_g B01111101
-#define ab_defg B01101111
-#define _bc____ B00110000
-#define a__defg B01001111
-#define ____ef_ B00000110
-#define ___defg B00001111
-#define abc__fg B01110011
-#define a___ef_ B01000110
-#define _b_____ B00100000
-#define ab___f_ B01100010
-#define _bcd___ B00111000
-#define a___ef_ B01000110
-#define ab_____ B01100000
-#define ____e__ B00000100
-#define __cde_g B00011101
-#define a____f_ B01000010
-#define a_cdefg B01011111
-#define ___de__ B00001100
-#define _____f_ B00000010
-#define ab___fg B01100011
-#define a__def_ B01001110
-#define __cde__ B00011100
-#define a___efg B01000111
-
-#define a__d___ B01001000
-#define abc____ B01110000
-#define _bc_ef_ B00110110
-#define ___def_ B00001110
-#define abc_ef_ B01110110
-#define _bcdef_ B00111110
-#define a__def_ B01001110
-#define abcd___ B01111000
-
-
-*/
-
-//Segment order d e f b c a _ g
-#define _______ B00000000
-#define __cd___ B10001000
-#define _bcde_g B11011001
-#define abcdefg B11111101
-#define __cdefg B11101001
-#define __c____ B00001000
-#define ab__efg B01110101
-#define abcd_fg B10111101
-#define abcde_g B11011101
-#define ab_defg B11110101
-#define _bc____ B00011000
-#define a__defg B11100101
-#define ____ef_ B01100000
-#define ___defg B11100001
-#define abc__fg B00111101
-#define a___ef_ B01100100
-#define _b_____ B00010000
-#define ab___f_ B00110100
-#define _bcd___ B10011000
-#define a___ef_ B01100100
-#define ab_____ B00010100
-#define ____e__ B01000000
-#define __cde_g B11001001
-#define a____f_ B00100100
-#define a_cdefg B11101101
-#define ___de__ B11000000
+#define __cdefg B01111100
+#define __c____ B00000100
+#define ab__efg B01110011
+#define abcd_fg B01101111
+#define abcde_g B01011111
+#define ab_defg B01111011
+#define _bc____ B00000110
+#define a__defg B01111001
+#define ____ef_ B00110000
+#define ___defg B01111000
+#define abc__fg B01100111
+#define a___ef_ B00110001
+#define _b_____ B00000010
+#define ab___f_ B00100011
+#define _bcd___ B00001110
+#define a___ef_ B00110001
+#define ab_____ B00000011
+#define ____e__ B00010000
+#define __cde_g B01011100
+#define a____f_ B00100001
+#define a_cdefg B01111101
+#define ___de__ B00011000
 #define _____f_ B00100000
-#define ab___fg B00110101
-#define a__def_ B11100100
-#define __cde__ B11001000
-#define a___efg B01100101
-
-#define a__d___ B10000100
-#define abc____ B00011100
-#define _bc_ef_ B01111000
-#define ___def_ B11100000
-#define abc_ef_ B01111100
-#define _bcdef_ B11111000
-#define a__def_ B11100100
-#define abcd___ B10011100
+#define ab___fg B01100011
+#define a__def_ B00111001
+#define __cde__ B00011100
+#define a___efg B01110001
+#define a__d___ B00001001
+#define abc____ B00000111
+#define _bc_ef_ B00110110
+#define ___def_ B00111000
+#define abc_ef_ B00110111
+#define _bcdef_ B00111110
+#define a__def_ B00111001
+#define abcd___ B00001111
 
 
 //Square Numbers
@@ -103,21 +53,63 @@
 //ASCII Character Set
 //Numbers 0 - 9
 //Letters A - Z
-//Segment order d e f b c a _ g
-uint8_t ascii[] = {
-    B11111100, B00011000, B11010101, B10011101, B00111001, B10101101, B11101101, B00011100, B11111101, B10111101, B00000000, B00000000, B00000000, B00000001, B00000000, B00000000,
-    B00000000, B01111101, B11101001, B11100100, B11011001, B11100101, B01100101, B10111101, B01111001, B00011000, B11011000, B00000000, B11100000, B00000000, B01001001, B11001001,
-    B01110101, B00000000, B01000001, B10101101, B11100001, B11001000, B00000000, B00000000, B00000000, B10111001, B00000000, B11001100, B01010001, B10011100, B00000000, B10000000
+//Segment order _ g f e d c b a
+const uint8_t ascii[] = {
+    B00111111, 
+    B00000110, 
+    B01011011, 
+    B01001111, 
+    B01100110, 
+    B01101101, 
+    B01111101, 
+    B00000111, 
+    B01111111, 
+    B01101111, 
+    B00000000, 
+    B00000000, 
+    B00000000, 
+    B01000000, 
+    B00000000, 
+    B00000000,
+    B00000000, 
+    B01110111, 
+    B01111100, 
+    B00111001, 
+    B01011110, 
+    B01111001, 
+    B01110001, 
+    B01101111, 
+    B01110110, 
+    B00000110, 
+    B00011110, 
+    B00000000, 
+    B00111000, 
+    B00000000, 
+    B01010100, 
+    B01011100,
+    B01110011, 
+    B00000000, 
+    B01010000, 
+    B01101101, 
+    B01111000, 
+    B00011100, 
+    B00000000, 
+    B00000000, 
+    B00000000, 
+    B01101110, 
+    B00000000, 
+    B00011101, 
+    B01010010, 
+    B00001111, 
+    B00000000, 
+    B00001000
 };
-
-//Digit sequence for each device (MAX7219)
-uint8_t digitMap[] = {5, 2, 6, 4, 1, 7, 3, 0};
 
 //------------------------------------------------------------
 //            Digits using logical coordinates
 //------------------------------------------------------------
 
-const int8_t largeDigits[11][6][6] PROGMEM = 
+const uint8_t largeDigits[11][6][6] = 
 {
   { //0
     { _______, _______, __cd___, _bcde_g, abcdefg, __cdefg },
@@ -209,7 +201,7 @@ const int8_t largeDigits[11][6][6] PROGMEM =
   }
 };
 
-const int8_t smallDigits[11][5][3] PROGMEM = 
+const uint8_t smallDigits[11][5][3] = 
 {
   { //0
     { a___ef_, a__d___, abc____ },

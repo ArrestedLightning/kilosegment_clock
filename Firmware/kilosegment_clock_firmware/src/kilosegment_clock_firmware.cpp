@@ -8,7 +8,7 @@
  * - MAX7219 device, digit and segments order has been changed to simply an otherwise 
  *   complex PCB board routing. 
  * - Hardware uses Arduino Mini Pro, DS1302 RTC and 4 push buttons
- * - Added Alarm function with selectable alarm usic
+ * - Added Alarm function with selectable alarm music
  * - Added Brightness setting
  * - Added Setup screen to set time, date, alarm, music and brightness
  * - Added Date screen (displays for two seconds when ENTER button is pressed
@@ -16,39 +16,42 @@
  * - Added date format option on configuration screen
  * - Increased date screen timeout from 2 to 5 seconds
  * - Added a configuarble choice of font for date display
+ * 
+ * Modifications by ArrestedLightning
+ * 2022-07-24
+ * - Modified to suport Kilosegment clock board hardware
+ * -- GN6932 display drivers, onboard RTC
  *--------------------------------------------------*/
  
-#include <MD_MAX72xx.h>
 #include <SPI.h>
-#include <TimeLib.h>
-#include <DS1302RTC.h>
+// #include <TimeLib.h>
+#include <STM32RTC.h>
 #include <EEPROM.h>
 #include "Button.h"
 #include "Tunes.h"
 #include "Digits.h"
+#include "mapping.h"
+#include "xx6932.h"
+#include "kilosegment_clock_firmware.h"
 
-#define HARDWARE_TYPE MD_MAX72XX::GENERIC_HW
-#define MAX_DEVICES 18
+/* Pin definitions */
+#define LED_CLK   PB13
+#define LED_DIN   PB14 //not used
+#define LED_DOUT  PB15
 
-#define LED_CLK   13  // or SCK  (WHI)
-#define LED_DATA  11  // or MOSI (BRN)
-#define LED_CS    10  // or SS   (YEL)
 
-#define SPEAKER   2
-#define SW_UP     3
-#define SW_DOWN   4
-#define RTC_CLK   5
-#define RTC_IO    6
-#define SW_ENTER  7
-#define RTC_CE    8
-#define SW_SELECT 9
+#define SPEAKER   PB9
+#define SW_UP     PB0
+#define SW_DOWN   PB1
+#define SW_ENTER  PB10
+#define SW_CLOCK  PB3
 
-DS1302RTC rtc(RTC_CE, RTC_IO, RTC_CLK);
+#define HB_LED    PA15
 
-// SPI hardware interface
-MD_MAX72XX mx = MD_MAX72XX(HARDWARE_TYPE, LED_CS, MAX_DEVICES);
-// Arbitrary pins
-//MD_MAX72XX mx = MD_MAX72XX(HARDWARE_TYPE, LED_DATA, LED_CLK, LED_CS, MAX_DEVICES);
+#define NUM_DISPLAY_DRIVERS 9
+
+/* Get the rtc object */
+STM32RTC& rtc = STM32RTC::getInstance();
 
 //EEPROM handling
 #define EEPROM_ADDRESS 0
@@ -67,6 +70,17 @@ typedef struct {
 
 EEPROM_DATA EepromData;       //Current EEPROM settings
 
+//pulled from time.h
+typedef struct { 
+  uint8_t Second; 
+  uint8_t Minute; 
+  uint8_t Hour; 
+  uint8_t Wday;   // day of week, sunday is day 1
+  uint8_t Day;
+  uint8_t Month; 
+  uint8_t Year;   // offset from 2001; 
+} TimeElements;
+
 void clockButtonPressed(void);
 void enterButtonPressed(void);
 void downButtonPressed(void);
@@ -79,6 +93,7 @@ Button* upButton;
 
 //Operating modes
 bool inSubMenu = false;
+//blink rate on setup menus
 #define SETUP_FLASH_RATE 200;
 unsigned long setupTimeout;
 bool setupDisplayState = false;
@@ -105,8 +120,20 @@ bool alarmCancelled = false;  //alarm cancelled by user
 bool musicPlaying = false;    //true if playing a song
 bool clockColon = false;      //show/hide colon
 
-int8_t dom[] = {31,28,31,30,31,30,31,31,30,31,30,31};
-tmElements_t newTime;           //Used to store new time
+/* Number of days in each month */
+const uint8_t dom[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+//Temporary time structure
+TimeElements newTime = { 0 };
+
+const uint32_t led_chip_select_pins[NUM_DISPLAY_DRIVERS] = { PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7, PA8 };
+//display driver objects
+xx6932 display_drivers[NUM_DISPLAY_DRIVERS];
+//LED_DIN is not used, but provided here to keep the library happy
+SPIClass SPI_2(LED_DOUT, LED_DIN, LED_CLK);
+//TRANSMITRECEIVE is necessary so that it waits for transmission to complete
+SPISettings spi_settings(500000, LSBFIRST, SPI_MODE3, SPI_TRANSMITRECEIVE);
+
 
 void setup()
 {
@@ -115,48 +142,51 @@ void setup()
   //Eprom
   readEepromData();
 
-  //Initialise buttons
-  clockButton = new Button(SW_SELECT);
+  //Initialize buttons
+  clockButton = new Button(SW_CLOCK);
   enterButton = new Button(SW_ENTER);
   downButton = new Button(SW_DOWN);
   downButton->Repeat(downButtonPressed);
   upButton = new Button(SW_UP);
   upButton->Repeat(upButtonPressed);
 
-  //Initialise sound
-  pinMode(SPEAKER,OUTPUT);
+  //Initialize sound
+  pinMode(SPEAKER, OUTPUT);
+  digitalWrite(SPEAKER, LOW);
 
-  mx.begin();
-  mx.control(MD_MAX72XX::INTENSITY, EepromData.brightness); //0..MAX_INTENSITY
-  mx.update(MD_MAX72XX::OFF) ;       //No Auto updating
+  SPI_2.begin();
+  // SPI_2.beginTransaction(spi_settings);
+  // SPI_2.endTransaction();
 
-  setSyncProvider(rtc.get);          // the function to get the time from the RTC
-  if(timeStatus() != timeSet)
-  {
-    Serial.println("RTC Sync Bad");
-    newTime.Year = CalendarYrToTm(2020);
-    newTime.Month = 5;
-    newTime.Day = 30;
-    newTime.Hour = 14;
-    newTime.Minute = 53;
-    newTime.Second = 0;
-    time_t t = makeTime(newTime);
-    setTime(t);
-    rtc.set(t);
-    
-    if (rtc.set(t) != 0) 
-    {
-      Serial.println("Set Time Failed");
-    }
+  //Initialize display drivers
+  for (int i = 0; i < NUM_DISPLAY_DRIVERS; i += 1) {
+    display_drivers[i].set_spi_instance(&SPI_2);
+    display_drivers[i].set_chip_select_pin(led_chip_select_pins[i]);
+    display_drivers[i].set_spi_settings(&spi_settings);
   }
-  newTime.Year = CalendarYrToTm(year());
-  newTime.Month = month();
-  newTime.Day = day();
-  newTime.Hour = hour();
-  newTime.Minute = minute();
-  newTime.Second = second();
-  Serial.println("Time: " + String(newTime.Hour) + ":" + String(newTime.Minute) + ":" + String(newTime.Second));
-  Serial.println("Date: " + String(newTime.Day) + "/" + String(newTime.Month) + "/" + String(tmYearToCalendar(newTime.Year)));
+
+  for (int i = 0; i < NUM_DISPLAY_DRIVERS; i += 1) {
+    display_drivers[i].init();
+    display_drivers[i].set_brightness(EepromData.brightness);
+  }
+  
+  pinMode(HB_LED, OUTPUT);
+  digitalWrite(HB_LED, LOW);
+
+  //make sure we're using the 32KHz external crystal if we want remotely accurate timekeeping
+  rtc.setClockSource(STM32RTC::LSE_CLOCK);
+  rtc.begin();
+
+  if(!rtc.isTimeSet())
+  {
+    Serial.println("RTC not set");
+    RTC_SetTime(0,0,0,0,HOUR_AM);
+    RTC_SetDate(tmYearFromCalendar(2022), 1, 1, RTC_WEEKDAY_SATURDAY);
+  }
+  rtc.getDate(&newTime.Wday, &newTime.Day, &newTime.Month, &newTime.Year);
+  rtc.getTime(&newTime.Hour, &newTime.Minute, &newTime.Second, NULL, NULL);
+  Serial.println("Time: " + String(rtc.getHours()) + ":" + String(rtc.getMinutes()) + ":" + String(rtc.getSeconds()));
+  Serial.println("Date: " + String(rtc.getDay()) + "/" + String(rtc.getMonth()) + "/" + String(rtc.getYear()));
 
   clockMode = CLOCK;
   showTime(true);
@@ -169,7 +199,7 @@ void loop()
   if (clockMode == CLOCK)
   {
     showTime(false);
-    if (EepromData.alarm && EepromData.hours == hour() && EepromData.minutes == minute())
+    if (EepromData.alarm && EepromData.hours == rtc.getHours() && EepromData.minutes == rtc.getMinutes())
     {
       if (!alarmCancelled)
       {
@@ -190,11 +220,12 @@ void loop()
   }
 
   delay(100);
+  digitalWrite(HB_LED, !digitalRead(HB_LED));
 }
 
 //---------------------------------------------------------------
 //Test if any buttons have been pressed
-void testButtons()
+void testButtons(void)
 {
   //Single press buttons
   if (clockButton->Pressed())
@@ -213,7 +244,7 @@ void testButtons()
 
 //---------------------------------------------------------------
 //Handle CLOCK btton
-void clockButtonPressed()
+void clockButtonPressed(void)
 {
   if (cancelAlarm()) return;
 
@@ -222,16 +253,16 @@ void clockButtonPressed()
   if (clockMode == CLOCK)
   {
     Serial.println("Saving Time: " + String(newTime.Hour) + ":" + String(newTime.Minute));
-    Serial.println("       From: " + String(hour()) + ":" + String(minute()));
-    if (newTime.Year != CalendarYrToTm(year()) || newTime.Month != month() || newTime.Day != day() || newTime.Hour != hour() || newTime.Minute != minute())
+    Serial.println("       From: " + String(rtc.getHours()) + ":" + String(rtc.getMinutes()));
+    if (newTime.Year != rtc.getYear() || newTime.Month != rtc.getMonth() || newTime.Day != rtc.getDay() || newTime.Hour != rtc.getHours() || newTime.Minute != rtc.getMinutes())
     {
       //Update time
       Serial.println("Updating RTC");
-      newTime.Second = second();
-      time_t t = makeTime(newTime);
-      setTime(t);
-      rtc.set(t);
-      if (rtc.set(t) != 0) 
+      //reset seconds when updating time so as to allow for synchronization with an external clock
+      newTime.Second = 0;//rtc.getSeconds();
+      rtc.setDate(newTime.Wday, newTime.Day, newTime.Month, newTime.Year);
+      rtc.setTime(newTime.Hour, newTime.Minute, newTime.Second, 0, rtc.AM);
+      if (!rtc.isTimeSet()) 
       {
         Serial.println("Set Time Failed");
       }
@@ -243,13 +274,9 @@ void clockButtonPressed()
   {
     if (clockMode == TIME_SET)
     {
-      newTime.Year = CalendarYrToTm(year());
-      newTime.Month = month();
-      newTime.Day = day();
-      newTime.Hour = hour();
-      newTime.Minute = minute();
-      newTime.Second = second();
-      Serial.println("Loading Time: " + String(hour()) + ":" + String(minute()));
+      rtc.getDate(&newTime.Wday, &newTime.Day, &newTime.Month, &newTime.Year);
+      rtc.getTime(&newTime.Hour, &newTime.Minute, &newTime.Second, NULL, NULL);
+      Serial.println("Loading Time: " + String(newTime.Hour) + ":" + String(newTime.Minute));
     }
     showSetup(true);
   }
@@ -257,7 +284,7 @@ void clockButtonPressed()
 
 //---------------------------------------------------------------
 //Handle ENTER btton
-void enterButtonPressed()
+void enterButtonPressed(void)
 {
   if (cancelAlarm()) return;
 
@@ -285,14 +312,14 @@ void enterButtonPressed()
   }
   else
   {
-    showDate(day(), month(), year());
+    showDate(rtc.getDay(), rtc.getMonth(), rtc.getYear());
     delay(5000);
   }
 }
 
 //---------------------------------------------------------------
 //Handle DOWN btton
-void downButtonPressed()
+void downButtonPressed(void)
 {
   if (cancelAlarm()) return;
 
@@ -346,8 +373,8 @@ void downButtonPressed()
       break;
     
     case BRIGHT_SET: 
-      EepromData.brightness = (EepromData.brightness + MAX_INTENSITY - 1) % MAX_INTENSITY; 
-      mx.control(MD_MAX72XX::INTENSITY, EepromData.brightness); //0..MAX_INTENSITY
+      EepromData.brightness = (EepromData.brightness + NUM_BRIGHTNESS_LEVELS_6932 - 1) % NUM_BRIGHTNESS_LEVELS_6932;
+      setDisplayBrightness(EepromData.brightness);
       showSetup(true);
       break;
 
@@ -368,7 +395,7 @@ void downButtonPressed()
 
 //---------------------------------------------------------------
 //Handle UP btton
-void upButtonPressed()
+void upButtonPressed(void)
 {
   if (cancelAlarm()) return;
 
@@ -422,8 +449,8 @@ void upButtonPressed()
       break;
     
     case BRIGHT_SET: 
-      EepromData.brightness = (EepromData.brightness + 1) % MAX_INTENSITY; 
-      mx.control(MD_MAX72XX::INTENSITY, EepromData.brightness); //0..MAX_INTENSITY
+      EepromData.brightness = (EepromData.brightness + 1) % NUM_BRIGHTNESS_LEVELS_6932;
+      setDisplayBrightness(EepromData.brightness);
       showSetup(true);
       break;
 
@@ -444,7 +471,7 @@ void upButtonPressed()
 
 //---------------------------------------------------------------
 //Turn off the alarm if it is playing a tune
-bool cancelAlarm()
+bool cancelAlarm(void)
 {
   if (musicPlaying)
   {
@@ -468,7 +495,7 @@ void showSetup(bool force)
     bool on = setupDisplayState;
     setupDisplayState = !setupDisplayState;
     
-    mx.clear();
+    clearDisplay();
     
     if (on || !(clockMode == TIME_SET && !inSubMenu)) displayString(0,7,"TINE");
     if (on || !(clockMode == TIME_SET && inSubMenu && timeSetMode == TIME_HOUR)) displayNumber(0,13,newTime.Hour,2,true);
@@ -503,7 +530,7 @@ void showSetup(bool force)
     if (on || !(clockMode == FORMAT_SET && inSubMenu && formatSetMode == DAY_MONTH)) displayString(5,13,(EepromData.formatDmy) ? "DD-NN" : "NN-DD");
     if (on || !(clockMode == FORMAT_SET && inSubMenu && formatSetMode == FONT_STYLE)) displayString(5,19,(EepromData.squareFont) ? "FONT1" : "FONT2");
     
-    mx.update();
+    updateDisplay();
   }
 }
 
@@ -512,11 +539,15 @@ void showSetup(bool force)
 //  force - always show time even if not changed
 void showTime(bool force)
 {
-  force = force || (lastSeconds != second());
+  uint8_t hours;
+  uint8_t minutes;
+  uint8_t seconds;
+  rtc.getTime(&hours, &minutes, &seconds, NULL, NULL);
+  force = force || (lastSeconds != seconds);
   if (force) 
   {
-    lastSeconds = second();
-    showTime(hour(), minute(), true, true, (second() & 0x01), (clockMode != CLOCK || !EepromData.format12hr));
+    lastSeconds = seconds;
+    showTime(hours, minutes, true, true, (seconds & 0x01), (clockMode != CLOCK || !EepromData.format12hr));
   }
 }
 
@@ -529,12 +560,21 @@ void showTime(bool force)
 //  ce - colon enable 
 void showTime(int h, int m, bool he, bool me, bool ce, bool f24)
 {
-  mx.clear();
+  clearDisplay();
   if (he)
   {
-    if (!f24 && h > 12)
-    {
-      h = h - 12;
+    if (!f24) {
+      if (h >= 12) {
+        displayString(5, 11, "P");
+      } else {
+        displayString(5, 11, "A");
+      }
+      if (h > 12)
+      {
+        h = h - 12;
+      } else if (h == 0) {
+        h = 12;
+      }
     }
     if (h > 9 || f24)
     {
@@ -551,7 +591,7 @@ void showTime(int h, int m, bool he, bool me, bool ce, bool f24)
   {
     displayLargeDigit(11, 10);
   }
-  mx.update();
+  updateDisplay();
 }
 
 //---------------------------------------------------------------
@@ -559,7 +599,7 @@ void showTime(int h, int m, bool he, bool me, bool ce, bool f24)
 void showDate(int d, int m, int y)
 {
   #define XOFS 3
-  mx.clear();
+  clearDisplay();
   if (EepromData.formatDmy)
   {
     displayDateDigit(XOFS+0, d / 10);
@@ -576,8 +616,8 @@ void showDate(int d, int m, int y)
     displayDateDigit(XOFS+12, d / 10);
     displayDateDigit(XOFS+16, d % 10);
   }
-  displayNumber(5, 10, y, 0, false);
-  mx.update();
+  displayNumber(5, 10, tmYearToCalendar(y), 0, false);
+  updateDisplay();
 }
 
 //---------------------------------------------------------------
@@ -638,58 +678,58 @@ void displaySmallDigit(uint8_t x, uint8_t v)
 // v = large digit to display (0..10)
 void displaySquareDigit(uint8_t col, uint8_t v)
 {
-  //Segment order d e f b c a _ g
+  //Segment order _ g f e d c b a
   uint8_t mask = ascii[v];
   if (mask == B00000000)
   {
     //Hyphen
-    mask = B00000001;
+    mask = B01000000;
   }
-  if (mask & B00000100)
+  if (mask & B00000001)
   {
     //seg A
     writePhysicalDigit(0, col + 0, 0xff, false);
     writePhysicalDigit(0, col + 1, 0xff, false);
     writePhysicalDigit(0, col + 2, 0xff, false);
   }
-  if (mask & B00010000)
+  if (mask & B00000010)
   {
     //seg B
     writePhysicalDigit(0, col + 2, 0xff, false);
     writePhysicalDigit(1, col + 2, 0xff, false);
     writePhysicalDigit(2, col + 2, 0xff, false);
   }
-  if (mask & B00001000)
+  if (mask & B00000100)
   {
     //seg C
     writePhysicalDigit(2, col + 2, 0xff, false);
     writePhysicalDigit(3, col + 2, 0xff, false);
     writePhysicalDigit(4, col + 2, 0xff, false);
   }
-  if (mask & B10000000)
+  if (mask & B00001000)
   {
     //seg D
     writePhysicalDigit(4, col + 0, 0xff, false);
     writePhysicalDigit(4, col + 1, 0xff, false);
     writePhysicalDigit(4, col + 2, 0xff, false);
   }
-  if (mask & B01000000)
+  if (mask & B00010000)
   {
-    //seg C
+    //seg E
     writePhysicalDigit(2, col, 0xff, false);
     writePhysicalDigit(3, col, 0xff, false);
     writePhysicalDigit(4, col, 0xff, false);
   }
   if (mask & B00100000)
   {
-    //seg E
+    //seg F
     writePhysicalDigit(0, col, 0xff, false);
     writePhysicalDigit(1, col, 0xff, false);
     writePhysicalDigit(2, col, 0xff, false);
   }
-  if (mask & B00000001)
+  if (mask & B01000000)
   {
-    //seg D
+    //seg G
     writePhysicalDigit(2, col + 0, 0xff, false);
     writePhysicalDigit(2, col + 1, 0xff, false);
     writePhysicalDigit(2, col + 2, 0xff, false);
@@ -698,7 +738,7 @@ void displaySquareDigit(uint8_t col, uint8_t v)
 
 //---------------------------------------------------------------
 // Write string of characters
-uint8_t displayString(uint8_t row, uint8_t col, String s)
+void displayString(uint8_t row, uint8_t col, String s)
 {
   for (int i = 0; i < s.length(); i++)
   {
@@ -719,7 +759,7 @@ uint8_t displayString(uint8_t row, uint8_t col, String s)
 
 //---------------------------------------------------------------
 // Write a number
-uint8_t displayNumber(uint8_t row, uint8_t col, int number, int padding, bool leadingZeros)
+void displayNumber(uint8_t row, uint8_t col, int number, int padding, bool leadingZeros)
 {
   if (padding == 0)
   {
@@ -753,14 +793,14 @@ void writePhysicalDigit(uint8_t row, uint8_t col, uint8_t v, bool erase)
 {
   if (row < 6 && col < 24)
   {
-    uint8_t dig = (col & 0x03) + ((row & 0x01) ? 4 : 0);
-    uint8_t dev = (col >> 2) * 3 + (row >> 1);
-    uint16_t c = ((uint16_t)dev << 3) | digitMap[dig];
+    uint8_t dev = device_mapping[row][col];
+    uint8_t dig = digit_mapping[row][col];
+
     if (!erase)
     {
-      v = v | mx.getColumn(c); 
+      v = v | display_drivers[dev].get_digit(dig);
     }
-    mx.setColumn(c, v);
+    display_drivers[dev].set_digit(dig, v);
   }
 }
 
@@ -782,14 +822,14 @@ void writeEepromData()
 
 //---------------------------------------------------------------
 //Read the EepromData structure from EEPROM, initialise if necessary
-void readEepromData()
+void readEepromData(void)
 {
   //Eprom
   EEPROM.get(EEPROM_ADDRESS,EepromData);
   //Serial.println("magic:" + String(EepromData.magic, 16) + ", alarm: " + String(EepromData.alarm) + ", time: " + String(EepromData.hours) + ":" + String(EepromData.minutes) + ", 12hr: " +  String(EepromData.format12hr) + ", brightness: " +  String(EepromData.brightness));
   if (EepromData.magic != EEPROM_MAGIC)
   {
-    Serial.println("Initialising EEPROM ...");
+    Serial.println("Initializing EEPROM ...");
     EepromData.magic = EEPROM_MAGIC;
     EepromData.alarm = false;
     EepromData.minutes = 30;
@@ -805,7 +845,7 @@ void readEepromData()
 
 //---------------------------------------------------------------
 //Play a melody
-int playSong(const uint16_t* melody)
+void playSong(const uint16_t* melody)
 {
   //Play each note in the melody until the END_OF_TUNE note is encountered
   musicPlaying = true;
@@ -848,4 +888,30 @@ void playNote(uint16_t noteRaw)
     // stop the tone playing:
     noTone(SPEAKER);
   }
+}
+
+void clearDisplay(void) {
+  for (int i = 0; i < NUM_DISPLAY_DRIVERS; i += 1) {
+    display_drivers[i].clear();
+  }
+}
+
+void updateDisplay(void) {
+  for (int i = 0; i < NUM_DISPLAY_DRIVERS; i += 1) {
+      display_drivers[i].update();
+    }
+}
+
+void setDisplayBrightness(uint8_t dispBrightness) {
+    for (int i = 0; i < NUM_DISPLAY_DRIVERS; i += 1) {
+      display_drivers[i].set_brightness(dispBrightness);
+    }
+}
+
+uint16_t tmYearToCalendar(uint8_t year) {
+  return (uint16_t) year + 2001;
+}
+
+uint8_t tmYearFromCalendar(uint16_t cYear) {
+  return (uint8_t) (cYear - 2001);
 }
