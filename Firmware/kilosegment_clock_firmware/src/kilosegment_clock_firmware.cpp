@@ -21,12 +21,16 @@
  * 2022-07-24
  * - Modified to suport Kilosegment clock board hardware
  * -- GN6932 display drivers, onboard RTC
+ * - Support temperature sensor
+ * - Expand ASCII table
  *--------------------------------------------------*/
  
 #include <SPI.h>
-// #include <TimeLib.h>
 #include <STM32RTC.h>
 #include <EEPROM.h>
+#include <LTR303.h>
+#include <Temperature_LM75_Derived.h>
+#include <HardwareSerial.h>
 #include "Button.h"
 #include "Tunes.h"
 #include "Digits.h"
@@ -50,6 +54,9 @@
 
 #define NUM_DISPLAY_DRIVERS 9
 
+#define debug_init()        Serial1.begin(115200)
+#define debug_println(...)  Serial1.println(__VA_ARGS__)
+
 /* Get the rtc object */
 STM32RTC& rtc = STM32RTC::getInstance();
 
@@ -64,6 +71,7 @@ typedef struct {
   bool format12hr;
   uint8_t brightness;
   uint8_t tune;
+  uint8_t tempMode;
   bool formatDmy;
   bool squareFont;
 } EEPROM_DATA;
@@ -78,7 +86,9 @@ typedef struct {
   uint8_t Wday;   // day of week, sunday is day 1
   uint8_t Day;
   uint8_t Month; 
-  uint8_t Year;   // offset from 2001; 
+  uint8_t Year;   // offset from 2001;
+  bool timeUpdated;
+  bool dateUpdated;
 } TimeElements;
 
 void clockButtonPressed(void);
@@ -99,8 +109,9 @@ unsigned long setupTimeout;
 bool setupDisplayState = false;
 
 
-enum ClockButtonModesEnum { CLOCK, TIME_SET, DATE_SET, ALARM_SET, TUNE_SET, BRIGHT_SET, FORMAT_SET };
+enum ClockButtonModesEnum { CLOCK, TIME_SET, DATE_SET, ALARM_SET, TUNE_SET, BRIGHT_SET, FORMAT_SET, TEMP_SET };
 ClockButtonModesEnum clockMode = CLOCK;
+#define LAST_CLOCK_MODE TEMP_SET
 
 enum TimeSetMenuEnum { TIME_HOUR, TIME_MIN, TIME_FORMAT };
 TimeSetMenuEnum timeSetMode = TIME_HOUR;
@@ -114,11 +125,18 @@ AlarmSetMenuEnum alarmSetMode = ALARM_HOUR;
 enum FormatSetMenuEnum { DAY_MONTH, FONT_STYLE };
 FormatSetMenuEnum formatSetMode = DAY_MONTH;
 
+#define TEMPMODE_OFF 0
+#define TEMPMODE_F   1
+#define TEMPMODE_C   2
+
 int lastSeconds = -1;
 bool alarmRinging = false;    //true when alarm is on
 bool alarmCancelled = false;  //alarm cancelled by user
 bool musicPlaying = false;    //true if playing a song
 bool clockColon = false;      //show/hide colon
+
+static const String tempModeStrings[] = {"OFF", "F", "C"};
+#define NUM_TEMP_MODES 3
 
 /* Number of days in each month */
 const uint8_t dom[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
@@ -134,10 +152,15 @@ SPIClass SPI_2(LED_DOUT, LED_DIN, LED_CLK);
 //TRANSMITRECEIVE is necessary so that it waits for transmission to complete
 SPISettings spi_settings(500000, LSBFIRST, SPI_MODE3, SPI_TRANSMITRECEIVE);
 
+Generic_LM75_11Bit temp_sensor;
+
+LTR303 light_sensor;
+
+HardwareSerial Serial1(PA10, PA9);
 
 void setup()
 {
-  Serial.begin(115200);
+  debug_init();
 
   //Eprom
   readEepromData();
@@ -170,6 +193,11 @@ void setup()
     display_drivers[i].set_brightness(EepromData.brightness);
   }
   
+  Wire.begin();
+  temp_sensor.disableShutdownMode();
+  light_sensor.begin();
+
+
   pinMode(HB_LED, OUTPUT);
   digitalWrite(HB_LED, LOW);
 
@@ -179,14 +207,16 @@ void setup()
 
   if(!rtc.isTimeSet())
   {
-    Serial.println("RTC not set");
+    debug_println("RTC not set");
     RTC_SetTime(0,0,0,0,HOUR_AM);
     RTC_SetDate(tmYearFromCalendar(2022), 1, 1, RTC_WEEKDAY_SATURDAY);
   }
   rtc.getDate(&newTime.Wday, &newTime.Day, &newTime.Month, &newTime.Year);
   rtc.getTime(&newTime.Hour, &newTime.Minute, &newTime.Second, NULL, NULL);
-  Serial.println("Time: " + String(rtc.getHours()) + ":" + String(rtc.getMinutes()) + ":" + String(rtc.getSeconds()));
-  Serial.println("Date: " + String(rtc.getDay()) + "/" + String(rtc.getMonth()) + "/" + String(rtc.getYear()));
+  debug_println("Time: " + String(rtc.getHours()) + ":" + String(rtc.getMinutes()) + ":" + String(rtc.getSeconds()));
+  debug_println("Date: " + String(rtc.getDay()) + "/" + String(rtc.getMonth()) + "/" + String(rtc.getYear()));
+  newTime.timeUpdated = false;
+  newTime.dateUpdated = false;
 
   clockMode = CLOCK;
   showTime(true);
@@ -249,22 +279,30 @@ void clockButtonPressed(void)
   if (cancelAlarm()) return;
 
   inSubMenu = false;
-  clockMode = (clockMode == FORMAT_SET) ? CLOCK : (ClockButtonModesEnum)((int)clockMode + 1);
+  clockMode = (clockMode == LAST_CLOCK_MODE) ? CLOCK : (ClockButtonModesEnum)((int)clockMode + 1);
   if (clockMode == CLOCK)
   {
-    Serial.println("Saving Time: " + String(newTime.Hour) + ":" + String(newTime.Minute));
-    Serial.println("       From: " + String(rtc.getHours()) + ":" + String(rtc.getMinutes()));
+    debug_println("Saving Time: " + String(newTime.Hour) + ":" + String(newTime.Minute));
+    debug_println("       From: " + String(rtc.getHours()) + ":" + String(rtc.getMinutes()));
     if (newTime.Year != rtc.getYear() || newTime.Month != rtc.getMonth() || newTime.Day != rtc.getDay() || newTime.Hour != rtc.getHours() || newTime.Minute != rtc.getMinutes())
     {
       //Update time
-      Serial.println("Updating RTC");
-      //reset seconds when updating time so as to allow for synchronization with an external clock
-      newTime.Second = 0;//rtc.getSeconds();
-      rtc.setDate(newTime.Wday, newTime.Day, newTime.Month, newTime.Year);
-      rtc.setTime(newTime.Hour, newTime.Minute, newTime.Second, 0, rtc.AM);
+      debug_println("Updating RTC");
+      //reset seconds when updating time so as to allow for synchronization with an external clock,
+      //but only if time was actually updated by the user while in the settings menu.  This avoids accumulating
+      //offset while modifying other settings.
+      if (newTime.timeUpdated) {
+        newTime.Second = 0;
+        rtc.setTime(newTime.Hour, newTime.Minute, newTime.Second, 0, rtc.AM);
+      }
+      newTime.timeUpdated = false;
+      if (newTime.dateUpdated) {
+        rtc.setDate(newTime.Wday, newTime.Day, newTime.Month, newTime.Year);
+      }
+      newTime.dateUpdated = false;
       if (!rtc.isTimeSet()) 
       {
-        Serial.println("Set Time Failed");
+        debug_println("Set Time Failed");
       }
     }
     writeEepromData(); 
@@ -276,7 +314,7 @@ void clockButtonPressed(void)
     {
       rtc.getDate(&newTime.Wday, &newTime.Day, &newTime.Month, &newTime.Year);
       rtc.getTime(&newTime.Hour, &newTime.Minute, &newTime.Second, NULL, NULL);
-      Serial.println("Loading Time: " + String(newTime.Hour) + ":" + String(newTime.Minute));
+      debug_println("Loading Time: " + String(newTime.Hour) + ":" + String(newTime.Minute));
     }
     showSetup(true);
   }
@@ -330,8 +368,8 @@ void downButtonPressed(void)
       {
         switch(timeSetMode)
         {
-          case TIME_HOUR: newTime.Hour = (newTime.Hour + 24 - 1) % 24; break;
-          case TIME_MIN: newTime.Minute = (newTime.Minute + 60 - 1) % 60; break;
+          case TIME_HOUR: newTime.Hour = (newTime.Hour + 24 - 1) % 24; newTime.timeUpdated = true;  break;
+          case TIME_MIN: newTime.Minute = (newTime.Minute + 60 - 1) % 60; newTime.timeUpdated = true; break;
           case TIME_FORMAT: EepromData.format12hr = !EepromData.format12hr; break;
         }
         showSetup(true);
@@ -343,8 +381,8 @@ void downButtonPressed(void)
       {
         switch(dateSetMode)
         {
-          case DATE_YEAR: newTime.Year = ((newTime.Year - 30 + 100) - 1) % 100 + 30; break;
-          case DATE_MONTH: newTime.Month = ((newTime.Month - 1 + 12) - 1) % 12 + 1; break;
+          case DATE_YEAR: newTime.Year = ((newTime.Year - 30 + 100) - 1) % 100 + 30; newTime.dateUpdated = true; break;
+          case DATE_MONTH: newTime.Month = ((newTime.Month - 1 + 12) - 1) % 12 + 1; newTime.dateUpdated = true; break;
           case DATE_DAY: 
             uint8_t md = daysInMonth(newTime.Year, newTime.Month);
             newTime.Day = ((newTime.Day - 1 + md) - 1) % md + 1;
@@ -389,7 +427,10 @@ void downButtonPressed(void)
       }
       showSetup(true);
       break;
-     
+    case TEMP_SET:
+      EepromData.tempMode = (EepromData.tempMode + NUM_TEMP_MODES - 1) % NUM_TEMP_MODES;
+      showSetup(true);
+      break;
   }
 }
 
@@ -406,8 +447,8 @@ void upButtonPressed(void)
       {
         switch(timeSetMode)
         {
-          case TIME_HOUR: newTime.Hour = (newTime.Hour + 1) % 24; break;
-          case TIME_MIN: newTime.Minute = (newTime.Minute + 1) % 60; break;
+          case TIME_HOUR: newTime.Hour = (newTime.Hour + 1) % 24; newTime.timeUpdated = true; break;
+          case TIME_MIN: newTime.Minute = (newTime.Minute + 1) % 60; newTime.timeUpdated = true; break;
           case TIME_FORMAT: EepromData.format12hr = !EepromData.format12hr; break;
         }
         showSetup(true);
@@ -419,8 +460,8 @@ void upButtonPressed(void)
       {
         switch(dateSetMode)
         {
-          case DATE_YEAR: newTime.Year = ((newTime.Year - 30) + 1) % 100 + 30; break;
-          case DATE_MONTH: newTime.Month = ((newTime.Month - 1) + 1) % 12 + 1; break;
+          case DATE_YEAR: newTime.Year = ((newTime.Year - 30) + 1) % 100 + 30; newTime.dateUpdated = true;  break;
+          case DATE_MONTH: newTime.Month = ((newTime.Month - 1) + 1) % 12 + 1; newTime.dateUpdated = true; break;
           case DATE_DAY: 
             uint8_t md = daysInMonth(newTime.Year, newTime.Month);
             newTime.Day = (newTime.Day % md) + 1;
@@ -447,7 +488,7 @@ void upButtonPressed(void)
       EepromData.tune = (EepromData.tune + 1) % NUM_OF_MELODIES; 
       showSetup(true);
       break;
-    
+
     case BRIGHT_SET: 
       EepromData.brightness = (EepromData.brightness + 1) % NUM_BRIGHTNESS_LEVELS_6932;
       setDisplayBrightness(EepromData.brightness);
@@ -465,7 +506,10 @@ void upButtonPressed(void)
       }
       showSetup(true);
       break;
-     
+    case TEMP_SET:
+      EepromData.tempMode = (EepromData.tempMode + 1) % NUM_TEMP_MODES;
+      showSetup(true);
+      break;
   }
 }
 
@@ -496,40 +540,50 @@ void showSetup(bool force)
     setupDisplayState = !setupDisplayState;
     
     clearDisplay();
-    
-    if (on || !(clockMode == TIME_SET && !inSubMenu)) displayString(0,7,"TINE");
-    if (on || !(clockMode == TIME_SET && inSubMenu && timeSetMode == TIME_HOUR)) displayNumber(0,13,newTime.Hour,2,true);
-    if (on || !(clockMode == TIME_SET && inSubMenu && timeSetMode == TIME_MIN)) displayNumber(0,16,newTime.Minute,2,true);
-    if (on || !(clockMode == TIME_SET && inSubMenu && timeSetMode == TIME_FORMAT)) displayString(0,19,(EepromData.format12hr) ? "12HR" : "24HR");
 
-    if (on || !(clockMode == DATE_SET && !inSubMenu)) displayString(1,7,"DATE");
-    if (on || !(clockMode == DATE_SET && inSubMenu && dateSetMode == DATE_YEAR)) displayNumber(1,13,tmYearToCalendar(newTime.Year),4,true);
-    if (on || !(clockMode == DATE_SET && inSubMenu && dateSetMode == DATE_MONTH)) displayNumber(1,18,newTime.Month,2,true);
-    if (on || !(clockMode == DATE_SET && inSubMenu && dateSetMode == DATE_DAY)) displayNumber(1,21,newTime.Day,2,true);
-    
-    if (on || !(clockMode == ALARM_SET && !inSubMenu)) displayString(2,6,"ALARN");
-    if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_HOUR)) displayNumber(2,13,EepromData.hours,2,true);
-    if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_MIN)) displayNumber(2,16,EepromData.minutes,2,true);
-    if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_STATE)) displayString(2,19,(EepromData.alarm) ? "ON" : "OFF");
-      
-    if (on || !(clockMode == TUNE_SET && !inSubMenu)) displayString(3,7,"TUNE");
-    if (on || !(clockMode == TUNE_SET && inSubMenu))
-    {
-      switch(EepromData.tune)
+    if (clockMode < TEMP_SET) { //Show page 1
+      if (on || !(clockMode == TIME_SET && !inSubMenu)) displayString(0,7,"TIME");
+      if (on || !(clockMode == TIME_SET && inSubMenu && timeSetMode == TIME_HOUR)) displayNumber(0,13,newTime.Hour,2,true);
+      if (on || !(clockMode == TIME_SET && inSubMenu && timeSetMode == TIME_MIN)) displayNumber(0,16,newTime.Minute,2,true);
+      if (on || !(clockMode == TIME_SET && inSubMenu && timeSetMode == TIME_FORMAT)) displayString(0,19,(EepromData.format12hr) ? "12HR" : "24HR");
+
+      if (on || !(clockMode == DATE_SET && !inSubMenu)) displayString(1,7,"DATE");
+      if (on || !(clockMode == DATE_SET && inSubMenu && dateSetMode == DATE_YEAR)) displayNumber(1,13,tmYearToCalendar(newTime.Year),4,true);
+      if (on || !(clockMode == DATE_SET && inSubMenu && dateSetMode == DATE_MONTH)) displayNumber(1,18,newTime.Month,2,true);
+      if (on || !(clockMode == DATE_SET && inSubMenu && dateSetMode == DATE_DAY)) displayNumber(1,21,newTime.Day,2,true);
+
+      if (on || !(clockMode == ALARM_SET && !inSubMenu)) displayString(2,6,"ALARM");
+      if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_HOUR)) displayNumber(2,13,EepromData.hours,2,true);
+      if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_MIN)) displayNumber(2,16,EepromData.minutes,2,true);
+      if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_STATE)) displayString(2,19,(EepromData.alarm) ? "ON" : "OFF");
+
+      if (on || !(clockMode == TUNE_SET && !inSubMenu)) displayString(3,7,"TUNE");
+      if (on || !(clockMode == TUNE_SET && inSubMenu))
       {
-        case 0: displayString(3,13,"ELISE"); break;
-        case 1: displayString(3,13,"RANGE"); break;
-        case 2: displayString(3,13,"SUNSHINE"); break;
+        switch(EepromData.tune)
+        {
+          case 0: displayString(3,13,"ELISE"); break;
+          case 1: displayString(3,13,"RANGE"); break;
+          case 2: displayString(3,13,"SUNSHINE"); break;
+        }
       }
-    }
-      
-    if (on || !(clockMode == BRIGHT_SET && !inSubMenu)) displayString(4,1,"BRIGHTNESS");
-    if (on || !(clockMode == BRIGHT_SET && inSubMenu)) displayNumber(4,13,EepromData.brightness,0,false);
 
-    if (on || !(clockMode == FORMAT_SET && !inSubMenu)) displayString(5,0,"DATE FORNAT");
-    if (on || !(clockMode == FORMAT_SET && inSubMenu && formatSetMode == DAY_MONTH)) displayString(5,13,(EepromData.formatDmy) ? "DD-NN" : "NN-DD");
-    if (on || !(clockMode == FORMAT_SET && inSubMenu && formatSetMode == FONT_STYLE)) displayString(5,19,(EepromData.squareFont) ? "FONT1" : "FONT2");
-    
+      if (on || !(clockMode == BRIGHT_SET && !inSubMenu)) displayString(4,1,"BRIGHTNESS");
+      if (on || !(clockMode == BRIGHT_SET && inSubMenu)) displayNumber(4,13,EepromData.brightness,0,false);
+
+      if (on || !(clockMode == FORMAT_SET && !inSubMenu)) displayString(5,0,"DATE FORMAT");
+      if (on || !(clockMode == FORMAT_SET && inSubMenu && formatSetMode == DAY_MONTH)) displayString(5,13,(EepromData.formatDmy) ? "DD-NN" : "NN-DD");
+      if (on || !(clockMode == FORMAT_SET && inSubMenu && formatSetMode == FONT_STYLE)) displayString(5,19,(EepromData.squareFont) ? "FONT1" : "FONT2");
+    } else {//show page 2
+      if (on || !(clockMode == TEMP_SET && !inSubMenu)) displayString(0,7,"TEMP");
+      if (on || !(clockMode == TEMP_SET && inSubMenu)) {
+        if (EepromData.tempMode < NUM_TEMP_MODES) {
+          displayString(0,13,tempModeStrings[EepromData.tempMode]);
+          }
+      }
+      displayString(1,1,"VERSION");
+    }
+
     updateDisplay();
   }
 }
@@ -564,10 +618,12 @@ void showTime(int h, int m, bool he, bool me, bool ce, bool f24)
   if (he)
   {
     if (!f24) {
-      if (h >= 12) {
-        displayString(5, 11, "P");
-      } else {
-        displayString(5, 11, "A");
+      if (ce) {
+        if (h >= 12) {
+          displayString(5, 11, "P");
+        } else {
+          displayString(5, 11, "A");
+        }
       }
       if (h > 12)
       {
@@ -591,6 +647,11 @@ void showTime(int h, int m, bool he, bool me, bool ce, bool f24)
   {
     displayLargeDigit(11, 10);
   }
+  if (EepromData.tempMode == TEMPMODE_F) {
+    displayNumber(0, 11, temp_sensor.readTemperatureF(), 3, false);
+  } else if (EepromData.tempMode == TEMPMODE_C) {
+    displayNumber(0, 11, temp_sensor.readTemperatureC(), 3, false);
+  }
   updateDisplay();
 }
 
@@ -602,21 +663,23 @@ void showDate(int d, int m, int y)
   clearDisplay();
   if (EepromData.formatDmy)
   {
-    displayDateDigit(XOFS+0, d / 10);
-    displayDateDigit(XOFS+4, d % 10);
-    displayDateDigit(XOFS+8, 10);  //colon
-    displayDateDigit(XOFS+12, m / 10);
-    displayDateDigit(XOFS+16, m % 10);
+    displayDateDigit(XOFS + 0, d / 10);
+    displayDateDigit(XOFS + 4, d % 10);
+    displayDateDigit(XOFS + 8, 10);  //colon
+    displayDateDigit(XOFS + 12, m / 10);
+    displayDateDigit(XOFS + 16, m % 10);
   }
   else
   {
-    displayDateDigit(XOFS+0, m / 10);
-    displayDateDigit(XOFS+4, m % 10);
-    displayDateDigit(XOFS+8, 10);  //colon
-    displayDateDigit(XOFS+12, d / 10);
-    displayDateDigit(XOFS+16, d % 10);
+    displayDateDigit(XOFS + 0, m / 10);
+    displayDateDigit(XOFS + 4, m % 10);
+    displayDateDigit(XOFS + 8, 10);  //colon
+    displayDateDigit(XOFS + 12, d / 10);
+    displayDateDigit(XOFS + 16, d % 10);
   }
   displayNumber(5, 10, tmYearToCalendar(y), 0, false);
+  displayNumber(5, 0, (int)temp_sensor.readTemperatureF(), 0, 0);
+  // displayNumber(5, 18, (int)lig)
   updateDisplay();
 }
 
@@ -679,7 +742,7 @@ void displaySmallDigit(uint8_t x, uint8_t v)
 void displaySquareDigit(uint8_t col, uint8_t v)
 {
   //Segment order _ g f e d c b a
-  uint8_t mask = ascii[v];
+  uint8_t mask = ascii[v + ASCII_NUM_OFFSET];
   if (mask == B00000000)
   {
     //Hyphen
@@ -743,15 +806,12 @@ void displayString(uint8_t row, uint8_t col, String s)
   for (int i = 0; i < s.length(); i++)
   {
     byte c = (byte)s.charAt(i);
-    if (c == 0x2D)
+    byte cb = c;
+    if (c < (byte)' ' || c > (byte)'`')
     {
-      c = 0x3D;
+      c = (byte)' ';
     }
-    if (c < 0x30 || c > 0x5F)
-    {
-      c = 0x3F;   //Used as a space character
-    }
-    c = c - 0x30;
+    c = c - (byte)' ';
     writePhysicalDigit(row, col, ascii[c], true);
     col = col + 1;
   }
@@ -772,13 +832,13 @@ void displayNumber(uint8_t row, uint8_t col, int number, int padding, bool leadi
     col--;
     if (number != 0 || first)
     {
-      writePhysicalDigit(row, col, ascii[number % 10], true);
+      writePhysicalDigit(row, col, ascii[(number % 10) + ASCII_NUM_OFFSET], true);
       number = number / 10;
       first = false;
     }
     else
     {
-      writePhysicalDigit(row, col, ascii[(leadingZeros) ? 0 : 0x0F], true);
+      writePhysicalDigit(row, col, ascii[(leadingZeros) ? ASCII_NUM_OFFSET : 0], true);
     }
   }
 }
@@ -816,8 +876,10 @@ uint8_t daysInMonth(int y, int m)
 //Write the EepromData structure to EEPROM
 void writeEepromData()
 {
+  debug_println("Writing EEPROM data");
   //This function uses EEPROM.update() to perform the write, so does not rewrites the value if it didn't change.
-  EEPROM.put(EEPROM_ADDRESS,EepromData);
+  debug_println("magic:" + String(EepromData.magic, 16) + ", alarm: " + String(EepromData.alarm) + ", time: " + String(EepromData.hours) + ":" + String(EepromData.minutes) + ", 12hr: " +  String(EepromData.format12hr) + ", brightness: " +  String(EepromData.brightness));
+  // EEPROM.put(EEPROM_ADDRESS, EepromData);
 }
 
 //---------------------------------------------------------------
@@ -825,22 +887,23 @@ void writeEepromData()
 void readEepromData(void)
 {
   //Eprom
-  EEPROM.get(EEPROM_ADDRESS,EepromData);
-  //Serial.println("magic:" + String(EepromData.magic, 16) + ", alarm: " + String(EepromData.alarm) + ", time: " + String(EepromData.hours) + ":" + String(EepromData.minutes) + ", 12hr: " +  String(EepromData.format12hr) + ", brightness: " +  String(EepromData.brightness));
+  // EEPROM.get(EEPROM_ADDRESS,EepromData);
+  debug_println("magic:" + String(EepromData.magic, 16) + ", alarm: " + String(EepromData.alarm) + ", time: " + String(EepromData.hours) + ":" + String(EepromData.minutes) + ", 12hr: " +  String(EepromData.format12hr) + ", brightness: " +  String(EepromData.brightness));
   if (EepromData.magic != EEPROM_MAGIC)
   {
-    Serial.println("Initializing EEPROM ...");
+    debug_println("Initializing EEPROM ...");
     EepromData.magic = EEPROM_MAGIC;
     EepromData.alarm = false;
     EepromData.minutes = 30;
     EepromData.hours = 5;
     EepromData.format12hr = false;
-    EepromData.brightness = 8;
+    EepromData.brightness = MAX_BRIGHTNESS_LEVEL_6932;
     EepromData.tune = 0;
     EepromData.formatDmy = false;
+    EepromData.squareFont = false;
     writeEepromData();
   }
-  Serial.println("alarm: " + String(EepromData.alarm) + ", time: " + String(EepromData.hours) + ":" + String(EepromData.minutes) + ", 12hr: " +  String(EepromData.format12hr) + ", brightness: " +  String(EepromData.brightness));
+  debug_println("alarm: " + String(EepromData.alarm) + ", time: " + String(EepromData.hours) + ":" + String(EepromData.minutes) + ", 12hr: " +  String(EepromData.format12hr) + ", brightness: " +  String(EepromData.brightness));
 }
 
 //---------------------------------------------------------------
