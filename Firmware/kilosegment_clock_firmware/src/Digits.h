@@ -2,7 +2,7 @@
  * 7 Segment array clock
  * define each digit in a 6x6 byte array
  *--------------------------------------------------*/
- 
+
 #pragma once
 
 
@@ -70,7 +70,7 @@ const uint8_t ascii[] = {
     B00000000, //+
     B10000000, //,
     B01000000, //-
-    B01000000, //.
+    B10000000, //.
     B01010010, ///
     B00111111, //0
     B00000110, //1
@@ -127,7 +127,7 @@ const uint8_t ascii[] = {
 //            Digits using logical coordinates
 //------------------------------------------------------------
 
-const uint8_t largeDigits[11][6][6] = 
+const uint8_t largeDigits[11][6][6] =
 {
   { //0
     { _______, _______, __cd___, _bcde_g, abcdefg, __cdefg },
@@ -219,7 +219,7 @@ const uint8_t largeDigits[11][6][6] =
   }
 };
 
-const uint8_t smallDigits[11][5][3] = 
+const uint8_t smallDigits[11][5][3] =
 {
   { //0
     { a___ef_, a__d___, abc____ },

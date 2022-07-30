@@ -1,12 +1,12 @@
 /*---------------------------------------------------
  * 7 Segment array clock
- * 
+ *
  * Based on clock by Frugha (https://hackaday.io/project/169632-7-segment-display-array-clock)
- * 
+ *
  * Modifications by John Bradnam (jbrad2089@gmail.com)
- * - Changed hardware to use 0.28" 7 segment displays.  
- * - MAX7219 device, digit and segments order has been changed to simply an otherwise 
- *   complex PCB board routing. 
+ * - Changed hardware to use 0.28" 7 segment displays.
+ * - MAX7219 device, digit and segments order has been changed to simply an otherwise
+ *   complex PCB board routing.
  * - Hardware uses Arduino Mini Pro, DS1302 RTC and 4 push buttons
  * - Added Alarm function with selectable alarm music
  * - Added Brightness setting
@@ -16,15 +16,17 @@
  * - Added date format option on configuration screen
  * - Increased date screen timeout from 2 to 5 seconds
  * - Added a configuarble choice of font for date display
- * 
+ *
  * Modifications by ArrestedLightning
  * 2022-07-24
  * - Modified to suport Kilosegment clock board hardware
  * -- GN6932 display drivers, onboard RTC
  * - Support temperature sensor
  * - Expand ASCII table
+ * - Add second page of settings.
+ * - Add built-in version number and build date
  *--------------------------------------------------*/
- 
+
 #include <SPI.h>
 #include <STM32RTC.h>
 #include <EEPROM.h>
@@ -37,6 +39,7 @@
 #include "mapping.h"
 #include "xx6932.h"
 #include "kilosegment_clock_firmware.h"
+#include "build_info.h"
 
 /* Pin definitions */
 #define LED_CLK   PB13
@@ -79,13 +82,13 @@ typedef struct {
 EEPROM_DATA EepromData;       //Current EEPROM settings
 
 //pulled from time.h
-typedef struct { 
-  uint8_t Second; 
-  uint8_t Minute; 
-  uint8_t Hour; 
+typedef struct {
+  uint8_t Second;
+  uint8_t Minute;
+  uint8_t Hour;
   uint8_t Wday;   // day of week, sunday is day 1
   uint8_t Day;
-  uint8_t Month; 
+  uint8_t Month;
   uint8_t Year;   // offset from 2001;
   bool timeUpdated;
   bool dateUpdated;
@@ -192,7 +195,7 @@ void setup()
     display_drivers[i].init();
     display_drivers[i].set_brightness(EepromData.brightness);
   }
-  
+
   Wire.begin();
   temp_sensor.disableShutdownMode();
   light_sensor.begin();
@@ -234,15 +237,15 @@ void loop()
       if (!alarmCancelled)
       {
         alarmRinging = true;
-        playSong(melodies[EepromData.tune]); 
+        playSong(melodies[EepromData.tune]);
       }
     }
-    else 
+    else
     {
       alarmCancelled = false;
       alarmRinging = false;
     }
-    
+
   }
   else
   {
@@ -266,7 +269,7 @@ void testButtons(void)
   {
     enterButtonPressed();
   }
-  
+
   //Don't need to check result of pressed since the button handler will invoke its repeat function
   upButton->Pressed();
   downButton->Pressed();
@@ -300,12 +303,12 @@ void clockButtonPressed(void)
         rtc.setDate(newTime.Wday, newTime.Day, newTime.Month, newTime.Year);
       }
       newTime.dateUpdated = false;
-      if (!rtc.isTimeSet()) 
+      if (!rtc.isTimeSet())
       {
         debug_println("Set Time Failed");
       }
     }
-    writeEepromData(); 
+    writeEepromData();
     showTime(true);
   }
   else
@@ -375,15 +378,15 @@ void downButtonPressed(void)
         showSetup(true);
       }
       break;
-      
-    case DATE_SET: 
+
+    case DATE_SET:
       if (inSubMenu)
       {
         switch(dateSetMode)
         {
           case DATE_YEAR: newTime.Year = ((newTime.Year - 30 + 100) - 1) % 100 + 30; newTime.dateUpdated = true; break;
           case DATE_MONTH: newTime.Month = ((newTime.Month - 1 + 12) - 1) % 12 + 1; newTime.dateUpdated = true; break;
-          case DATE_DAY: 
+          case DATE_DAY:
             uint8_t md = daysInMonth(newTime.Year, newTime.Month);
             newTime.Day = ((newTime.Day - 1 + md) - 1) % md + 1;
             break;
@@ -405,18 +408,18 @@ void downButtonPressed(void)
       }
       break;
 
-    case TUNE_SET: 
-      EepromData.tune = (EepromData.tune + NUM_OF_MELODIES - 1) % NUM_OF_MELODIES; 
+    case TUNE_SET:
+      EepromData.tune = (EepromData.tune + NUM_OF_MELODIES - 1) % NUM_OF_MELODIES;
       showSetup(true);
       break;
-    
-    case BRIGHT_SET: 
+
+    case BRIGHT_SET:
       EepromData.brightness = (EepromData.brightness + NUM_BRIGHTNESS_LEVELS_6932 - 1) % NUM_BRIGHTNESS_LEVELS_6932;
       setDisplayBrightness(EepromData.brightness);
       showSetup(true);
       break;
 
-    case FORMAT_SET: 
+    case FORMAT_SET:
       if (inSubMenu)
       {
         switch (formatSetMode)
@@ -454,15 +457,15 @@ void upButtonPressed(void)
         showSetup(true);
       }
       break;
-      
-    case DATE_SET: 
+
+    case DATE_SET:
       if (inSubMenu)
       {
         switch(dateSetMode)
         {
           case DATE_YEAR: newTime.Year = ((newTime.Year - 30) + 1) % 100 + 30; newTime.dateUpdated = true;  break;
           case DATE_MONTH: newTime.Month = ((newTime.Month - 1) + 1) % 12 + 1; newTime.dateUpdated = true; break;
-          case DATE_DAY: 
+          case DATE_DAY:
             uint8_t md = daysInMonth(newTime.Year, newTime.Month);
             newTime.Day = (newTime.Day % md) + 1;
             break;
@@ -484,18 +487,18 @@ void upButtonPressed(void)
       }
       break;
 
-    case TUNE_SET: 
-      EepromData.tune = (EepromData.tune + 1) % NUM_OF_MELODIES; 
+    case TUNE_SET:
+      EepromData.tune = (EepromData.tune + 1) % NUM_OF_MELODIES;
       showSetup(true);
       break;
 
-    case BRIGHT_SET: 
+    case BRIGHT_SET:
       EepromData.brightness = (EepromData.brightness + 1) % NUM_BRIGHTNESS_LEVELS_6932;
       setDisplayBrightness(EepromData.brightness);
       showSetup(true);
       break;
 
-    case FORMAT_SET: 
+    case FORMAT_SET:
       if (inSubMenu)
       {
         switch (formatSetMode)
@@ -533,12 +536,12 @@ void showSetup(bool force)
 {
   setupDisplayState = setupDisplayState | force;
   force = force || (millis() > setupTimeout);
-  if (force) 
+  if (force)
   {
     setupTimeout = millis() + SETUP_FLASH_RATE;
     bool on = setupDisplayState;
     setupDisplayState = !setupDisplayState;
-    
+
     clearDisplay();
 
     if (clockMode < TEMP_SET) { //Show page 1
@@ -581,7 +584,9 @@ void showSetup(bool force)
           displayString(0,13,tempModeStrings[EepromData.tempMode]);
           }
       }
-      displayString(1,1,"VERSION");
+      displayString(4, 4, "VERSION");
+      displayNumber(4, 13, BUILD_NUMBER, 0, 0);
+      displayString(5, 3, BUILD_DATE);
     }
 
     updateDisplay();
@@ -598,7 +603,7 @@ void showTime(bool force)
   uint8_t seconds;
   rtc.getTime(&hours, &minutes, &seconds, NULL, NULL);
   force = force || (lastSeconds != seconds);
-  if (force) 
+  if (force)
   {
     lastSeconds = seconds;
     showTime(hours, minutes, true, true, (seconds & 0x01), (clockMode != CLOCK || !EepromData.format12hr));
@@ -609,9 +614,9 @@ void showTime(bool force)
 //Display the time on the display
 //  h - hour
 //  m - minute
-//  he - hour enable 
-//  me - minute enable 
-//  ce - colon enable 
+//  he - hour enable
+//  me - minute enable
+//  ce - colon enable
 void showTime(int h, int m, bool he, bool me, bool ce, bool f24)
 {
   clearDisplay();
@@ -812,8 +817,18 @@ void displayString(uint8_t row, uint8_t col, String s)
       c = (byte)' ';
     }
     c = c - (byte)' ';
-    writePhysicalDigit(row, col, ascii[c], true);
-    col = col + 1;
+    if (cb == (byte)'.') {
+      //special case period to avoid extra spaces
+      //this logic definitely may be suboptimal under some circumstances,
+      //but should work for things we care about right now
+      if (col > 0) {
+        col -= 1;//associate with previous digit
+      }
+      writePhysicalDigit(row, col, ascii[c], false);
+    } else {
+      writePhysicalDigit(row, col, ascii[c], true);
+    }
+      col = col + 1;
   }
 }
 
@@ -940,7 +955,7 @@ void playNote(uint16_t noteRaw)
   {
     tone(SPEAKER, frequency, noteDuration);
   }
-		
+
   // to distinguish the notes, set a minimum time between them.
   // the note's duration + 30% seems to work well:
   uint16_t pauseBetweenNotes = (noteDuration * 13) / 10;
