@@ -77,6 +77,7 @@ typedef struct {
   uint8_t tempMode;
   bool formatDmy;
   bool squareFont;
+  bool autoBrightness;
 } EEPROM_DATA;
 
 EEPROM_DATA EepromData;       //Current EEPROM settings
@@ -112,9 +113,11 @@ unsigned long setupTimeout;
 bool setupDisplayState = false;
 
 
-enum ClockButtonModesEnum { CLOCK, TIME_SET, DATE_SET, ALARM_SET, TUNE_SET, BRIGHT_SET, FORMAT_SET, TEMP_SET };
+enum ClockButtonModesEnum { CLOCK, DATE, TIME_SET, DATE_SET, ALARM_SET, TUNE_SET, BRIGHT_SET, FORMAT_SET, TEMP_SET };
 ClockButtonModesEnum clockMode = CLOCK;
-#define LAST_CLOCK_MODE TEMP_SET
+#define MENU_PAGE_1_END FORMAT_SET
+#define FIRST_CLOCK_MENU_MODE TIME_SET
+#define LAST_CLOCK_MENU_MODE TEMP_SET
 
 enum TimeSetMenuEnum { TIME_HOUR, TIME_MIN, TIME_FORMAT };
 TimeSetMenuEnum timeSetMode = TIME_HOUR;
@@ -128,6 +131,9 @@ AlarmSetMenuEnum alarmSetMode = ALARM_HOUR;
 enum FormatSetMenuEnum { DAY_MONTH, FONT_STYLE };
 FormatSetMenuEnum formatSetMode = DAY_MONTH;
 
+enum BrightnessSetMenuEnum { BRIGHT_VALUE, BRIGHT_AUTO };
+BrightnessSetMenuEnum brightSetMode = BRIGHT_VALUE;
+
 #define TEMPMODE_OFF 0
 #define TEMPMODE_F   1
 #define TEMPMODE_C   2
@@ -137,6 +143,14 @@ bool alarmRinging = false;    //true when alarm is on
 bool alarmCancelled = false;  //alarm cancelled by user
 bool musicPlaying = false;    //true if playing a song
 bool clockColon = false;      //show/hide colon
+bool debugMode = false;     //show sensor values on date screen, plus other debug options
+
+unsigned int light_sensor_ch0 = 0;
+unsigned int light_sensor_ch1 = 0;
+bool light_sensor_valid = false;
+uint8_t active_brightness_level = 0;
+
+uint32_t date_screen_entry_time = 0;
 
 static const String tempModeStrings[] = {"OFF", "F", "C"};
 #define NUM_TEMP_MODES 3
@@ -191,6 +205,7 @@ void setup()
     display_drivers[i].set_spi_settings(&spi_settings);
   }
 
+  active_brightness_level = EepromData.brightness;
   for (int i = 0; i < NUM_DISPLAY_DRIVERS; i += 1) {
     display_drivers[i].init();
     display_drivers[i].set_brightness(EepromData.brightness);
@@ -199,10 +214,16 @@ void setup()
   Wire.begin();
   temp_sensor.disableShutdownMode();
   light_sensor.begin();
+  delay(100);
+  //set the integration time to 50, sample interval of 50
+  light_sensor.setMeasurementRate(0, 0);
+  //gain is set to 4 empirically
+  light_sensor.setControl(2, false, true);
+  delay(15);
 
 
   pinMode(HB_LED, OUTPUT);
-  digitalWrite(HB_LED, LOW);
+  digitalWrite(HB_LED, HIGH);//LED is active low, default off
 
   //make sure we're using the 32KHz external crystal if we want remotely accurate timekeeping
   rtc.setClockSource(STM32RTC::LSE_CLOCK);
@@ -229,6 +250,8 @@ void loop()
 {
   testButtons();
 
+  readLightSensor();
+
   if (clockMode == CLOCK)
   {
     showTime(false);
@@ -246,6 +269,9 @@ void loop()
       alarmRinging = false;
     }
 
+  } else if (clockMode == DATE) {
+    showDate(rtc.getDay(), rtc.getMonth(), rtc.getYear());
+    // delay(5000);
   }
   else
   {
@@ -253,7 +279,11 @@ void loop()
   }
 
   delay(100);
-  digitalWrite(HB_LED, !digitalRead(HB_LED));
+  if (debugMode) {
+    digitalWrite(HB_LED, !digitalRead(HB_LED));
+  } else {
+    digitalWrite(HB_LED, HIGH);
+  }
 }
 
 //---------------------------------------------------------------
@@ -279,11 +309,22 @@ void testButtons(void)
 //Handle CLOCK btton
 void clockButtonPressed(void)
 {
+  bool menuEnd = false;
   if (cancelAlarm()) return;
 
   inSubMenu = false;
-  clockMode = (clockMode == LAST_CLOCK_MODE) ? CLOCK : (ClockButtonModesEnum)((int)clockMode + 1);
-  if (clockMode == CLOCK)
+  if (clockMode == CLOCK) {
+    clockMode = FIRST_CLOCK_MENU_MODE;//jump from clock to menu
+  } else if (clockMode == DATE) {
+    clockMode = CLOCK;//jump from date to clock
+  } else if (clockMode == LAST_CLOCK_MENU_MODE) {
+    clockMode = CLOCK;//jump from last menu back to clock
+    menuEnd = true;
+  } else {
+    clockMode = (ClockButtonModesEnum)((int)clockMode + 1);//jump to next menu item
+  }
+  //update RTC only if we've just left the menu
+  if (menuEnd)
   {
     debug_println("Saving Time: " + String(newTime.Hour) + ":" + String(newTime.Minute));
     debug_println("       From: " + String(rtc.getHours()) + ":" + String(rtc.getMinutes()));
@@ -313,7 +354,7 @@ void clockButtonPressed(void)
   }
   else
   {
-    if (clockMode == TIME_SET)
+    if (clockMode == FIRST_CLOCK_MENU_MODE)
     {
       rtc.getDate(&newTime.Wday, &newTime.Day, &newTime.Month, &newTime.Year);
       rtc.getTime(&newTime.Hour, &newTime.Minute, &newTime.Second, NULL, NULL);
@@ -329,8 +370,12 @@ void enterButtonPressed(void)
 {
   if (cancelAlarm()) return;
 
-  if (clockMode != CLOCK)
-  {
+  if (clockMode == CLOCK) {
+    clockMode = DATE;
+    date_screen_entry_time = millis();
+  } else if (clockMode == DATE) {
+    clockMode = CLOCK;
+  } else {
     if (!inSubMenu)
     {
       timeSetMode = TIME_HOUR;
@@ -347,14 +392,10 @@ void enterButtonPressed(void)
         case DATE_SET: dateSetMode = (dateSetMode == DATE_DAY) ? DATE_YEAR : (DateSetMenuEnum)((int)dateSetMode + 1); break;
         case ALARM_SET: alarmSetMode = (alarmSetMode == ALARM_STATE) ? ALARM_HOUR : (AlarmSetMenuEnum)((int)alarmSetMode + 1); break;
         case FORMAT_SET: formatSetMode = (formatSetMode == FONT_STYLE) ? DAY_MONTH : (FormatSetMenuEnum)((int)formatSetMode + 1); break;
+        case BRIGHT_SET: brightSetMode = (brightSetMode == BRIGHT_AUTO) ? BRIGHT_VALUE : (BrightnessSetMenuEnum)((int)brightSetMode + 1); break;
       }
     }
     showSetup(true);
-  }
-  else
-  {
-    showDate(rtc.getDay(), rtc.getMonth(), rtc.getYear());
-    delay(5000);
   }
 }
 
@@ -384,7 +425,7 @@ void downButtonPressed(void)
       {
         switch(dateSetMode)
         {
-          case DATE_YEAR: newTime.Year = ((newTime.Year - 30 + 100) - 1) % 100 + 30; newTime.dateUpdated = true; break;
+          case DATE_YEAR: newTime.Year = (newTime.Year + UINT8_MAX - 1) % UINT8_MAX; newTime.dateUpdated = true; break;
           case DATE_MONTH: newTime.Month = ((newTime.Month - 1 + 12) - 1) % 12 + 1; newTime.dateUpdated = true; break;
           case DATE_DAY:
             uint8_t md = daysInMonth(newTime.Year, newTime.Month);
@@ -414,8 +455,22 @@ void downButtonPressed(void)
       break;
 
     case BRIGHT_SET:
-      EepromData.brightness = (EepromData.brightness + NUM_BRIGHTNESS_LEVELS_6932 - 1) % NUM_BRIGHTNESS_LEVELS_6932;
-      setDisplayBrightness(EepromData.brightness);
+      if (inSubMenu)
+      {
+        switch (brightSetMode)
+        {
+          case BRIGHT_VALUE:
+            EepromData.brightness = (EepromData.brightness + NUM_BRIGHTNESS_LEVELS_6932 - 1) % NUM_BRIGHTNESS_LEVELS_6932;
+            setDisplayBrightness(EepromData.brightness);
+            break;
+          case BRIGHT_AUTO:
+            EepromData.autoBrightness = !EepromData.autoBrightness;
+            if (!EepromData.autoBrightness) {
+              setDisplayBrightness(EepromData.brightness);
+            }
+            break;
+        }
+      }
       showSetup(true);
       break;
 
@@ -445,6 +500,9 @@ void upButtonPressed(void)
 
   switch (clockMode)
   {
+    case DATE:
+      debugMode = !debugMode;
+      break;
     case TIME_SET:
       if (inSubMenu)
       {
@@ -463,7 +521,7 @@ void upButtonPressed(void)
       {
         switch(dateSetMode)
         {
-          case DATE_YEAR: newTime.Year = ((newTime.Year - 30) + 1) % 100 + 30; newTime.dateUpdated = true;  break;
+          case DATE_YEAR: newTime.Year = (newTime.Year + 1) % UINT8_MAX; newTime.dateUpdated = true;  break;
           case DATE_MONTH: newTime.Month = ((newTime.Month - 1) + 1) % 12 + 1; newTime.dateUpdated = true; break;
           case DATE_DAY:
             uint8_t md = daysInMonth(newTime.Year, newTime.Month);
@@ -493,8 +551,22 @@ void upButtonPressed(void)
       break;
 
     case BRIGHT_SET:
-      EepromData.brightness = (EepromData.brightness + 1) % NUM_BRIGHTNESS_LEVELS_6932;
-      setDisplayBrightness(EepromData.brightness);
+      if (inSubMenu)
+      {
+        switch (brightSetMode)
+        {
+          case BRIGHT_VALUE:
+            EepromData.brightness = (EepromData.brightness + 1) % NUM_BRIGHTNESS_LEVELS_6932;
+            setDisplayBrightness(EepromData.brightness);
+            break;
+          case BRIGHT_AUTO:
+            EepromData.autoBrightness = !EepromData.autoBrightness;
+            if (!EepromData.autoBrightness) {
+              setDisplayBrightness(EepromData.brightness);
+            }
+            break;
+        }
+      }
       showSetup(true);
       break;
 
@@ -544,7 +616,7 @@ void showSetup(bool force)
 
     clearDisplay();
 
-    if (clockMode < TEMP_SET) { //Show page 1
+    if (clockMode <= MENU_PAGE_1_END) { //Show page 1
       if (on || !(clockMode == TIME_SET && !inSubMenu)) displayString(0,7,"TIME");
       if (on || !(clockMode == TIME_SET && inSubMenu && timeSetMode == TIME_HOUR)) displayNumber(0,13,newTime.Hour,2,true);
       if (on || !(clockMode == TIME_SET && inSubMenu && timeSetMode == TIME_MIN)) displayNumber(0,16,newTime.Minute,2,true);
@@ -572,10 +644,14 @@ void showSetup(bool force)
       }
 
       if (on || !(clockMode == BRIGHT_SET && !inSubMenu)) displayString(4,1,"BRIGHTNESS");
-      if (on || !(clockMode == BRIGHT_SET && inSubMenu)) displayNumber(4,13,EepromData.brightness,0,false);
+      if (on || !(clockMode == BRIGHT_SET && inSubMenu && brightSetMode == BRIGHT_VALUE)) displayNumber(4,13,EepromData.brightness,0,false);
+      if (on || !(clockMode == BRIGHT_SET && inSubMenu && brightSetMode == BRIGHT_AUTO)) {
+        displayString(4, 15, "AUTO");
+        displayString(4, 20, (EepromData.autoBrightness) ? "ON" : "OFF");
+      }
 
       if (on || !(clockMode == FORMAT_SET && !inSubMenu)) displayString(5,0,"DATE FORMAT");
-      if (on || !(clockMode == FORMAT_SET && inSubMenu && formatSetMode == DAY_MONTH)) displayString(5,13,(EepromData.formatDmy) ? "DD-NN" : "NN-DD");
+      if (on || !(clockMode == FORMAT_SET && inSubMenu && formatSetMode == DAY_MONTH)) displayString(5,13,(EepromData.formatDmy) ? "DD-MM" : "MM-DD");
       if (on || !(clockMode == FORMAT_SET && inSubMenu && formatSetMode == FONT_STYLE)) displayString(5,19,(EepromData.squareFont) ? "FONT1" : "FONT2");
     } else {//show page 2
       if (on || !(clockMode == TEMP_SET && !inSubMenu)) displayString(0,7,"TEMP");
@@ -670,7 +746,7 @@ void showDate(int d, int m, int y)
   {
     displayDateDigit(XOFS + 0, d / 10);
     displayDateDigit(XOFS + 4, d % 10);
-    displayDateDigit(XOFS + 8, 10);  //colon
+    displayDateDigit(XOFS + 8, 10);  //dash
     displayDateDigit(XOFS + 12, m / 10);
     displayDateDigit(XOFS + 16, m % 10);
   }
@@ -678,13 +754,23 @@ void showDate(int d, int m, int y)
   {
     displayDateDigit(XOFS + 0, m / 10);
     displayDateDigit(XOFS + 4, m % 10);
-    displayDateDigit(XOFS + 8, 10);  //colon
+    displayDateDigit(XOFS + 8, 10);  //dash
     displayDateDigit(XOFS + 12, d / 10);
     displayDateDigit(XOFS + 16, d % 10);
   }
   displayNumber(5, 10, tmYearToCalendar(y), 0, false);
-  displayNumber(5, 0, (int)temp_sensor.readTemperatureF(), 0, 0);
-  // displayNumber(5, 18, (int)lig)
+
+  if (debugMode) {
+    displayNumber(5, 0, (int)temp_sensor.readTemperatureF(), 0, 0);
+    if (light_sensor_valid) {
+      displayNumber(5, 18, active_brightness_level, 0, false);
+      displayString(5, 19, ".");
+      displayNumber(5, 19, light_sensor_ch1, 5, false);
+    } else {
+      displayString(5, 19, "Error");
+    }
+  }
+
   updateDisplay();
 }
 
@@ -981,6 +1067,7 @@ void updateDisplay(void) {
 }
 
 void setDisplayBrightness(uint8_t dispBrightness) {
+    active_brightness_level = dispBrightness;
     for (int i = 0; i < NUM_DISPLAY_DRIVERS; i += 1) {
       display_drivers[i].set_brightness(dispBrightness);
     }
@@ -992,4 +1079,40 @@ uint16_t tmYearToCalendar(uint8_t year) {
 
 uint8_t tmYearFromCalendar(uint16_t cYear) {
   return (uint8_t) (cYear - 2001);
+}
+
+void readLightSensor(void) {
+    long auto_brightness_value;
+    bool ls_valid = false;
+    byte ls_gain;
+    bool ls_intrstatus;
+    bool ls_newdata = false;
+    unsigned int light_sensor_ch0_raw;
+    unsigned int light_sensor_ch1_raw;
+    static unsigned int prev_light_sensor0_value = 0;
+    static unsigned int prev_light_sensor1_value = 0;
+    light_sensor.getStatus(ls_valid, ls_gain, ls_intrstatus, ls_newdata);
+    light_sensor_valid = light_sensor.getData(light_sensor_ch0_raw, light_sensor_ch1_raw);
+    if (ls_newdata) { //sensor has new data
+      //effectively an exponential average; last value is weighted 7x more heavily than the present value to slow down response time.
+      //When the light sensor saturates (e.g. is exposed to direct sunlight), it may temporarily report 0; this averaging helps
+      //to prevent that from showing up as blips in the display brightness
+      light_sensor_ch0 = (light_sensor_ch0_raw + 7 * prev_light_sensor0_value) / 8;
+      light_sensor_ch1 = (light_sensor_ch1_raw + 7 * prev_light_sensor1_value) / 8;
+      prev_light_sensor0_value = light_sensor_ch0;
+      prev_light_sensor1_value = light_sensor_ch1;
+      // debug_println(String(ls_valid) + " " + String(ls_newdata) + " " + String(light_sensor_ch0) + " " + String(light_sensor_ch1));
+      //map ambient light level to brightness values.  Channel 0 is the "mainly-visible-light" channel.
+      //the full-scale value of 200 was chosen empirically.
+      auto_brightness_value = map(light_sensor_ch0, 0, 200, 0, MAX_BRIGHTNESS_LEVEL_6932);
+      if (auto_brightness_value < 0 ) {
+        auto_brightness_value = 0;
+      } else if (auto_brightness_value > MAX_BRIGHTNESS_LEVEL_6932) {
+        auto_brightness_value = MAX_BRIGHTNESS_LEVEL_6932;
+      }
+      if (EepromData.autoBrightness) {
+        active_brightness_level = auto_brightness_value;
+        setDisplayBrightness(active_brightness_level);
+      }
+    }
 }
