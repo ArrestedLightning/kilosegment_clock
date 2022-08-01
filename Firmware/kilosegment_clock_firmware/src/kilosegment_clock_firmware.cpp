@@ -29,7 +29,7 @@
 
 #include <SPI.h>
 #include <STM32RTC.h>
-#include <EEPROM.h>
+#include <FlashStorage_STM32F1.h>
 #include <LTR303.h>
 #include <Temperature_LM75_Derived.h>
 #include <HardwareSerial.h>
@@ -78,6 +78,7 @@ typedef struct {
   bool formatDmy;
   bool squareFont;
   bool autoBrightness;
+  uint32_t padding;
 } EEPROM_DATA;
 
 EEPROM_DATA EepromData;       //Current EEPROM settings
@@ -108,7 +109,7 @@ Button* upButton;
 //Operating modes
 bool inSubMenu = false;
 //blink rate on setup menus
-#define SETUP_FLASH_RATE 200;
+#define SETUP_FLASH_RATE 200
 #define DATE_SCREEN_TIMEOUT 5000//ms
 unsigned long setupTimeout;
 bool setupDisplayState = false;
@@ -180,6 +181,7 @@ void setup()
 {
   debug_init();
 
+  EEPROM.init();
   //Eprom
   readEepromData();
 
@@ -206,10 +208,15 @@ void setup()
     display_drivers[i].set_spi_settings(&spi_settings);
   }
 
-  active_brightness_level = EepromData.brightness;
+  if (EepromData.autoBrightness) {
+    //start at minimum brightness and allow auto-brightness to ramp us up if necessary
+    active_brightness_level = 0;
+  } else {
+    active_brightness_level = EepromData.brightness;
+  }
   for (int i = 0; i < NUM_DISPLAY_DRIVERS; i += 1) {
     display_drivers[i].init();
-    display_drivers[i].set_brightness(EepromData.brightness);
+    display_drivers[i].set_brightness(active_brightness_level);
   }
 
   Wire.begin();
@@ -222,6 +229,11 @@ void setup()
   light_sensor.setControl(2, false, true);
   delay(15);
 
+  //reset if up button is held on boot
+  if (digitalRead(SW_UP) == LOW) {
+    loadDefaults();
+    writeEepromData();
+  }
 
   pinMode(HB_LED, OUTPUT);
   digitalWrite(HB_LED, HIGH);//LED is active low, default off
@@ -465,7 +477,9 @@ void downButtonPressed(void)
         {
           case BRIGHT_VALUE:
             EepromData.brightness = (EepromData.brightness + NUM_BRIGHTNESS_LEVELS_6932 - 1) % NUM_BRIGHTNESS_LEVELS_6932;
-            setDisplayBrightness(EepromData.brightness);
+            if (!EepromData.autoBrightness) {
+              setDisplayBrightness(EepromData.brightness);
+            }
             break;
           case BRIGHT_AUTO:
             EepromData.autoBrightness = !EepromData.autoBrightness;
@@ -561,7 +575,9 @@ void upButtonPressed(void)
         {
           case BRIGHT_VALUE:
             EepromData.brightness = (EepromData.brightness + 1) % NUM_BRIGHTNESS_LEVELS_6932;
-            setDisplayBrightness(EepromData.brightness);
+            if (!EepromData.autoBrightness) {
+              setDisplayBrightness(EepromData.brightness);
+            }
             break;
           case BRIGHT_AUTO:
             EepromData.autoBrightness = !EepromData.autoBrightness;
@@ -983,8 +999,10 @@ void writeEepromData()
 {
   debug_println("Writing EEPROM data");
   //This function uses EEPROM.update() to perform the write, so does not rewrites the value if it didn't change.
-  debug_println("magic:" + String(EepromData.magic, 16) + ", alarm: " + String(EepromData.alarm) + ", time: " + String(EepromData.hours) + ":" + String(EepromData.minutes) + ", 12hr: " +  String(EepromData.format12hr) + ", brightness: " +  String(EepromData.brightness));
-  // EEPROM.put(EEPROM_ADDRESS, EepromData);
+  debug_println("magic:" + String(EepromData.magic, 16) + ", alarm: " + String(EepromData.alarm) + ", time: " + String(EepromData.hours) + ":" + String(EepromData.minutes) + ", 12hr: " +
+    String(EepromData.format12hr) + ", brightness: " +  String(EepromData.brightness) + ", AutoBrighness: " + String(EepromData.autoBrightness) + ", Format: " + String(EepromData.formatDmy) +
+    " " + String(EepromData.squareFont));
+   EEPROM.put(EEPROM_ADDRESS, EepromData);
 }
 
 //---------------------------------------------------------------
@@ -992,20 +1010,11 @@ void writeEepromData()
 void readEepromData(void)
 {
   //Eprom
-  // EEPROM.get(EEPROM_ADDRESS,EepromData);
+  EEPROM.get(EEPROM_ADDRESS,EepromData);
   debug_println("magic:" + String(EepromData.magic, 16) + ", alarm: " + String(EepromData.alarm) + ", time: " + String(EepromData.hours) + ":" + String(EepromData.minutes) + ", 12hr: " +  String(EepromData.format12hr) + ", brightness: " +  String(EepromData.brightness));
   if (EepromData.magic != EEPROM_MAGIC)
   {
-    debug_println("Initializing EEPROM ...");
-    EepromData.magic = EEPROM_MAGIC;
-    EepromData.alarm = false;
-    EepromData.minutes = 30;
-    EepromData.hours = 5;
-    EepromData.format12hr = false;
-    EepromData.brightness = MAX_BRIGHTNESS_LEVEL_6932;
-    EepromData.tune = 0;
-    EepromData.formatDmy = false;
-    EepromData.squareFont = false;
+    loadDefaults();
     writeEepromData();
   }
   debug_println("alarm: " + String(EepromData.alarm) + ", time: " + String(EepromData.hours) + ":" + String(EepromData.minutes) + ", 12hr: " +  String(EepromData.format12hr) + ", brightness: " +  String(EepromData.brightness));
@@ -1119,4 +1128,19 @@ void readLightSensor(void) {
         setDisplayBrightness(active_brightness_level);
       }
     }
+}
+
+void loadDefaults(void) {
+    debug_println("Loading default settings...");
+    EepromData.magic = EEPROM_MAGIC;
+    EepromData.alarm = false;
+    EepromData.minutes = 30;
+    EepromData.hours = 5;
+    EepromData.format12hr = false;
+    EepromData.brightness = MAX_BRIGHTNESS_LEVEL_6932;
+    EepromData.tune = 0;
+    EepromData.formatDmy = false;
+    EepromData.squareFont = false;
+    EepromData.autoBrightness = true;
+    EepromData.tempMode = TEMPMODE_OFF;
 }

@@ -30,3 +30,4 @@ void setDisplayBrightness(uint8_t dispBrightness);
 uint16_t tmYearToCalendar(uint8_t year);
 uint8_t tmYearFromCalendar(uint16_t cYear);
 void readLightSensor(void);
+void loadDefaults(void);
