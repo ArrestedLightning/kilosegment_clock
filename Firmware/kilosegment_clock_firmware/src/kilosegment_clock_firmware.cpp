@@ -109,6 +109,7 @@ Button* upButton;
 bool inSubMenu = false;
 //blink rate on setup menus
 #define SETUP_FLASH_RATE 200;
+#define DATE_SCREEN_TIMEOUT 5000//ms
 unsigned long setupTimeout;
 bool setupDisplayState = false;
 
@@ -270,8 +271,11 @@ void loop()
     }
 
   } else if (clockMode == DATE) {
-    showDate(rtc.getDay(), rtc.getMonth(), rtc.getYear());
-    // delay(5000);
+    if (millis() - date_screen_entry_time > DATE_SCREEN_TIMEOUT) {
+      clockMode = CLOCK;
+    } else {
+      showDate(rtc.getDay(), rtc.getMonth(), rtc.getYear());
+    }
   }
   else
   {
