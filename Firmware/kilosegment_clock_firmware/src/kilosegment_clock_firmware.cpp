@@ -66,22 +66,24 @@ STM32RTC& rtc = STM32RTC::getInstance();
 //EEPROM handling
 #define EEPROM_ADDRESS 0
 #define EEPROM_MAGIC 0x0BAD0DAD
+
+//boolean values seem like they can have problems when saved to and loaded from flash
+//if a value other than 0 or 1 is loaded, so use uint8_t for all boolean values.
 typedef struct {
   uint32_t magic;
-  bool alarm;
+  uint8_t alarm;
   uint8_t minutes;
   uint8_t hours;
-  bool format12hr;
+  uint8_t format12hr;
   uint8_t brightness;
   uint8_t tune;
   uint8_t tempMode;
-  bool formatDmy;
-  bool squareFont;
-  bool autoBrightness;
-  uint32_t padding;
+  uint8_t formatDmy;
+  uint8_t squareFont;
+  uint8_t autoBrightness;
 } EEPROM_DATA;
 
-EEPROM_DATA EepromData;       //Current EEPROM settings
+EEPROM_DATA EepromData; //Current EEPROM settings
 
 //pulled from time.h
 typedef struct {
@@ -182,7 +184,7 @@ void setup()
   debug_init();
 
   EEPROM.init();
-  //Eprom
+
   readEepromData();
 
   //Initialize buttons
@@ -240,16 +242,16 @@ void setup()
 
   //make sure we're using the 32KHz external crystal if we want remotely accurate timekeeping
   rtc.setClockSource(STM32RTC::LSE_CLOCK);
-  rtc.begin();
+  rtc.begin(STM32RTC::HOUR_24);
 
   if(!rtc.isTimeSet())
   {
     debug_println("RTC not set");
-    RTC_SetTime(0,0,0,0,HOUR_AM);
-    RTC_SetDate(tmYearFromCalendar(2022), 1, 1, RTC_WEEKDAY_SATURDAY);
+    rtc.setTime(0, 0, 0);
+    rtc.setDate(1, 1, tmYearFromCalendar(2022));
   }
-  rtc.getDate(&newTime.Wday, &newTime.Day, &newTime.Month, &newTime.Year);
   rtc.getTime(&newTime.Hour, &newTime.Minute, &newTime.Second, NULL, NULL);
+  rtc.getDate(&newTime.Wday, &newTime.Day, &newTime.Month, &newTime.Year);
   debug_println("Time: " + String(rtc.getHours()) + ":" + String(rtc.getMinutes()) + ":" + String(rtc.getSeconds()));
   debug_println("Date: " + String(rtc.getDay()) + "/" + String(rtc.getMonth()) + "/" + String(rtc.getYear()));
   newTime.timeUpdated = false;
@@ -342,28 +344,29 @@ void clockButtonPressed(void)
   //update RTC only if we've just left the menu
   if (menuEnd)
   {
-    debug_println("Saving Time: " + String(newTime.Hour) + ":" + String(newTime.Minute));
-    debug_println("       From: " + String(rtc.getHours()) + ":" + String(rtc.getMinutes()));
-    if (newTime.Year != rtc.getYear() || newTime.Month != rtc.getMonth() || newTime.Day != rtc.getDay() || newTime.Hour != rtc.getHours() || newTime.Minute != rtc.getMinutes())
+    //Update time
+
+    //reset seconds when updating time so as to allow for synchronization with an external clock,
+    //but only if time was actually updated by the user while in the settings menu.  This avoids accumulating
+    //offset while modifying other settings.
+    if (newTime.timeUpdated) {
+      debug_println("Saving Time: " + String(newTime.Hour) + ":" + String(newTime.Minute));
+      debug_println("       From: " + String(rtc.getHours()) + ":" + String(rtc.getMinutes()));
+      newTime.Second = 0;
+      rtc.setTime(newTime.Hour, newTime.Minute, newTime.Second, 0, rtc.AM);
+    }
+    newTime.timeUpdated = false;
+
+    if (newTime.dateUpdated) {
+      debug_println("Saving Date: " + String(tmYearToCalendar(newTime.Year)) + "-" + String(newTime.Month) + "-" + String(newTime.Day));
+      debug_println("       From: " + String(tmYearToCalendar(rtc.getYear())) + "-" + String(rtc.getMonth()) + "-" + String(rtc.getDay()));
+      rtc.setDate(newTime.Wday, newTime.Day, newTime.Month, newTime.Year);
+    }
+    newTime.dateUpdated = false;
+
+    if (!rtc.isTimeSet())
     {
-      //Update time
-      debug_println("Updating RTC");
-      //reset seconds when updating time so as to allow for synchronization with an external clock,
-      //but only if time was actually updated by the user while in the settings menu.  This avoids accumulating
-      //offset while modifying other settings.
-      if (newTime.timeUpdated) {
-        newTime.Second = 0;
-        rtc.setTime(newTime.Hour, newTime.Minute, newTime.Second, 0, rtc.AM);
-      }
-      newTime.timeUpdated = false;
-      if (newTime.dateUpdated) {
-        rtc.setDate(newTime.Wday, newTime.Day, newTime.Month, newTime.Year);
-      }
-      newTime.dateUpdated = false;
-      if (!rtc.isTimeSet())
-      {
-        debug_println("Set Time Failed");
-      }
+      debug_println("Set Time Failed");
     }
     writeEepromData();
     showTime(true);
@@ -446,6 +449,7 @@ void downButtonPressed(void)
           case DATE_DAY:
             uint8_t md = daysInMonth(newTime.Year, newTime.Month);
             newTime.Day = ((newTime.Day - 1 + md) - 1) % md + 1;
+            newTime.dateUpdated = true;
             break;
         }
         showSetup(true);
@@ -544,6 +548,7 @@ void upButtonPressed(void)
           case DATE_DAY:
             uint8_t md = daysInMonth(newTime.Year, newTime.Month);
             newTime.Day = (newTime.Day % md) + 1;
+            newTime.dateUpdated = true;
             break;
         }
         showSetup(true);
@@ -998,7 +1003,11 @@ uint8_t daysInMonth(int y, int m)
 void writeEepromData()
 {
   debug_println("Writing EEPROM data");
-  //This function uses EEPROM.update() to perform the write, so does not rewrites the value if it didn't change.
+  //This function uses EEPROM.update() to perform the write, so does not rewrite the value if it didn't change.
+  //We're a the FlashStorage library to emulate EEPROM, which uses a single page of flash for storage
+  //Using the flash in this way is not really best practice, as no wear leveling is done
+  //however, the GD32F103 is rated to 100,000 cycles, and the STM32F103 is rated to at least 10,000 cycles, so it seems
+  //unlikely to be a problem with reasonable usage patterns in this system.
   debug_println("magic:" + String(EepromData.magic, 16) + ", alarm: " + String(EepromData.alarm) + ", time: " + String(EepromData.hours) + ":" + String(EepromData.minutes) + ", 12hr: " +
     String(EepromData.format12hr) + ", brightness: " +  String(EepromData.brightness) + ", AutoBrighness: " + String(EepromData.autoBrightness) + ", Format: " + String(EepromData.formatDmy) +
     " " + String(EepromData.squareFont));
@@ -1009,7 +1018,6 @@ void writeEepromData()
 //Read the EepromData structure from EEPROM, initialise if necessary
 void readEepromData(void)
 {
-  //Eprom
   EEPROM.get(EEPROM_ADDRESS,EepromData);
   debug_println("magic:" + String(EepromData.magic, 16) + ", alarm: " + String(EepromData.alarm) + ", time: " + String(EepromData.hours) + ":" + String(EepromData.minutes) + ", 12hr: " +  String(EepromData.format12hr) + ", brightness: " +  String(EepromData.brightness));
   if (EepromData.magic != EEPROM_MAGIC)
@@ -1018,6 +1026,14 @@ void readEepromData(void)
     writeEepromData();
   }
   debug_println("alarm: " + String(EepromData.alarm) + ", time: " + String(EepromData.hours) + ":" + String(EepromData.minutes) + ", 12hr: " +  String(EepromData.format12hr) + ", brightness: " +  String(EepromData.brightness));
+
+  //sanity check enumerated values
+  if (EepromData.tempMode >= NUM_TEMP_MODES) {
+    EepromData.tempMode = TEMPMODE_OFF;
+  }
+  if (EepromData.tune >= NUM_OF_MELODIES) {
+    EepromData.tune = 0;
+  }
 }
 
 //---------------------------------------------------------------
