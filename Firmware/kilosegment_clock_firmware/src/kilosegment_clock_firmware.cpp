@@ -81,6 +81,8 @@ typedef struct {
   uint8_t formatDmy;
   uint8_t squareFont;
   uint8_t autoBrightness;
+  uint8_t colonMode;
+  uint8_t amPmIndMode;
 } EEPROM_DATA;
 
 EEPROM_DATA EepromData; //Current EEPROM settings
@@ -117,11 +119,11 @@ unsigned long setupTimeout;
 bool setupDisplayState = false;
 
 
-enum ClockButtonModesEnum { CLOCK, DATE, TIME_SET, DATE_SET, ALARM_SET, TUNE_SET, BRIGHT_SET, FORMAT_SET, TEMP_SET };
+enum ClockButtonModesEnum { CLOCK, DATE, TIME_SET, DATE_SET, ALARM_SET, TUNE_SET, BRIGHT_SET, FORMAT_SET, TEMP_SET, COLON_SET, AMPMIND_SET };
 ClockButtonModesEnum clockMode = CLOCK;
 #define MENU_PAGE_1_END FORMAT_SET
 #define FIRST_CLOCK_MENU_MODE TIME_SET
-#define LAST_CLOCK_MENU_MODE TEMP_SET
+#define LAST_CLOCK_MENU_MODE AMPMIND_SET
 
 enum TimeSetMenuEnum { TIME_HOUR, TIME_MIN, TIME_FORMAT };
 TimeSetMenuEnum timeSetMode = TIME_HOUR;
@@ -138,9 +140,18 @@ FormatSetMenuEnum formatSetMode = DAY_MONTH;
 enum BrightnessSetMenuEnum { BRIGHT_VALUE, BRIGHT_AUTO };
 BrightnessSetMenuEnum brightSetMode = BRIGHT_VALUE;
 
-#define TEMPMODE_OFF 0
-#define TEMPMODE_F   1
-#define TEMPMODE_C   2
+#define TEMPMODE_OFF    0
+#define TEMPMODE_F      1
+#define TEMPMODE_C      2
+
+#define COLONMODE_OFF   0
+#define COLONMODE_ON    1
+#define COLONMODE_FLASH 2
+
+#define AMPMIND_OFF     0
+#define AMPMIND_ON      1
+#define AMPMIND_FLASH   2
+
 
 int lastSeconds = -1;
 bool alarmRinging = false;    //true when alarm is on
@@ -158,6 +169,12 @@ uint32_t date_screen_entry_time = 0;
 
 static const String tempModeStrings[] = {"OFF", "F", "C"};
 #define NUM_TEMP_MODES 3
+
+static const String colonModeStrings[] = {"OFF", "ON", "FLASH"};
+#define NUM_COLON_MODES 3
+
+#define ampmIndModeStrings   colonModeStrings
+#define NUM_AMPMIND_MODES 3
 
 /* Number of days in each month */
 const uint8_t dom[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
@@ -231,8 +248,8 @@ void setup()
   light_sensor.setControl(2, false, true);
   delay(15);
 
-  //reset if up button is held on boot
-  if (digitalRead(SW_UP) == LOW) {
+  //reset if down button is held on boot
+  if (digitalRead(SW_DOWN) == LOW) {
     loadDefaults();
     writeEepromData();
   }
@@ -507,8 +524,19 @@ void downButtonPressed(void)
       }
       showSetup(true);
       break;
+
     case TEMP_SET:
       EepromData.tempMode = (EepromData.tempMode + NUM_TEMP_MODES - 1) % NUM_TEMP_MODES;
+      showSetup(true);
+      break;
+
+    case COLON_SET:
+      EepromData.colonMode = (EepromData.colonMode + NUM_COLON_MODES - 1) % NUM_COLON_MODES;
+      showSetup(true);
+      break;
+
+    case AMPMIND_SET:
+      EepromData.amPmIndMode = (EepromData.amPmIndMode + NUM_AMPMIND_MODES - 1) % NUM_AMPMIND_MODES;
       showSetup(true);
       break;
   }
@@ -606,8 +634,19 @@ void upButtonPressed(void)
       }
       showSetup(true);
       break;
+
     case TEMP_SET:
       EepromData.tempMode = (EepromData.tempMode + 1) % NUM_TEMP_MODES;
+      showSetup(true);
+      break;
+
+    case COLON_SET:
+      EepromData.colonMode = (EepromData.colonMode + 1) % NUM_COLON_MODES;
+      showSetup(true);
+      break;
+
+    case AMPMIND_SET:
+      EepromData.amPmIndMode = (EepromData.amPmIndMode + 1) % NUM_AMPMIND_MODES;
       showSetup(true);
       break;
   }
@@ -678,16 +717,28 @@ void showSetup(bool force)
       if (on || !(clockMode == FORMAT_SET && !inSubMenu)) displayString(5,0,"DATE FORMAT");
       if (on || !(clockMode == FORMAT_SET && inSubMenu && formatSetMode == DAY_MONTH)) displayString(5,13,(EepromData.formatDmy) ? "DD-MM" : "MM-DD");
       if (on || !(clockMode == FORMAT_SET && inSubMenu && formatSetMode == FONT_STYLE)) displayString(5,19,(EepromData.squareFont) ? "FONT1" : "FONT2");
-    } else {//show page 2
+
+    } else {//show page 2 -------------------------------------------------------------------------------------------------------------------------------
+
       if (on || !(clockMode == TEMP_SET && !inSubMenu)) displayString(0,7,"TEMP");
       if (on || !(clockMode == TEMP_SET && inSubMenu)) {
         if (EepromData.tempMode < NUM_TEMP_MODES) {
-          displayString(0,13,tempModeStrings[EepromData.tempMode]);
+          displayString(0, 13, tempModeStrings[EepromData.tempMode]);
           }
       }
-      displayString(4, 4, "VERSION");
-      displayNumber(4, 13, BUILD_NUMBER, 0, 0);
-      displayString(5, 3, BUILD_DATE);
+      if (on || !(clockMode == COLON_SET && !inSubMenu)) displayString(1,6,"COLON");
+      if (on || !(clockMode == COLON_SET && inSubMenu)) {
+        if (EepromData.colonMode < NUM_COLON_MODES) {
+          displayString(1, 13, colonModeStrings[EepromData.colonMode]);
+          }
+      }
+      if (on || !(clockMode == AMPMIND_SET && !inSubMenu)) displayString(2,3,"12HR. IND");
+      if (on || !(clockMode == AMPMIND_SET && inSubMenu)) {
+        if (EepromData.amPmIndMode < NUM_AMPMIND_MODES) {
+          displayString(2, 13, ampmIndModeStrings[EepromData.amPmIndMode]);
+          }
+      }
+      displayString(5, 0, "V. " + String(BUILD_NUMBER) + " " + BUILD_DATE);
     }
 
     updateDisplay();
@@ -724,7 +775,8 @@ void showTime(int h, int m, bool he, bool me, bool ce, bool f24)
   if (he)
   {
     if (!f24) {
-      if (ce) {
+      //display AM/PM Indicator if forced on, or requested on and not forced off
+      if ((EepromData.amPmIndMode == AMPMIND_ON) || (ce && (EepromData.amPmIndMode != AMPMIND_OFF))) {
         if (h >= 12) {
           displayString(5, 11, "P");
         } else {
@@ -749,7 +801,8 @@ void showTime(int h, int m, bool he, bool me, bool ce, bool f24)
     displayLargeDigit(13, m / 10);
     displayLargeDigit(18, m % 10);
   }
-  if (ce)
+  //display colon if forced on, or requested on and not forced off
+  if ((EepromData.colonMode == COLONMODE_ON) || (ce && (EepromData.colonMode != COLONMODE_OFF)))
   {
     displayLargeDigit(11, 10);
   }
@@ -758,6 +811,12 @@ void showTime(int h, int m, bool he, bool me, bool ce, bool f24)
   } else if (EepromData.tempMode == TEMPMODE_C) {
     displayNumber(0, 11, temp_sensor.readTemperatureC(), 3, false);
   }
+
+  //show dot in lower right corner if alarm is enabled
+  if (EepromData.alarm) {
+    writePhysicalDigit(5, 23, dp_____, false);
+  }
+
   updateDisplay();
 }
 
@@ -923,11 +982,14 @@ void displayString(uint8_t row, uint8_t col, String s)
   {
     byte c = (byte)s.charAt(i);
     byte cb = c;
+    //characters outside of our supported range get replaced with spaces
     if (c < (byte)' ' || c > (byte)'`')
     {
       c = (byte)' ';
     }
+    //offset the input character by the space character to get the index in our font array
     c = c - (byte)' ';
+
     if (cb == (byte)'.') {
       //special case period to avoid extra spaces
       //this logic definitely may be suboptimal under some circumstances,
@@ -1162,4 +1224,6 @@ void loadDefaults(void) {
     EepromData.squareFont = false;
     EepromData.autoBrightness = true;
     EepromData.tempMode = TEMPMODE_OFF;
+    EepromData.colonMode = COLONMODE_FLASH;
+    EepromData.amPmIndMode = AMPMIND_FLASH;
 }
