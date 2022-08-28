@@ -1133,11 +1133,14 @@ void readLightSensor(void) {
       // debug_println(String(ls_valid) + " " + String(ls_newdata) + " " + String(light_sensor_ch0) + " " + String(light_sensor_ch1));
       //map ambient light level to brightness values.  Channel 0 is the "mainly-visible-light" channel.
       //the full-scale value of 200 was chosen empirically.
-      auto_brightness_value = map(light_sensor_ch0, 0, 200, 0, MAX_BRIGHTNESS_LEVEL_6932);
+      // auto_brightness_value = map(light_sensor_ch0, 0, 200, 0, MAX_BRIGHTNESS_LEVEL_6932);
+      auto_brightness_value = map(light_sensor_ch0, 0, 200, 0, EepromData.brightness);//map to max brightness
       if (auto_brightness_value < 0 ) {
         auto_brightness_value = 0;
-      } else if (auto_brightness_value > MAX_BRIGHTNESS_LEVEL_6932) {
-        auto_brightness_value = MAX_BRIGHTNESS_LEVEL_6932;
+      // } else if (auto_brightness_value > MAX_BRIGHTNESS_LEVEL_6932) {
+      } else if (auto_brightness_value > EepromData.brightness) {
+        // auto_brightness_value = MAX_BRIGHTNESS_LEVEL_6932;
+        auto_brightness_value = EepromData.brightness;
       }
       if (EepromData.autoBrightness) {
         active_brightness_level = auto_brightness_value;
