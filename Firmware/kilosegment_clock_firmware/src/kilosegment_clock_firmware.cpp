@@ -39,6 +39,7 @@
 #include "mapping.h"
 #include "xx6932.h"
 #include "kilosegment_clock_firmware.h"
+#include "kilosegment_clock_bootloader.h"
 #include "build_info.h"
 
 /* Pin definitions */
@@ -198,11 +199,13 @@ HardwareSerial Serial1(PA10, PA9);
 
 void setup()
 {
+  bool config_reset = false;
+
   debug_init();
 
   EEPROM.init();
 
-  readEepromData();
+  config_reset = readEepromData();
 
   //Initialize buttons
   clockButton = new Button(SW_CLOCK);
@@ -252,6 +255,7 @@ void setup()
   if (digitalRead(SW_DOWN) == LOW) {
     loadDefaults();
     writeEepromData();
+    config_reset = true;
   }
 
   pinMode(HB_LED, OUTPUT);
@@ -275,6 +279,13 @@ void setup()
   newTime.dateUpdated = false;
 
   clockMode = CLOCK;
+
+  if (config_reset) {
+    displayString(0, 0, "DEFAULT SETTINGS LOADED");
+    updateDisplay();
+    delay(5000);
+  }
+
   showTime(true);
 }
 
@@ -732,7 +743,7 @@ void showSetup(bool force)
           displayString(1, 13, colonModeStrings[EepromData.colonMode]);
           }
       }
-      if (on || !(clockMode == AMPMIND_SET && !inSubMenu)) displayString(2,3,"12HR. IND");
+      if (on || !(clockMode == AMPMIND_SET && !inSubMenu)) displayString(2,3,"12HR IND");
       if (on || !(clockMode == AMPMIND_SET && inSubMenu)) {
         if (EepromData.amPmIndMode < NUM_AMPMIND_MODES) {
           displayString(2, 13, ampmIndModeStrings[EepromData.amPmIndMode]);
@@ -1005,13 +1016,34 @@ void displayString(uint8_t row, uint8_t col, String s)
   }
 }
 
+//from https://stackoverflow.com/questions/25892665/performance-of-log10-function-returning-an-int
+//this saves a fair amount of flash vs. using log10 (which uses floating point math)
+unsigned int baseTwoDigits(unsigned int x) {
+    return 32 - __builtin_clz(x);
+}
+
+static unsigned int baseTenDigits(unsigned int x) {
+    static const unsigned char guess[33] = {
+        0, 0, 0, 0, 1, 1, 1, 2, 2, 2,
+        3, 3, 3, 3, 4, 4, 4, 5, 5, 5,
+        6, 6, 6, 6, 7, 7, 7, 8, 8, 8,
+        9, 9, 9
+    };
+    static const unsigned int tenToThe[] = {
+        0, 10, 100, 1000, 10000, 100000,
+        1000000, 10000000, 100000000, 1000000000,
+    };
+    unsigned int digits = guess[baseTwoDigits(x)];
+    return digits + (x >= tenToThe[digits]);
+}
+
 //---------------------------------------------------------------
 // Write a number
 void displayNumber(uint8_t row, uint8_t col, int number, int padding, bool leadingZeros)
 {
   if (padding == 0)
   {
-    padding = (number > 0) ? floor(log10(number)) + 1 : 1;
+    padding = (number > 0) ? baseTenDigits(number) : 1;
   }
   col = col + padding;
   bool first = true;
@@ -1070,22 +1102,27 @@ void writeEepromData()
   //Using the flash in this way is not really best practice, as no wear leveling is done
   //however, the GD32F103 is rated to 100,000 cycles, and the STM32F103 is rated to at least 10,000 cycles, so it seems
   //unlikely to be a problem with reasonable usage patterns in this system.
+  EEPROM.setCommitASAP(false);
   debug_println("magic:" + String(EepromData.magic, 16) + ", alarm: " + String(EepromData.alarm) + ", time: " + String(EepromData.hours) + ":" + String(EepromData.minutes) + ", 12hr: " +
     String(EepromData.format12hr) + ", brightness: " +  String(EepromData.brightness) + ", AutoBrighness: " + String(EepromData.autoBrightness) + ", Format: " + String(EepromData.formatDmy) +
     " " + String(EepromData.squareFont));
    EEPROM.put(EEPROM_ADDRESS, EepromData);
+   EEPROM.commit();
 }
 
 //---------------------------------------------------------------
 //Read the EepromData structure from EEPROM, initialise if necessary
-void readEepromData(void)
+//returns true if default settings were loaded
+bool readEepromData(void)
 {
-  EEPROM.get(EEPROM_ADDRESS,EepromData);
+  bool defaults_loaded = false;
+  EEPROM.get(EEPROM_ADDRESS, EepromData);
   debug_println("magic:" + String(EepromData.magic, 16) + ", alarm: " + String(EepromData.alarm) + ", time: " + String(EepromData.hours) + ":" + String(EepromData.minutes) + ", 12hr: " +  String(EepromData.format12hr) + ", brightness: " +  String(EepromData.brightness));
   if (EepromData.magic != EEPROM_MAGIC)
   {
     loadDefaults();
     writeEepromData();
+    defaults_loaded = true;
   }
   debug_println("alarm: " + String(EepromData.alarm) + ", time: " + String(EepromData.hours) + ":" + String(EepromData.minutes) + ", 12hr: " +  String(EepromData.format12hr) + ", brightness: " +  String(EepromData.brightness));
 
@@ -1096,6 +1133,13 @@ void readEepromData(void)
   if (EepromData.tune >= NUM_OF_MELODIES) {
     EepromData.tune = 0;
   }
+  if (EepromData.colonMode >= NUM_COLON_MODES) {
+    EepromData.colonMode = COLONMODE_FLASH;
+  }
+  if (EepromData.amPmIndMode >= NUM_AMPMIND_MODES) {
+    EepromData.amPmIndMode = AMPMIND_FLASH;
+  }
+  return defaults_loaded;
 }
 
 //---------------------------------------------------------------

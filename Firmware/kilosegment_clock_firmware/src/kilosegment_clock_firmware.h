@@ -21,7 +21,7 @@ void displayNumber(uint8_t row, uint8_t col, int number, int padding, bool leadi
 void writePhysicalDigit(uint8_t row, uint8_t col, uint8_t v, bool erase);
 uint8_t daysInMonth(int y, int m);
 void writeEepromData(void);
-void readEepromData(void);
+bool readEepromData(void);
 void playSong(const uint16_t* melody);
 void playNote(uint16_t noteRaw);
 void clearDisplay(void);
