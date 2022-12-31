@@ -827,6 +827,8 @@ void showSetup(bool force)
           case 0: displayString(3,13,"ELISE"); break;
           case 1: displayString(3,13,"RANGE"); break;
           case 2: displayString(3,13,"SUNSHINE"); break;
+          case 3: displayString(3,13,"BEEP 1"); break;
+          case 4: displayString(3,13,"BEEP 2"); break;
         }
       }
 
@@ -1039,8 +1041,11 @@ void displaySmallDigit(uint8_t x, uint8_t v)
   }
 }
 
+//#define PHYSICAL_DIGIT_MASK 0xFF //include decimal point
+#define PHYSICAL_DIGIT_MASK 0x7F //exclude decimal point
+
 //---------------------------------------------------------------
-// Write a segment bit mask
+// Write a segment bit mask (Font 1)
 // x = 0 to 23
 // v = large digit to display (0..10)
 void displaySquareDigit(uint8_t col, uint8_t v)
@@ -1055,51 +1060,51 @@ void displaySquareDigit(uint8_t col, uint8_t v)
   if (mask & B00000001)
   {
     //seg A
-    writePhysicalDigit(0, col + 0, 0xff, false);
-    writePhysicalDigit(0, col + 1, 0xff, false);
-    writePhysicalDigit(0, col + 2, 0xff, false);
+    writePhysicalDigit(0, col + 0, PHYSICAL_DIGIT_MASK, false);
+    writePhysicalDigit(0, col + 1, PHYSICAL_DIGIT_MASK, false);
+    writePhysicalDigit(0, col + 2, PHYSICAL_DIGIT_MASK, false);
   }
   if (mask & B00000010)
   {
     //seg B
-    writePhysicalDigit(0, col + 2, 0xff, false);
-    writePhysicalDigit(1, col + 2, 0xff, false);
-    writePhysicalDigit(2, col + 2, 0xff, false);
+    writePhysicalDigit(0, col + 2, PHYSICAL_DIGIT_MASK, false);
+    writePhysicalDigit(1, col + 2, PHYSICAL_DIGIT_MASK, false);
+    writePhysicalDigit(2, col + 2, PHYSICAL_DIGIT_MASK, false);
   }
   if (mask & B00000100)
   {
     //seg C
-    writePhysicalDigit(2, col + 2, 0xff, false);
-    writePhysicalDigit(3, col + 2, 0xff, false);
-    writePhysicalDigit(4, col + 2, 0xff, false);
+    writePhysicalDigit(2, col + 2, PHYSICAL_DIGIT_MASK, false);
+    writePhysicalDigit(3, col + 2, PHYSICAL_DIGIT_MASK, false);
+    writePhysicalDigit(4, col + 2, PHYSICAL_DIGIT_MASK, false);
   }
   if (mask & B00001000)
   {
     //seg D
-    writePhysicalDigit(4, col + 0, 0xff, false);
-    writePhysicalDigit(4, col + 1, 0xff, false);
-    writePhysicalDigit(4, col + 2, 0xff, false);
+    writePhysicalDigit(4, col + 0, PHYSICAL_DIGIT_MASK, false);
+    writePhysicalDigit(4, col + 1, PHYSICAL_DIGIT_MASK, false);
+    writePhysicalDigit(4, col + 2, PHYSICAL_DIGIT_MASK, false);
   }
   if (mask & B00010000)
   {
     //seg E
-    writePhysicalDigit(2, col, 0xff, false);
-    writePhysicalDigit(3, col, 0xff, false);
-    writePhysicalDigit(4, col, 0xff, false);
+    writePhysicalDigit(2, col, PHYSICAL_DIGIT_MASK, false);
+    writePhysicalDigit(3, col, PHYSICAL_DIGIT_MASK, false);
+    writePhysicalDigit(4, col, PHYSICAL_DIGIT_MASK, false);
   }
   if (mask & B00100000)
   {
     //seg F
-    writePhysicalDigit(0, col, 0xff, false);
-    writePhysicalDigit(1, col, 0xff, false);
-    writePhysicalDigit(2, col, 0xff, false);
+    writePhysicalDigit(0, col, PHYSICAL_DIGIT_MASK, false);
+    writePhysicalDigit(1, col, PHYSICAL_DIGIT_MASK, false);
+    writePhysicalDigit(2, col, PHYSICAL_DIGIT_MASK, false);
   }
   if (mask & B01000000)
   {
     //seg G
-    writePhysicalDigit(2, col + 0, 0xff, false);
-    writePhysicalDigit(2, col + 1, 0xff, false);
-    writePhysicalDigit(2, col + 2, 0xff, false);
+    writePhysicalDigit(2, col + 0, PHYSICAL_DIGIT_MASK, false);
+    writePhysicalDigit(2, col + 1, PHYSICAL_DIGIT_MASK, false);
+    writePhysicalDigit(2, col + 2, PHYSICAL_DIGIT_MASK, false);
   }
 }
 
