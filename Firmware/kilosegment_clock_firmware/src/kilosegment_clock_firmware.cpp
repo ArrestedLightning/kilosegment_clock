@@ -33,6 +33,9 @@
 #include <LTR303.h>
 #include <Temperature_LM75_Derived.h>
 #include <HardwareSerial.h>
+#ifdef WANT_CLI
+#include <SimpleCLI.h>
+#endif
 #include "Button.h"
 #include "Tunes.h"
 #include "Digits.h"
@@ -197,6 +200,13 @@ LTR303 light_sensor;
 
 HardwareSerial Serial1(PA10, PA9);
 
+#ifdef WANT_CLI
+SimpleCLI cli;
+
+Command cmdPing;
+Command cmdHelp;
+#endif
+
 void setup()
 {
   bool config_reset = false;
@@ -287,10 +297,26 @@ void setup()
   }
 
   showTime(true);
+#ifdef WANT_CLI
+  SerialUSB.begin();
+  cmdPing = cli.addCmd("ping");
+  cmdPing.addArg("n", "10");
+  cmdPing.setDescription(" Responds with a ping n-times");
+
+
+  cmdHelp = cli.addCommand("help");
+  cmdHelp.setDescription(" Get help!");
+
+  SerialUSB.println("Ready!");
+#endif
 }
 
 void loop()
 {
+  #ifdef WANT_CLI
+  handleCLI();
+  #endif
+
   testButtons();
 
   readLightSensor();
@@ -331,6 +357,85 @@ void loop()
     digitalWrite(HB_LED, HIGH);
   }
 }
+
+#ifdef WANT_CLI
+void handleCLI(void) {
+    if (SerialUSB.available()) {
+      String input = SerialUSB.readStringUntil('\n');
+
+      if (input.length() > 0) {
+          cli.parse(input);
+      }
+    }
+   if (cli.available()) {
+        Command c = cli.getCmd();
+
+        int argNum = c.countArgs();
+
+        SerialUSB.print("> ");
+        SerialUSB.print(c.getName());
+        SerialUSB.print(' ');
+
+        for (int i = 0; i<argNum; ++i) {
+            Argument arg = c.getArgument(i);
+            // if(arg.isSet()) {
+            SerialUSB.print(arg.toString());
+            SerialUSB.print(' ');
+            // }
+        }
+
+        Serial.println();
+
+        if (c == cmdPing) {
+            SerialUSB.print(c.getArgument("n").getValue() + "x ");
+            SerialUSB.println("Pong!");
+        // } else if (c == cmdMycommand) {
+        //     Serial.println("Hi " + c.getArgument("o").getValue());
+        // } else if (c == cmdEcho) {
+        //     Argument str = c.getArgument(0);
+        //     Serial.println(str.getValue());
+        // } else if (c == cmdRm) {
+        //     Serial.println("Remove directory " + c.getArgument(0).getValue());
+        // } else if (c == cmdLs) {
+        //     Argument a   = c.getArgument("a");
+        //     bool     set = a.isSet();
+        //     if (a.isSet()) {
+        //         Serial.println("Listing all directories");
+        //     } else {
+        //         Serial.println("Listing directories");
+        //     }
+        // } else if (c == cmdBoundless) {
+        //     Serial.print("Boundless: ");
+
+        //     for (int i = 0; i<argNum; ++i) {
+        //         Argument arg = c.getArgument(i);
+        //         if (i>0) Serial.print(",");
+        //         Serial.print("\"");
+        //         Serial.print(arg.getValue());
+        //         Serial.print("\"");
+        //     }
+        // } else if (c == cmdSingle) {
+        //     Serial.println("Single \"" + c.getArg(0).getValue() + "\"");
+        } else if (c == cmdHelp) {
+            SerialUSB.println("Help:");
+            SerialUSB.println(cli.toString());
+        }
+    }
+
+    if (cli.errored()) {
+        CommandError cmdError = cli.getError();
+
+        SerialUSB.print("ERROR: ");
+        SerialUSB.println(cmdError.toString());
+
+        if (cmdError.hasCommand()) {
+            SerialUSB.print("Did you mean \"");
+            SerialUSB.print(cmdError.getCommand().toString());
+            SerialUSB.println("\"?");
+        }
+    }
+}
+#endif
 
 //---------------------------------------------------------------
 //Test if any buttons have been pressed
@@ -692,10 +797,14 @@ void showSetup(bool force)
     clearDisplay();
 
     if (clockMode <= MENU_PAGE_1_END) { //Show page 1
+      uint8_t hour;
       if (on || !(clockMode == TIME_SET && !inSubMenu)) displayString(0,7,"TIME");
-      if (on || !(clockMode == TIME_SET && inSubMenu && timeSetMode == TIME_HOUR)) displayNumber(0,13,newTime.Hour,2,true);
+      if (EepromData.format12hr) {
+        if (on || !(clockMode == TIME_SET && inSubMenu && timeSetMode == TIME_HOUR)) displayString(0,18,newTime.Hour >= 12 ? "P" : "A");
+      }
+      if (on || !(clockMode == TIME_SET && inSubMenu && timeSetMode == TIME_HOUR)) displayNumber(0,13,hour_24_to_12(newTime.Hour, EepromData.format12hr),2,true);
       if (on || !(clockMode == TIME_SET && inSubMenu && timeSetMode == TIME_MIN)) displayNumber(0,16,newTime.Minute,2,true);
-      if (on || !(clockMode == TIME_SET && inSubMenu && timeSetMode == TIME_FORMAT)) displayString(0,19,(EepromData.format12hr) ? "12HR" : "24HR");
+      if (on || !(clockMode == TIME_SET && inSubMenu && timeSetMode == TIME_FORMAT)) displayString(0,20,(EepromData.format12hr) ? "12HR" : "24HR");
 
       if (on || !(clockMode == DATE_SET && !inSubMenu)) displayString(1,7,"DATE");
       if (on || !(clockMode == DATE_SET && inSubMenu && dateSetMode == DATE_YEAR)) displayNumber(1,13,tmYearToCalendar(newTime.Year),4,true);
@@ -703,9 +812,12 @@ void showSetup(bool force)
       if (on || !(clockMode == DATE_SET && inSubMenu && dateSetMode == DATE_DAY)) displayNumber(1,21,newTime.Day,2,true);
 
       if (on || !(clockMode == ALARM_SET && !inSubMenu)) displayString(2,6,"ALARM");
-      if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_HOUR)) displayNumber(2,13,EepromData.hours,2,true);
+      if (EepromData.format12hr) {
+        if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_HOUR)) displayString(2,18,EepromData.hours >= 12 ? "P" : "A");
+      }
+      if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_HOUR)) displayNumber(2,13,hour_24_to_12(EepromData.hours, EepromData.format12hr),2,true);
       if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_MIN)) displayNumber(2,16,EepromData.minutes,2,true);
-      if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_STATE)) displayString(2,19,(EepromData.alarm) ? "ON" : "OFF");
+      if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_STATE)) displayString(2,20,(EepromData.alarm) ? "ON" : "OFF");
 
       if (on || !(clockMode == TUNE_SET && !inSubMenu)) displayString(3,7,"TUNE");
       if (on || !(clockMode == TUNE_SET && inSubMenu))
@@ -756,6 +868,17 @@ void showSetup(bool force)
   }
 }
 
+uint8_t hour_24_to_12(uint8_t hour, bool format_12hr) {
+    if (format_12hr) {
+        if (hour > 12) {
+          hour = hour - 12;
+        } else if (hour == 0) {
+          hour = 12;
+        }
+    }
+    return hour;
+}
+
 //---------------------------------------------------------------
 //Display the current time on the display if changed
 //  force - always show time even if not changed
@@ -794,12 +917,7 @@ void showTime(int h, int m, bool he, bool me, bool ce, bool f24)
           displayString(5, 11, "A");
         }
       }
-      if (h > 12)
-      {
-        h = h - 12;
-      } else if (h == 0) {
-        h = 12;
-      }
+      h = hour_24_to_12(h, !f24);
     }
     if (h > 9 || f24)
     {

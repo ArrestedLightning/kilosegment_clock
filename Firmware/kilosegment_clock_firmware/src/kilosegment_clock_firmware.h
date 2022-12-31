@@ -1,7 +1,7 @@
 #pragma once
 #include <Arduino.h>
 
-
+void handleCLI(void);
 void testButtons(void);
 void clockButtonPressed(void);
 void enterButtonPressed(void);
@@ -9,6 +9,7 @@ void downButtonPressed(void);
 void upButtonPressed(void);
 bool cancelAlarm(void);
 void showSetup(bool force);
+uint8_t hour_24_to_12(uint8_t hour, bool format_12hr);
 void showTime(bool force);
 void showTime(int h, int m, bool he, bool me, bool ce, bool f24);
 void showDate(int d, int m, int y);

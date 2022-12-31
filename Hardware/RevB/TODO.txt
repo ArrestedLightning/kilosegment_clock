@@ -3,3 +3,5 @@ Add a header input for 5V so it can be powered without USB.
 Add letters below OSHW logo
 Add more thermal isolation to temperature sensor IC.
 Consider increasing capacitor size on display drivers and enhancing ground/power connections.
+USB series and pull up resistors
+Stronger pullup on reset pin

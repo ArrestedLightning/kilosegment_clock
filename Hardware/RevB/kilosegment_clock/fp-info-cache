@@ -1,4 +1,4 @@
-19574814431079126
+19591385343177945
 AL_Footprints
 2.4LCD_TOUCH_SD
 
@@ -27,6 +27,13 @@ AL_Footprints
 0
 5
 3
+AL_Footprints
+6xSMD_wire_pads
+
+
+0
+6
+6
 AL_Footprints
 9mm_SMD_BUZZER
 
@@ -76,6 +83,13 @@ Connector
 0
 42
 42
+AL_Footprints
+ADNS-9x00_top
+
+
+0
+16
+16
 AL_Footprints
 AQH-SSR
 
@@ -133,6 +147,13 @@ USB CONNECTOR WITH SHIELD
 6
 6
 AL_Footprints
+CONN-SMD_AXE520127
+
+
+0
+24
+24
+AL_Footprints
 Crystal_SMD_5032_2Pads_THT_HYBRID
 Ceramic SMD crystal, 5.0x3.2mm, 2 Pads
 crystal oscillator quartz SMD SMT 5032
@@ -153,6 +174,13 @@ SUB-D
 0
 22
 20
+AL_Footprints
+DC-IN-TH_DC-005-5A-2.0
+
+
+0
+3
+3
 AL_Footprints
 DFN-8-1EP_3x3mm_Pitch0.65mm_HANDSOLDER
 8-Lead Plastic Dual Flat, No Lead Package (MF) - 3x3x0.9 mm Body [DFN] (see Microchip Packaging Specification 00000049BS.pdf)
@@ -196,6 +224,13 @@ ESP8266_ESP-03
 14
 8
 AL_Footprints
+FPC-SMD_FH12-6S-0.5SH-55
+
+
+0
+8
+8
+AL_Footprints
 FX135
 
 
@@ -237,6 +272,13 @@ HC-SR501
 0
 3
 3
+AL_Footprints
+HDMI-SMD_HDMI-019S
+
+
+0
+23
+20
 AL_Footprints
 HLK-PM01
 
@@ -335,6 +377,13 @@ LED SMD right angle  CCA
 0
 2
 2
+AL_Footprints
+LGA-8_L6.0-W8.0-P1.27-BL
+
+
+0
+8
+8
 AL_Footprints
 MAXIM_DIL16
 DUAL IN LINE PACKAGE
@@ -560,6 +609,13 @@ SOIC 1.27
 12
 9
 AL_Footprints
+SOP-8_L4.9-W3.9-P1.27-LS6.0-BL
+
+
+0
+8
+8
+AL_Footprints
 SOP-32_L21.0-W7.5-P1.27-LS10.4-BL
 
 
@@ -587,6 +643,13 @@ SMALL OUTLINE INTEGRATED CIRCUIT
 0
 16
 16
+AL_Footprints
+SSOP-8_L2.0-W2.3-P0.50-LS3.1-BR
+
+
+0
+8
+8
 AL_Footprints
 SSOP-16_L4.6-W2.6-P0.53-LS4.0-BL
 
@@ -686,6 +749,20 @@ USB-A-TH_4P-P1.40-V-F-C39416
 7
 7
 AL_Footprints
+USB-C-SMD_918-518K2023S50000
+
+
+0
+20
+17
+AL_Footprints
+USB-C-SMD_GT-USB-7051A
+
+
+0
+20
+17
+AL_Footprints
 USB-C-TH_TYPE-C-31-M-19
 
 
@@ -734,6 +811,20 @@ VPAD_VPAC0
 0
 1
 1
+AL_Footprints
+WIRELM-SMD_ESP32-S3-WROOM-1
+
+
+0
+49
+41
+AL_Footprints
+WSON-12_L3.0-W3.0-P0.45-BL-EP
+
+
+0
+13
+13
 AL_Footprints
 XKB_VERT_TACTSW
 
@@ -56993,13 +57084,6 @@ Yellow 5381 Series LED
 0
 2
 2
-Logo
-Logo
-
-
-0
-0
-0
 Module
 A20_OLINUXINO_LIME2
 A20 Olinuxino LIME2, 1.2GHz, 512-1024MB RAM, Micro-SD, NAND or eMMC, 1000Mbit Ethernet
@@ -83740,38 +83824,3 @@ al_logo13mm
 0
 0
 0
-scuznet
-0472192001
-
-
-0
-12
-8
-scuznet
-D25S13A
-
-
-0
-27
-26
-scuznet
-LOGO
-
-
-0
-0
-0
-scuznet
-LOGO_BIG
-
-
-0
-0
-0
-scuznet
-PJ-037A
-
-
-0
-2
-2

@@ -1,7 +1,7 @@
 #ifndef _BUILD_INFO_H_
 #define _BUILD_INFO_H_
 
-#define BUILD_NUMBER 398
-#define BUILD_DATE "2022-09-02 08.28.56"
+#define BUILD_NUMBER 489
+#define BUILD_DATE "2022-12-31 12.08.01"
 
 #endif
