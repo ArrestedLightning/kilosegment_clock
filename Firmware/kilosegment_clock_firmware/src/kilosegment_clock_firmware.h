@@ -2,8 +2,10 @@
 #include <Arduino.h>
 
 void handleCLI(void);
+void updateRTCandSettings(void);
 void testButtons(void);
 void clockButtonPressed(void);
+void clockButtonHeld(void);
 void enterButtonPressed(void);
 void downButtonPressed(void);
 void upButtonPressed(void);

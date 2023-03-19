@@ -61,6 +61,9 @@
 
 #define NUM_DISPLAY_DRIVERS 9
 
+//time to press the clock button to exit the menu
+#define CLOCK_BUTTON_HOLD_TIME  1000
+
 #define debug_init()        Serial1.begin(115200)
 #define debug_println(...)  Serial1.println(__VA_ARGS__)
 
@@ -218,7 +221,8 @@ void setup()
   config_reset = readEepromData();
 
   //Initialize buttons
-  clockButton = new Button(SW_CLOCK);
+  clockButton = new Button(SW_CLOCK, SW_CLOCK, CLOCK_BUTTON_HOLD_TIME);
+  clockButton->Held(clockButtonHeld);
   enterButton = new Button(SW_ENTER);
   downButton = new Button(SW_DOWN);
   downButton->Repeat(downButtonPressed);
@@ -279,7 +283,7 @@ void setup()
   {
     debug_println("RTC not set");
     rtc.setTime(0, 0, 0);
-    rtc.setDate(1, 1, tmYearFromCalendar(2022));
+    rtc.setDate(1, 1, tmYearFromCalendar(2023));
   }
   rtc.getTime(&newTime.Hour, &newTime.Minute, &newTime.Second, NULL, NULL);
   rtc.getDate(&newTime.Wday, &newTime.Day, &newTime.Month, &newTime.Year);
@@ -437,6 +441,34 @@ void handleCLI(void) {
 }
 #endif
 
+
+void updateRTCandSettings(void) {
+    //Update time
+    //reset seconds when updating time so as to allow for synchronization with an external clock,
+    //but only if time was actually updated by the user while in the settings menu.  This avoids accumulating
+    //offset while modifying other settings.
+    if (newTime.timeUpdated) {
+      debug_println("Saving Time: " + String(newTime.Hour) + ":" + String(newTime.Minute));
+      debug_println("       From: " + String(rtc.getHours()) + ":" + String(rtc.getMinutes()));
+      newTime.Second = 0;
+      rtc.setTime(newTime.Hour, newTime.Minute, newTime.Second, 0, rtc.AM);
+    }
+    newTime.timeUpdated = false;
+
+    if (newTime.dateUpdated) {
+      debug_println("Saving Date: " + String(tmYearToCalendar(newTime.Year)) + "-" + String(newTime.Month) + "-" + String(newTime.Day));
+      debug_println("       From: " + String(tmYearToCalendar(rtc.getYear())) + "-" + String(rtc.getMonth()) + "-" + String(rtc.getDay()));
+      rtc.setDate(newTime.Wday, newTime.Day, newTime.Month, newTime.Year);
+    }
+    newTime.dateUpdated = false;
+
+    if (!rtc.isTimeSet())
+    {
+      debug_println("Set Time Failed");
+    }
+    writeEepromData();
+    showTime(true);
+}
 //---------------------------------------------------------------
 //Test if any buttons have been pressed
 void testButtons(void)
@@ -477,32 +509,7 @@ void clockButtonPressed(void)
   //update RTC only if we've just left the menu
   if (menuEnd)
   {
-    //Update time
-
-    //reset seconds when updating time so as to allow for synchronization with an external clock,
-    //but only if time was actually updated by the user while in the settings menu.  This avoids accumulating
-    //offset while modifying other settings.
-    if (newTime.timeUpdated) {
-      debug_println("Saving Time: " + String(newTime.Hour) + ":" + String(newTime.Minute));
-      debug_println("       From: " + String(rtc.getHours()) + ":" + String(rtc.getMinutes()));
-      newTime.Second = 0;
-      rtc.setTime(newTime.Hour, newTime.Minute, newTime.Second, 0, rtc.AM);
-    }
-    newTime.timeUpdated = false;
-
-    if (newTime.dateUpdated) {
-      debug_println("Saving Date: " + String(tmYearToCalendar(newTime.Year)) + "-" + String(newTime.Month) + "-" + String(newTime.Day));
-      debug_println("       From: " + String(tmYearToCalendar(rtc.getYear())) + "-" + String(rtc.getMonth()) + "-" + String(rtc.getDay()));
-      rtc.setDate(newTime.Wday, newTime.Day, newTime.Month, newTime.Year);
-    }
-    newTime.dateUpdated = false;
-
-    if (!rtc.isTimeSet())
-    {
-      debug_println("Set Time Failed");
-    }
-    writeEepromData();
-    showTime(true);
+    updateRTCandSettings();
   }
   else
   {
@@ -513,6 +520,14 @@ void clockButtonPressed(void)
       debug_println("Loading Time: " + String(newTime.Hour) + ":" + String(newTime.Minute));
     }
     showSetup(true);
+  }
+}
+
+void clockButtonHeld(void)
+{
+  if (clockMode != CLOCK && clockMode != DATE) {
+    clockMode = CLOCK;//jump from last menu back to clock
+    updateRTCandSettings();
   }
 }
 
@@ -803,20 +818,28 @@ void showSetup(bool force)
         if (on || !(clockMode == TIME_SET && inSubMenu && timeSetMode == TIME_HOUR)) displayString(0,18,newTime.Hour >= 12 ? "P" : "A");
       }
       if (on || !(clockMode == TIME_SET && inSubMenu && timeSetMode == TIME_HOUR)) displayNumber(0,13,hour_24_to_12(newTime.Hour, EepromData.format12hr),2,true);
-      if (on || !(clockMode == TIME_SET && inSubMenu && timeSetMode == TIME_MIN)) displayNumber(0,16,newTime.Minute,2,true);
+                                                                                   displayString(0,15,".");
+      if (on || !(clockMode == TIME_SET && inSubMenu && timeSetMode == TIME_MIN)) displayNumber(0,15,newTime.Minute,2,true);
       if (on || !(clockMode == TIME_SET && inSubMenu && timeSetMode == TIME_FORMAT)) displayString(0,20,(EepromData.format12hr) ? "12HR" : "24HR");
+      // if (newTime.timeUpdated) writePhysicalDigit(0, 23, dp_____, false);//show indicator if update pending
+      if (newTime.timeUpdated) displayString(0,0 ,"SET");//show indicator if update pending
 
       if (on || !(clockMode == DATE_SET && !inSubMenu)) displayString(1,7,"DATE");
       if (on || !(clockMode == DATE_SET && inSubMenu && dateSetMode == DATE_YEAR)) displayNumber(1,13,tmYearToCalendar(newTime.Year),4,true);
+                                                                                   displayString(1,17,"-");
       if (on || !(clockMode == DATE_SET && inSubMenu && dateSetMode == DATE_MONTH)) displayNumber(1,18,newTime.Month,2,true);
+                                                                                    displayString(1,20,"-");
       if (on || !(clockMode == DATE_SET && inSubMenu && dateSetMode == DATE_DAY)) displayNumber(1,21,newTime.Day,2,true);
+      //if (newTime.dateUpdated) writePhysicalDigit(1, 23, dp_____, false);//show indicator if update pending
+      if (newTime.dateUpdated) displayString(1, 0,"SET");//show indicator if update pending
 
       if (on || !(clockMode == ALARM_SET && !inSubMenu)) displayString(2,6,"ALARM");
       if (EepromData.format12hr) {
         if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_HOUR)) displayString(2,18,EepromData.hours >= 12 ? "P" : "A");
       }
       if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_HOUR)) displayNumber(2,13,hour_24_to_12(EepromData.hours, EepromData.format12hr),2,true);
-      if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_MIN)) displayNumber(2,16,EepromData.minutes,2,true);
+                                                                                       displayString(2,15,".");
+      if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_MIN)) displayNumber(2,15,EepromData.minutes,2,true);
       if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_STATE)) displayString(2,20,(EepromData.alarm) ? "ON" : "OFF");
 
       if (on || !(clockMode == TUNE_SET && !inSubMenu)) displayString(3,7,"TUNE");
@@ -1332,11 +1355,11 @@ void setDisplayBrightness(uint8_t dispBrightness) {
 }
 
 uint16_t tmYearToCalendar(uint8_t year) {
-  return (uint16_t) year + 2001;
+  return (uint16_t) year + 2000;
 }
 
 uint8_t tmYearFromCalendar(uint16_t cYear) {
-  return (uint8_t) (cYear - 2001);
+  return (uint8_t) (cYear - 2000);
 }
 
 void readLightSensor(void) {
