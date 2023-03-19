@@ -25,6 +25,8 @@
  * - Expand ASCII table
  * - Add second page of settings.
  * - Add built-in version number and build date
+ * 2023-03-19
+ * - Added function to auto-show date at configurable interval
  *--------------------------------------------------*/
 
 #include <SPI.h>
@@ -90,6 +92,7 @@ typedef struct {
   uint8_t autoBrightness;
   uint8_t colonMode;
   uint8_t amPmIndMode;
+  uint8_t auto_show_date_interval_index;
 } EEPROM_DATA;
 
 EEPROM_DATA EepromData; //Current EEPROM settings
@@ -124,13 +127,14 @@ bool inSubMenu = false;
 #define DATE_SCREEN_TIMEOUT 5000//ms
 unsigned long setupTimeout;
 bool setupDisplayState = false;
+bool dateShownFlag = false;
 
 
-enum ClockButtonModesEnum { CLOCK, DATE, TIME_SET, DATE_SET, ALARM_SET, TUNE_SET, BRIGHT_SET, FORMAT_SET, TEMP_SET, COLON_SET, AMPMIND_SET };
+enum ClockButtonModesEnum { CLOCK, DATE, TIME_SET, DATE_SET, ALARM_SET, TUNE_SET, BRIGHT_SET, FORMAT_SET, TEMP_SET, COLON_SET, AMPMIND_SET, AUTO_DATE_INTERVAL_SET };
 ClockButtonModesEnum clockMode = CLOCK;
 #define MENU_PAGE_1_END FORMAT_SET
 #define FIRST_CLOCK_MENU_MODE TIME_SET
-#define LAST_CLOCK_MENU_MODE AMPMIND_SET
+#define LAST_CLOCK_MENU_MODE AUTO_DATE_INTERVAL_SET
 
 enum TimeSetMenuEnum { TIME_HOUR, TIME_MIN, TIME_FORMAT };
 TimeSetMenuEnum timeSetMode = TIME_HOUR;
@@ -182,6 +186,9 @@ static const String colonModeStrings[] = {"OFF", "ON", "FLASH"};
 
 #define ampmIndModeStrings   colonModeStrings
 #define NUM_AMPMIND_MODES 3
+
+static const uint16_t auto_date_intervals[] = {0, 10, 15, 30, 60, 300, 600, 900, 1800, 3600, 7200, 14400, 21600, 43200}; //in seconds;
+#define NUM_AUTO_DATE_INTERVALS (sizeof(auto_date_intervals) / sizeof(auto_date_intervals[0]))
 
 /* Number of days in each month */
 const uint8_t dom[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
@@ -327,6 +334,18 @@ void loop()
 
   if (clockMode == CLOCK)
   {
+    if (EepromData.auto_show_date_interval_index <  NUM_AUTO_DATE_INTERVALS &&
+        auto_date_intervals[EepromData.auto_show_date_interval_index] != 0) {
+      if (getSecondOfDay() % auto_date_intervals[EepromData.auto_show_date_interval_index] == 0) {
+        if (dateShownFlag == false) {
+          dateShownFlag = true;
+          switchToDateScreen();
+          return; //avoid showing new time for 100ms before switching to date screen
+        }
+      } else {
+        dateShownFlag = false;
+      }
+    }
     showTime(false);
     if (EepromData.alarm && EepromData.hours == rtc.getHours() && EepromData.minutes == rtc.getMinutes())
     {
@@ -538,8 +557,7 @@ void enterButtonPressed(void)
   if (cancelAlarm()) return;
 
   if (clockMode == CLOCK) {
-    clockMode = DATE;
-    date_screen_entry_time = millis();
+    switchToDateScreen();
   } else if (clockMode == DATE) {
     clockMode = CLOCK;
   } else {
@@ -590,12 +608,20 @@ void downButtonPressed(void)
     case DATE_SET:
       if (inSubMenu)
       {
+        uint8_t md;
         switch(dateSetMode)
         {
           case DATE_YEAR: newTime.Year = (newTime.Year + UINT8_MAX - 1) % UINT8_MAX; newTime.dateUpdated = true; break;
-          case DATE_MONTH: newTime.Month = ((newTime.Month - 1 + 12) - 1) % 12 + 1; newTime.dateUpdated = true; break;
+          case DATE_MONTH:
+            newTime.Month = ((newTime.Month - 1 + 12) - 1) % 12 + 1;
+            md = daysInMonth(newTime.Year, newTime.Month);
+            if (newTime.Day > md) { //limit day to possible days in selected month
+              newTime.Day = md;
+            }
+            newTime.dateUpdated = true;
+            break;
           case DATE_DAY:
-            uint8_t md = daysInMonth(newTime.Year, newTime.Month);
+            md = daysInMonth(newTime.Year, newTime.Month);
             newTime.Day = ((newTime.Day - 1 + md) - 1) % md + 1;
             newTime.dateUpdated = true;
             break;
@@ -670,6 +696,10 @@ void downButtonPressed(void)
       EepromData.amPmIndMode = (EepromData.amPmIndMode + NUM_AMPMIND_MODES - 1) % NUM_AMPMIND_MODES;
       showSetup(true);
       break;
+    case AUTO_DATE_INTERVAL_SET:
+      EepromData.auto_show_date_interval_index = (EepromData.auto_show_date_interval_index + NUM_AUTO_DATE_INTERVALS - 1) % NUM_AUTO_DATE_INTERVALS;
+      showSetup(true);
+      break;
   }
 }
 
@@ -700,12 +730,20 @@ void upButtonPressed(void)
     case DATE_SET:
       if (inSubMenu)
       {
+        uint8_t md;
         switch(dateSetMode)
         {
           case DATE_YEAR: newTime.Year = (newTime.Year + 1) % UINT8_MAX; newTime.dateUpdated = true;  break;
-          case DATE_MONTH: newTime.Month = ((newTime.Month - 1) + 1) % 12 + 1; newTime.dateUpdated = true; break;
+          case DATE_MONTH:
+            newTime.Month = ((newTime.Month - 1) + 1) % 12 + 1;
+            md = daysInMonth(newTime.Year, newTime.Month);
+            if (newTime.Day > md) { //limit day to possible days in selected month
+              newTime.Day = md;
+            }
+            newTime.dateUpdated = true;
+            break;
           case DATE_DAY:
-            uint8_t md = daysInMonth(newTime.Year, newTime.Month);
+            md = daysInMonth(newTime.Year, newTime.Month);
             newTime.Day = (newTime.Day % md) + 1;
             newTime.dateUpdated = true;
             break;
@@ -780,6 +818,11 @@ void upButtonPressed(void)
       EepromData.amPmIndMode = (EepromData.amPmIndMode + 1) % NUM_AMPMIND_MODES;
       showSetup(true);
       break;
+
+    case AUTO_DATE_INTERVAL_SET:
+      EepromData.auto_show_date_interval_index = (EepromData.auto_show_date_interval_index + 1) % NUM_AUTO_DATE_INTERVALS;
+      showSetup(true);
+      break;
   }
 }
 
@@ -795,6 +838,11 @@ bool cancelAlarm(void)
   }
   yield();
   return false;
+}
+
+void switchToDateScreen(void) {
+    clockMode = DATE;
+    date_screen_entry_time = millis();
 }
 
 //---------------------------------------------------------------
@@ -885,6 +933,26 @@ void showSetup(bool force)
         if (EepromData.amPmIndMode < NUM_AMPMIND_MODES) {
           displayString(2, 13, ampmIndModeStrings[EepromData.amPmIndMode]);
           }
+      }
+
+      if (on || !(clockMode == AUTO_DATE_INTERVAL_SET && !inSubMenu)) displayString(3,2,"AUTO DATE");
+      if (on || !(clockMode == AUTO_DATE_INTERVAL_SET && inSubMenu)) {
+        if (EepromData.auto_show_date_interval_index < NUM_AUTO_DATE_INTERVALS) {
+          //Show reasonable time units based on selected time interval
+          uint16_t interval_sec = auto_date_intervals[EepromData.auto_show_date_interval_index];
+          if (interval_sec == 0) {
+            displayString(3, 13, "OFF");
+          } else if (interval_sec >= 3600) {
+            displayNumber(3, 13, interval_sec / 3600, 2, false);
+            displayString(3, 16, "HR");
+          } else if (interval_sec >= 60) {
+            displayNumber(3, 13, interval_sec / 60, 2, false);
+            displayString(3, 16, "MIN");
+          } else {
+            displayNumber(3, 13, interval_sec, 2, false);
+            displayString(3, 16, "SEC");
+          }
+        }
       }
       displayString(5, 0, "V. " + String(BUILD_NUMBER) + " " + BUILD_DATE);
     }
@@ -1362,6 +1430,14 @@ uint8_t tmYearFromCalendar(uint16_t cYear) {
   return (uint8_t) (cYear - 2000);
 }
 
+uint32_t getSecondOfDay(void) {
+  uint8_t hours;
+  uint8_t minutes;
+  uint8_t seconds;
+  rtc.getTime(&hours, &minutes, &seconds, NULL);
+  return ((uint32_t) hours) * 3600UL + ((uint32_t) minutes) * 60UL + ((uint32_t) seconds);
+}
+
 void readLightSensor(void) {
     long auto_brightness_value;
     bool ls_valid = false;
@@ -1416,4 +1492,5 @@ void loadDefaults(void) {
     EepromData.tempMode = TEMPMODE_OFF;
     EepromData.colonMode = COLONMODE_FLASH;
     EepromData.amPmIndMode = AMPMIND_FLASH;
+    EepromData.auto_show_date_interval_index = 0;
 }
