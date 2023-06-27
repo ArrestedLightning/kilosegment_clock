@@ -328,56 +328,58 @@ void loop()
   handleCLI();
   #endif
 
-  testButtons();
+  if (millis() % 100 == 0) {
+    testButtons();
 
-  readLightSensor();
+    readLightSensor();
 
-  if (clockMode == CLOCK)
-  {
-    if (EepromData.auto_show_date_interval_index <  NUM_AUTO_DATE_INTERVALS &&
-        auto_date_intervals[EepromData.auto_show_date_interval_index] != 0) {
-      if (getSecondOfDay() % auto_date_intervals[EepromData.auto_show_date_interval_index] == 0) {
-        if (dateShownFlag == false) {
-          dateShownFlag = true;
-          switchToDateScreen();
-          return; //avoid showing new time for 100ms before switching to date screen
-        }
-      } else {
-        dateShownFlag = false;
-      }
-    }
-    showTime(false);
-    if (EepromData.alarm && EepromData.hours == rtc.getHours() && EepromData.minutes == rtc.getMinutes())
+    if (clockMode == CLOCK)
     {
-      if (!alarmCancelled)
+      if (EepromData.auto_show_date_interval_index <  NUM_AUTO_DATE_INTERVALS &&
+          auto_date_intervals[EepromData.auto_show_date_interval_index] != 0) {
+        if (getSecondOfDay() % auto_date_intervals[EepromData.auto_show_date_interval_index] == 0) {
+          if (dateShownFlag == false) {
+            dateShownFlag = true;
+            switchToDateScreen();
+            return; //avoid showing new time for 100ms before switching to date screen
+          }
+        } else {
+          dateShownFlag = false;
+        }
+      }
+      showTime(false);
+      if (EepromData.alarm && EepromData.hours == rtc.getHours() && EepromData.minutes == rtc.getMinutes())
       {
-        alarmRinging = true;
-        playSong(melodies[EepromData.tune]);
+        if (!alarmCancelled)
+        {
+          alarmRinging = true;
+          playSong(melodies[EepromData.tune]);
+        }
+      }
+      else
+      {
+        alarmCancelled = false;
+        alarmRinging = false;
+      }
+
+    } else if (clockMode == DATE) {
+      if (millis() - date_screen_entry_time > DATE_SCREEN_TIMEOUT) {
+        clockMode = CLOCK;
+      } else {
+        showDate(rtc.getDay(), rtc.getMonth(), rtc.getYear());
       }
     }
     else
     {
-      alarmCancelled = false;
-      alarmRinging = false;
+      showSetup(false);
     }
 
-  } else if (clockMode == DATE) {
-    if (millis() - date_screen_entry_time > DATE_SCREEN_TIMEOUT) {
-      clockMode = CLOCK;
+    // delay(100);
+    if (debugMode) {
+      digitalWrite(HB_LED, !digitalRead(HB_LED));
     } else {
-      showDate(rtc.getDay(), rtc.getMonth(), rtc.getYear());
+      digitalWrite(HB_LED, HIGH);
     }
-  }
-  else
-  {
-    showSetup(false);
-  }
-
-  delay(100);
-  if (debugMode) {
-    digitalWrite(HB_LED, !digitalRead(HB_LED));
-  } else {
-    digitalWrite(HB_LED, HIGH);
   }
 }
 
@@ -1319,7 +1321,7 @@ void writeEepromData()
   EEPROM.setCommitASAP(false);
   debug_println("magic:" + String(EepromData.magic, 16) + ", alarm: " + String(EepromData.alarm) + ", time: " + String(EepromData.hours) + ":" + String(EepromData.minutes) + ", 12hr: " +
     String(EepromData.format12hr) + ", brightness: " +  String(EepromData.brightness) + ", AutoBrighness: " + String(EepromData.autoBrightness) + ", Format: " + String(EepromData.formatDmy) +
-    " " + String(EepromData.squareFont));
+    " " + String(EepromData.squareFont) + "auto: " + String(EepromData.auto_show_date_interval_index));
    EEPROM.put(EEPROM_ADDRESS, EepromData);
    EEPROM.commit();
 }
@@ -1454,8 +1456,8 @@ void readLightSensor(void) {
       //effectively an exponential average; last value is weighted 7x more heavily than the present value to slow down response time.
       //When the light sensor saturates (e.g. is exposed to direct sunlight), it may temporarily report 0; this averaging helps
       //to prevent that from showing up as blips in the display brightness
-      light_sensor_ch0 = (light_sensor_ch0_raw + 7 * prev_light_sensor0_value) / 8;
-      light_sensor_ch1 = (light_sensor_ch1_raw + 7 * prev_light_sensor1_value) / 8;
+      light_sensor_ch0 = (light_sensor_ch0_raw + 15 * prev_light_sensor0_value) / 16;
+      light_sensor_ch1 = (light_sensor_ch1_raw + 15 * prev_light_sensor1_value) / 16;
       prev_light_sensor0_value = light_sensor_ch0;
       prev_light_sensor1_value = light_sensor_ch1;
       // debug_println(String(ls_valid) + " " + String(ls_newdata) + " " + String(light_sensor_ch0) + " " + String(light_sensor_ch1));
