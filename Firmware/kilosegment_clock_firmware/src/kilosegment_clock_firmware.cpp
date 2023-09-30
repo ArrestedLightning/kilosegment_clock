@@ -580,6 +580,7 @@ void enterButtonPressed(void)
         case ALARM_SET: alarmSetMode = (alarmSetMode == ALARM_STATE) ? ALARM_HOUR : (AlarmSetMenuEnum)((int)alarmSetMode + 1); break;
         case FORMAT_SET: formatSetMode = (formatSetMode == FONT_STYLE) ? DAY_MONTH : (FormatSetMenuEnum)((int)formatSetMode + 1); break;
         case BRIGHT_SET: brightSetMode = (brightSetMode == BRIGHT_AUTO) ? BRIGHT_VALUE : (BrightnessSetMenuEnum)((int)brightSetMode + 1); break;
+        default: break;
       }
     }
     showSetup(true);
@@ -602,6 +603,7 @@ void downButtonPressed(void)
           case TIME_HOUR: newTime.Hour = (newTime.Hour + 24 - 1) % 24; newTime.timeUpdated = true;  break;
           case TIME_MIN: newTime.Minute = (newTime.Minute + 60 - 1) % 60; newTime.timeUpdated = true; break;
           case TIME_FORMAT: EepromData.format12hr = !EepromData.format12hr; break;
+          default: break;
         }
         showSetup(true);
       }
@@ -627,6 +629,7 @@ void downButtonPressed(void)
             newTime.Day = ((newTime.Day - 1 + md) - 1) % md + 1;
             newTime.dateUpdated = true;
             break;
+            default: break;
         }
         showSetup(true);
       }
@@ -640,6 +643,7 @@ void downButtonPressed(void)
           case ALARM_HOUR: EepromData.hours = (EepromData.hours + 24 - 1) % 24; break;
           case ALARM_MIN: EepromData.minutes = (EepromData.minutes + 60 - 1) % 60; break;
           case ALARM_STATE: EepromData.alarm = !EepromData.alarm; break;
+          default: break;
         }
         showSetup(true);
       }
@@ -667,6 +671,7 @@ void downButtonPressed(void)
               setDisplayBrightness(EepromData.brightness);
             }
             break;
+          default: break;
         }
       }
       showSetup(true);
@@ -679,6 +684,7 @@ void downButtonPressed(void)
         {
           case DAY_MONTH: EepromData.formatDmy = !EepromData.formatDmy; break;
           case FONT_STYLE: EepromData.squareFont = !EepromData.squareFont; break;
+          default: break;
         }
       }
       showSetup(true);
@@ -702,6 +708,7 @@ void downButtonPressed(void)
       EepromData.auto_show_date_interval_index = (EepromData.auto_show_date_interval_index + NUM_AUTO_DATE_INTERVALS - 1) % NUM_AUTO_DATE_INTERVALS;
       showSetup(true);
       break;
+    default: break;
   }
 }
 
@@ -749,6 +756,7 @@ void upButtonPressed(void)
             newTime.Day = (newTime.Day % md) + 1;
             newTime.dateUpdated = true;
             break;
+          default: break;
         }
         showSetup(true);
       }
@@ -762,6 +770,7 @@ void upButtonPressed(void)
           case ALARM_HOUR: EepromData.hours = (EepromData.hours + 1) % 24; break;
           case ALARM_MIN: EepromData.minutes = (EepromData.minutes + 1) % 60; break;
           case ALARM_STATE: EepromData.alarm = !EepromData.alarm; break;
+          default: break;
         }
         showSetup(true);
       }
@@ -789,6 +798,7 @@ void upButtonPressed(void)
               setDisplayBrightness(EepromData.brightness);
             }
             break;
+          default: break;
         }
       }
       showSetup(true);
@@ -801,6 +811,7 @@ void upButtonPressed(void)
         {
           case DAY_MONTH: EepromData.formatDmy = !EepromData.formatDmy; break;
           case FONT_STYLE: EepromData.squareFont = !EepromData.squareFont; break;
+          default: break;
         }
       }
       showSetup(true);
@@ -825,6 +836,7 @@ void upButtonPressed(void)
       EepromData.auto_show_date_interval_index = (EepromData.auto_show_date_interval_index + 1) % NUM_AUTO_DATE_INTERVALS;
       showSetup(true);
       break;
+    default: break;
   }
 }
 
@@ -902,6 +914,7 @@ void showSetup(bool force)
           case 2: displayString(3,13,"SUNSHINE"); break;
           case 3: displayString(3,13,"BEEP 1"); break;
           case 4: displayString(3,13,"BEEP 2"); break;
+          default: break;
         }
       }
 
