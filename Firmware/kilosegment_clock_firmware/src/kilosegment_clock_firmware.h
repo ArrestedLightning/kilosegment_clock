@@ -38,3 +38,4 @@ uint8_t tmYearFromCalendar(uint16_t cYear);
 uint32_t getSecondOfDay(void);
 void readLightSensor(void);
 void loadDefaults(void);
+void feed_watchdog(void);

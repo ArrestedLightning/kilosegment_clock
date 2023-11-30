@@ -278,11 +278,15 @@ void setup()
   //Initialize buttons
   clockButton = new Button(SW_CLOCK, SW_CLOCK, CLOCK_BUTTON_HOLD_TIME);
   clockButton->Held(clockButtonHeld);
+  clockButton->Background(feed_watchdog);
   enterButton = new Button(SW_ENTER);
+  enterButton->Background(feed_watchdog);
   downButton = new Button(SW_DOWN);
   downButton->Repeat(downButtonPressed);
+  downButton->Background(feed_watchdog);
   upButton = new Button(SW_UP);
   upButton->Repeat(upButtonPressed);
+  upButton->Background(feed_watchdog);
 
   //Initialize sound
   pinMode(SPEAKER, OUTPUT);
@@ -1534,6 +1538,10 @@ void loadDefaults(void) {
     EepromData.colonMode = COLONMODE_FLASH;
     EepromData.amPmIndMode = AMPMIND_FLASH;
     EepromData.auto_show_date_interval_index = 0;
+}
+
+void feed_watchdog(void) {
+  IWatchdog.reload();
 }
 
 static void cmd_print_help(char *args, char *response, size_t response_len) {
