@@ -1,7 +1,8 @@
 #pragma once
 #include <Arduino.h>
 
-void handleCLI(void);
+void handleCLIUSB(void);
+void handleCLISerial(void);
 void updateRTCandSettings(void);
 void testButtons(void);
 void clockButtonPressed(void);
@@ -26,6 +27,7 @@ void writePhysicalDigit(uint8_t row, uint8_t col, uint8_t v, bool erase);
 uint8_t daysInMonth(int y, int m);
 void writeEepromData(void);
 bool readEepromData(void);
+void makeSettingsString(char *str, size_t length);
 void playSong(const uint16_t* melody);
 void playNote(uint16_t noteRaw);
 void clearDisplay(void);

@@ -27,6 +27,8 @@
  * - Add built-in version number and build date
  * 2023-03-19
  * - Added function to auto-show date at configurable interval
+ * 2023-10-12
+ * - Added basic command-line interface
  *--------------------------------------------------*/
 
 #include <SPI.h>
@@ -35,9 +37,6 @@
 #include <LTR303.h>
 #include <Temperature_LM75_Derived.h>
 #include <HardwareSerial.h>
-#ifdef WANT_CLI
-#include <SimpleCLI.h>
-#endif
 #include "Button.h"
 #include "Tunes.h"
 #include "Digits.h"
@@ -46,6 +45,10 @@
 #include "kilosegment_clock_firmware.h"
 #include "kilosegment_clock_bootloader.h"
 #include "build_info.h"
+extern "C" {
+  #include "cli.h"
+}
+
 
 /* Pin definitions */
 #define LED_CLK   PB13
@@ -66,8 +69,18 @@
 //time to press the clock button to exit the menu
 #define CLOCK_BUTTON_HOLD_TIME  1000
 
-#define debug_init()        Serial1.begin(115200)
+//I really wanted to support more than this, but this is all ST will support with their libraries,
+//and right now I can't bring myself to fork and maintain all the libraries that would need to change
+//to support dates farther in the future.
+//In all likelyhood, it will never even matter.  If someone is still using one of these in the year
+//2100, you have my sincere apologies.
+#define MAX_YEAR 100
+
+#ifdef WANT_DEBUG
 #define debug_println(...)  Serial1.println(__VA_ARGS__)
+#else
+#define debug_println(...)
+#endif
 
 /* Get the rtc object */
 STM32RTC& rtc = STM32RTC::getInstance();
@@ -76,13 +89,15 @@ STM32RTC& rtc = STM32RTC::getInstance();
 #define EEPROM_ADDRESS 0
 #define EEPROM_MAGIC 0x0BAD0DAD
 
+#define WANT_CLI 1
+
 //boolean values seem like they can have problems when saved to and loaded from flash
 //if a value other than 0 or 1 is loaded, so use uint8_t for all boolean values.
 typedef struct {
   uint32_t magic;
-  uint8_t alarm;
-  uint8_t minutes;
-  uint8_t hours;
+  uint8_t alarmEnable;
+  uint8_t alarmMinute;
+  uint8_t alarmHour;
   uint8_t format12hr;
   uint8_t brightness;
   uint8_t tune;
@@ -128,6 +143,7 @@ bool inSubMenu = false;
 unsigned long setupTimeout;
 bool setupDisplayState = false;
 bool dateShownFlag = false;
+bool commandProcessedFlag = false; //just for LED status indicator
 
 
 enum ClockButtonModesEnum { CLOCK, DATE, TIME_SET, DATE_SET, ALARM_SET, TUNE_SET, BRIGHT_SET, FORMAT_SET, TEMP_SET, COLON_SET, AMPMIND_SET, AUTO_DATE_INTERVAL_SET };
@@ -210,18 +226,49 @@ LTR303 light_sensor;
 
 HardwareSerial Serial1(PA10, PA9);
 
-#ifdef WANT_CLI
-SimpleCLI cli;
+static void cmd_print_help       (char *args, char *response, size_t response_len);
+static void cmd_print_version    (char *args, char *response, size_t response_len);
+static void cmd_dump_config      (char *args, char *response, size_t response_len);
+static void cmd_set_time         (char *args, char *response, size_t response_len);
+static void cmd_set_date         (char *args, char *response, size_t response_len);
+static void cmd_set_time_format  (char *args, char *response, size_t response_len);
+static void cmd_set_brightness   (char *args, char *response, size_t response_len);
+static void cmd_set_alarm        (char *args, char *response, size_t response_len);
+static void cmd_save_settings    (char *args, char *response, size_t response_len);
+static void cmd_fact_reset       (char *args, char *response, size_t response_len);
+static void cmd_show_date        (char *args, char *response, size_t response_len);
+static void cmd_get_date_time    (char *args, char *response, size_t response_len);
+static void cmd_handle_reboot    (char *args, char *response, size_t response_len);
+static void cmd_handle_bootloader(char *args, char *response, size_t response_len);
 
-Command cmdPing;
-Command cmdHelp;
-#endif
+//if you have one command that's named a subset of another one, be sure to list the longer one first
+extern "C" const cli_command cli_commands[] = {
+        cmd_def(cmd_print_help,                 "?",            "prints out the list of available commands"),
+        cmd_def(cmd_print_help,                 "help",         "prints out the list of available commands"),
+        cmd_def(cmd_print_version,              "ver?",         "Prints firmware version."                 ),
+        cmd_def(cmd_dump_config,                "config?",      "Prints the saved system config."          ),
+        cmd_def(cmd_get_date_time,              "date_time?",   "Prints the current date & time."          ),
+        cmd_def(cmd_set_time,                   "set_time",     "Set time hour minute second"              ),
+        cmd_def(cmd_set_date,                   "set_date",     "Set date year month day"                  ),
+        cmd_def(cmd_set_time_format,            "set_format",   "Set display format 12hr=0/1"              ),
+        cmd_def(cmd_set_brightness,             "set_bright",   "Set brightness 0-7 [auto=0/1]"            ),
+        cmd_def(cmd_set_alarm,                  "set_alarm",    "Set alarm hour minute [on=0/1]"           ),
+        cmd_def(cmd_show_date,                  "show_date",    "Shows the date screen"                    ),
+        cmd_def(cmd_save_settings,              "save_config",  "Saves the active configuration to EEPROM" ),
+        cmd_def(cmd_fact_reset,                 "fact_reset",   "Resets all settings to factory defaults." ),
+        cmd_def(cmd_handle_reboot,              "reboot",       "Reboots the device."                      ),
+        cmd_def(cmd_handle_bootloader,          "bootload",     "Reboots the device into bootloader mode"  ),
+        cmd_def(NULL, NULL, NULL),
+};
+
 
 void setup()
 {
   bool config_reset = false;
 
-  debug_init();
+#if defined(WANT_DEBUG) || defined(WANT_CLI)
+  Serial1.begin(115200);
+#endif
 
   EEPROM.init();
 
@@ -241,8 +288,6 @@ void setup()
   digitalWrite(SPEAKER, LOW);
 
   SPI_2.begin();
-  // SPI_2.beginTransaction(spi_settings);
-  // SPI_2.endTransaction();
 
   //Initialize display drivers
   for (int i = 0; i < NUM_DISPLAY_DRIVERS; i += 1) {
@@ -310,22 +355,14 @@ void setup()
   showTime(true);
 #ifdef WANT_CLI
   SerialUSB.begin();
-  cmdPing = cli.addCmd("ping");
-  cmdPing.addArg("n", "10");
-  cmdPing.setDescription(" Responds with a ping n-times");
-
-
-  cmdHelp = cli.addCommand("help");
-  cmdHelp.setDescription(" Get help!");
-
-  SerialUSB.println("Ready!");
 #endif
 }
 
 void loop()
 {
   #ifdef WANT_CLI
-  handleCLI();
+  handleCLIUSB();
+  handleCLISerial();
   #endif
 
   if (millis() % 100 == 0) {
@@ -348,7 +385,7 @@ void loop()
         }
       }
       showTime(false);
-      if (EepromData.alarm && EepromData.hours == rtc.getHours() && EepromData.minutes == rtc.getMinutes())
+      if (EepromData.alarmEnable && EepromData.alarmHour == rtc.getHours() && EepromData.alarmMinute == rtc.getMinutes())
       {
         if (!alarmCancelled)
         {
@@ -378,86 +415,52 @@ void loop()
     if (debugMode) {
       digitalWrite(HB_LED, !digitalRead(HB_LED));
     } else {
-      digitalWrite(HB_LED, HIGH);
+      //blink LED for one cycle if command received
+      if (commandProcessedFlag) {
+        commandProcessedFlag = false;
+        digitalWrite(HB_LED, LOW);
+      } else {
+        digitalWrite(HB_LED, HIGH);
+      }
     }
   }
 }
 
 #ifdef WANT_CLI
-void handleCLI(void) {
+void handleCLIUSB(void) {
+    bool valid_command;
     if (SerialUSB.available()) {
-      String input = SerialUSB.readStringUntil('\n');
-
-      if (input.length() > 0) {
-          cli.parse(input);
+      char line[128];
+      char response[1024];
+      memset(line, 0, sizeof(line));
+      memset(response, 0, sizeof(response));
+      size_t lineLength = SerialUSB.readBytesUntil('\n', line, sizeof(line) - 1);
+      line[sizeof(line) - 1] = '\0';
+      valid_command = parse_command(line, response, sizeof(response) - 1);
+      if (!valid_command) {
+        SerialUSB.println("Unrecognized command.");
+      } else {
+        commandProcessedFlag = true;
+        SerialUSB.println(response);
       }
     }
-   if (cli.available()) {
-        Command c = cli.getCmd();
-
-        int argNum = c.countArgs();
-
-        SerialUSB.print("> ");
-        SerialUSB.print(c.getName());
-        SerialUSB.print(' ');
-
-        for (int i = 0; i<argNum; ++i) {
-            Argument arg = c.getArgument(i);
-            // if(arg.isSet()) {
-            SerialUSB.print(arg.toString());
-            SerialUSB.print(' ');
-            // }
-        }
-
-        Serial.println();
-
-        if (c == cmdPing) {
-            SerialUSB.print(c.getArgument("n").getValue() + "x ");
-            SerialUSB.println("Pong!");
-        // } else if (c == cmdMycommand) {
-        //     Serial.println("Hi " + c.getArgument("o").getValue());
-        // } else if (c == cmdEcho) {
-        //     Argument str = c.getArgument(0);
-        //     Serial.println(str.getValue());
-        // } else if (c == cmdRm) {
-        //     Serial.println("Remove directory " + c.getArgument(0).getValue());
-        // } else if (c == cmdLs) {
-        //     Argument a   = c.getArgument("a");
-        //     bool     set = a.isSet();
-        //     if (a.isSet()) {
-        //         Serial.println("Listing all directories");
-        //     } else {
-        //         Serial.println("Listing directories");
-        //     }
-        // } else if (c == cmdBoundless) {
-        //     Serial.print("Boundless: ");
-
-        //     for (int i = 0; i<argNum; ++i) {
-        //         Argument arg = c.getArgument(i);
-        //         if (i>0) Serial.print(",");
-        //         Serial.print("\"");
-        //         Serial.print(arg.getValue());
-        //         Serial.print("\"");
-        //     }
-        // } else if (c == cmdSingle) {
-        //     Serial.println("Single \"" + c.getArg(0).getValue() + "\"");
-        } else if (c == cmdHelp) {
-            SerialUSB.println("Help:");
-            SerialUSB.println(cli.toString());
-        }
-    }
-
-    if (cli.errored()) {
-        CommandError cmdError = cli.getError();
-
-        SerialUSB.print("ERROR: ");
-        SerialUSB.println(cmdError.toString());
-
-        if (cmdError.hasCommand()) {
-            SerialUSB.print("Did you mean \"");
-            SerialUSB.print(cmdError.getCommand().toString());
-            SerialUSB.println("\"?");
-        }
+}
+void handleCLISerial(void) {
+    bool valid_command;
+    if (Serial1.available()) {
+      char line[128];
+      char response[1024];
+      memset(line, 0, sizeof(line));
+      memset(response, 0, sizeof(response));
+      size_t lineLength = Serial1.readBytesUntil('\n', line, sizeof(line) - 1);
+      line[sizeof(line) - 1] = '\0';
+      valid_command = parse_command(line, response, sizeof(response) - 1);
+      if (!valid_command) {
+        Serial1.println("Unrecognized command.");
+      } else {
+        commandProcessedFlag = true;
+        Serial1.println(response);
+      }
     }
 }
 #endif
@@ -615,7 +618,7 @@ void downButtonPressed(void)
         uint8_t md;
         switch(dateSetMode)
         {
-          case DATE_YEAR: newTime.Year = (newTime.Year + UINT8_MAX - 1) % UINT8_MAX; newTime.dateUpdated = true; break;
+          case DATE_YEAR: newTime.Year = (newTime.Year + MAX_YEAR - 1) % MAX_YEAR; newTime.dateUpdated = true; break;
           case DATE_MONTH:
             newTime.Month = ((newTime.Month - 1 + 12) - 1) % 12 + 1;
             md = daysInMonth(newTime.Year, newTime.Month);
@@ -640,9 +643,9 @@ void downButtonPressed(void)
       {
         switch(alarmSetMode)
         {
-          case ALARM_HOUR: EepromData.hours = (EepromData.hours + 24 - 1) % 24; break;
-          case ALARM_MIN: EepromData.minutes = (EepromData.minutes + 60 - 1) % 60; break;
-          case ALARM_STATE: EepromData.alarm = !EepromData.alarm; break;
+          case ALARM_HOUR: EepromData.alarmHour = (EepromData.alarmHour + 24 - 1) % 24; break;
+          case ALARM_MIN: EepromData.alarmMinute = (EepromData.alarmMinute + 60 - 1) % 60; break;
+          case ALARM_STATE: EepromData.alarmEnable = !EepromData.alarmEnable; break;
           default: break;
         }
         showSetup(true);
@@ -742,7 +745,7 @@ void upButtonPressed(void)
         uint8_t md;
         switch(dateSetMode)
         {
-          case DATE_YEAR: newTime.Year = (newTime.Year + 1) % UINT8_MAX; newTime.dateUpdated = true;  break;
+          case DATE_YEAR: newTime.Year = (newTime.Year + 1) % MAX_YEAR; newTime.dateUpdated = true;  break;
           case DATE_MONTH:
             newTime.Month = ((newTime.Month - 1) + 1) % 12 + 1;
             md = daysInMonth(newTime.Year, newTime.Month);
@@ -767,9 +770,9 @@ void upButtonPressed(void)
       {
         switch(alarmSetMode)
         {
-          case ALARM_HOUR: EepromData.hours = (EepromData.hours + 1) % 24; break;
-          case ALARM_MIN: EepromData.minutes = (EepromData.minutes + 1) % 60; break;
-          case ALARM_STATE: EepromData.alarm = !EepromData.alarm; break;
+          case ALARM_HOUR: EepromData.alarmHour = (EepromData.alarmHour + 1) % 24; break;
+          case ALARM_MIN: EepromData.alarmMinute = (EepromData.alarmMinute + 1) % 60; break;
+          case ALARM_STATE: EepromData.alarmEnable = !EepromData.alarmEnable; break;
           default: break;
         }
         showSetup(true);
@@ -897,12 +900,12 @@ void showSetup(bool force)
 
       if (on || !(clockMode == ALARM_SET && !inSubMenu)) displayString(2,6,"ALARM");
       if (EepromData.format12hr) {
-        if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_HOUR)) displayString(2,18,EepromData.hours >= 12 ? "P" : "A");
+        if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_HOUR)) displayString(2,18,EepromData.alarmHour >= 12 ? "P" : "A");
       }
-      if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_HOUR)) displayNumber(2,13,hour_24_to_12(EepromData.hours, EepromData.format12hr),2,true);
+      if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_HOUR)) displayNumber(2,13,hour_24_to_12(EepromData.alarmHour, EepromData.format12hr),2,true);
                                                                                        displayString(2,15,".");
-      if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_MIN)) displayNumber(2,15,EepromData.minutes,2,true);
-      if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_STATE)) displayString(2,20,(EepromData.alarm) ? "ON" : "OFF");
+      if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_MIN)) displayNumber(2,15,EepromData.alarmMinute,2,true);
+      if (on || !(clockMode == ALARM_SET && inSubMenu && alarmSetMode == ALARM_STATE)) displayString(2,20,(EepromData.alarmEnable) ? "ON" : "OFF");
 
       if (on || !(clockMode == TUNE_SET && !inSubMenu)) displayString(3,7,"TUNE");
       if (on || !(clockMode == TUNE_SET && inSubMenu))
@@ -1050,7 +1053,7 @@ void showTime(int h, int m, bool he, bool me, bool ce, bool f24)
   }
 
   //show dot in lower right corner if alarm is enabled
-  if (EepromData.alarm) {
+  if (EepromData.alarmEnable) {
     writePhysicalDigit(5, 23, dp_____, false);
   }
 
@@ -1332,11 +1335,8 @@ void writeEepromData()
   //however, the GD32F103 is rated to 100,000 cycles, and the STM32F103 is rated to at least 10,000 cycles, so it seems
   //unlikely to be a problem with reasonable usage patterns in this system.
   EEPROM.setCommitASAP(false);
-  debug_println("magic:" + String(EepromData.magic, 16) + ", alarm: " + String(EepromData.alarm) + ", time: " + String(EepromData.hours) + ":" + String(EepromData.minutes) + ", 12hr: " +
-    String(EepromData.format12hr) + ", brightness: " +  String(EepromData.brightness) + ", AutoBrighness: " + String(EepromData.autoBrightness) + ", Format: " + String(EepromData.formatDmy) +
-    " " + String(EepromData.squareFont) + "auto: " + String(EepromData.auto_show_date_interval_index));
-   EEPROM.put(EEPROM_ADDRESS, EepromData);
-   EEPROM.commit();
+  EEPROM.put(EEPROM_ADDRESS, EepromData);
+  EEPROM.commit();
 }
 
 //---------------------------------------------------------------
@@ -1344,16 +1344,18 @@ void writeEepromData()
 //returns true if default settings were loaded
 bool readEepromData(void)
 {
+  char settingsString[512] = {0};
   bool defaults_loaded = false;
   EEPROM.get(EEPROM_ADDRESS, EepromData);
-  debug_println("magic:" + String(EepromData.magic, 16) + ", alarm: " + String(EepromData.alarm) + ", time: " + String(EepromData.hours) + ":" + String(EepromData.minutes) + ", 12hr: " +  String(EepromData.format12hr) + ", brightness: " +  String(EepromData.brightness));
+
   if (EepromData.magic != EEPROM_MAGIC)
   {
     loadDefaults();
     writeEepromData();
     defaults_loaded = true;
+    debug_println("Defaults loaded");
+
   }
-  debug_println("alarm: " + String(EepromData.alarm) + ", time: " + String(EepromData.hours) + ":" + String(EepromData.minutes) + ", 12hr: " +  String(EepromData.format12hr) + ", brightness: " +  String(EepromData.brightness));
 
   //sanity check enumerated values
   if (EepromData.tempMode >= NUM_TEMP_MODES) {
@@ -1368,9 +1370,25 @@ bool readEepromData(void)
   if (EepromData.amPmIndMode >= NUM_AMPMIND_MODES) {
     EepromData.amPmIndMode = AMPMIND_FLASH;
   }
+  makeSettingsString(settingsString, sizeof(settingsString) - 1);
+  debug_println(settingsString);
   return defaults_loaded;
 }
 
+void makeSettingsString(char *str, size_t length) {
+  snprintf(str, length, "magic=%08x\nalarm_en=%d\nalarm_time=%d:%d\n12h_format=%d\nauto_brightness=%d\nbrightness=%d\nformat=%d,%d\nauto=%d\n",
+          EepromData.magic,
+          EepromData.alarmEnable,
+          EepromData.alarmHour,
+          EepromData.alarmMinute,
+          EepromData.format12hr,
+          EepromData.autoBrightness,
+          EepromData.brightness,
+          EepromData.formatDmy,
+          EepromData.squareFont,
+          EepromData.auto_show_date_interval_index
+          );
+}
 //---------------------------------------------------------------
 //Play a melody
 void playSong(const uint16_t* melody)
@@ -1466,7 +1484,7 @@ void readLightSensor(void) {
     light_sensor.getStatus(ls_valid, ls_gain, ls_intrstatus, ls_newdata);
     light_sensor_valid = light_sensor.getData(light_sensor_ch0_raw, light_sensor_ch1_raw);
     if (ls_newdata) { //sensor has new data
-      //effectively an exponential average; last value is weighted 7x more heavily than the present value to slow down response time.
+      //effectively an exponential average; last value is weighted 15x more heavily than the present value to slow down response time.
       //When the light sensor saturates (e.g. is exposed to direct sunlight), it may temporarily report 0; this averaging helps
       //to prevent that from showing up as blips in the display brightness
       light_sensor_ch0 = (light_sensor_ch0_raw + 15 * prev_light_sensor0_value) / 16;
@@ -1487,17 +1505,22 @@ void readLightSensor(void) {
       }
       if (EepromData.autoBrightness) {
         active_brightness_level = auto_brightness_value;
-        setDisplayBrightness(active_brightness_level);
       }
     }
+    /* The 6932 LED drivers, at least as implemented on this hardware, seem to have a strange bug.
+     * After running for a while (typically days-weeks), one or more of them will blank out.
+     * Sending a brightness update restores them to functionality, so we do it on every
+     * refresh cycle, regardless of whether or not brightness has changed, or auto-brightness
+     * is even enabled. */
+    setDisplayBrightness(active_brightness_level);
 }
 
 void loadDefaults(void) {
     debug_println("Loading default settings...");
     EepromData.magic = EEPROM_MAGIC;
-    EepromData.alarm = false;
-    EepromData.minutes = 30;
-    EepromData.hours = 5;
+    EepromData.alarmEnable = false;
+    EepromData.alarmMinute = 30;
+    EepromData.alarmHour = 5;
     EepromData.format12hr = false;
     EepromData.brightness = MAX_BRIGHTNESS_LEVEL_6932;
     EepromData.tune = 0;
@@ -1508,4 +1531,180 @@ void loadDefaults(void) {
     EepromData.colonMode = COLONMODE_FLASH;
     EepromData.amPmIndMode = AMPMIND_FLASH;
     EepromData.auto_show_date_interval_index = 0;
+}
+
+static void cmd_print_help(char *args, char *response, size_t response_len) {
+  const cli_command *current_command = &cli_commands[0];
+  int len;
+  while (current_command->cmd_name) {
+    len = snprintf(response, response_len, "%-15s: %s\n", current_command->cmd_name, current_command->cmd_help);
+    //decrement remaining bytes and move string pointer forward while building up response
+    if (len >= 0) {
+      if (len <= response_len) {
+        response_len -= len;
+        response += len;
+      } else {
+        //no more space left in response buffer
+        response_len = 0;
+        break;
+      }
+    }
+    current_command += 1;
+  }
+}
+
+static void cmd_print_version(char *args, char *response, size_t response_len) {
+   snprintf(response, response_len, "Version %d, built on %s", BUILD_NUMBER, BUILD_DATE);
+}
+static void cmd_dump_config(char *args, char *response, size_t response_len) {
+  makeSettingsString(response, response_len);
+}
+
+static void cmd_set_time(char *args, char *response, size_t response_len) {
+  unsigned int hour;
+  unsigned int minute;
+  unsigned int second;
+  int result;
+  bool valid;
+  result = sscanf(args, "%*s %u %u %u", &hour, &minute, &second);
+  if (result == 3 &&
+      hour < 24 &&
+      minute < 60 &&
+      second < 60) {
+        valid = true;
+      } else {
+        valid = false;
+      }
+  if (valid) {
+    snprintf(response, response_len, "Setting time to %02u:%02u:%02u", hour, minute, second);
+    rtc.setTime(hour, minute, second, 0, rtc.AM);
+  } else {
+    strncpy(response, "Invalid argument", response_len);
+  }
+}
+
+static void cmd_set_date(char *args, char *response, size_t response_len) {
+  unsigned int year;
+  unsigned int month;
+  unsigned int day;
+  int result;
+  bool valid;
+  result = sscanf(args, "%*s %u %u %u", &year, &month, &day);
+  if (result == 3 &&
+      year >= tmYearToCalendar(0) && year <= tmYearToCalendar(MAX_YEAR) &&
+      month > 0 && month <= 12 &&
+      day > 0 && day <= daysInMonth(year, month))
+      {
+        valid = true;
+      } else {
+        valid = false;
+      }
+  if (valid) {
+    snprintf(response, response_len, "Setting date to %u-%02u-%02u", year, month, day);
+    rtc.setDate(day, month, tmYearFromCalendar(year));
+  } else {
+    strncpy(response, "Invalid argument", response_len);
+  }
+}
+
+static void cmd_fact_reset(char *args, char *response, size_t response_len) {
+  loadDefaults();
+  writeEepromData();
+  NVIC_SystemReset();
+}
+static void cmd_handle_reboot(char *args, char *response, size_t response_len) {
+  clearDisplay();
+  NVIC_SystemReset();
+}
+static void cmd_handle_bootloader(char *args, char *response, size_t response_len) {
+  //blank display before leaving
+  clearDisplay();
+  //Set flag in backup RAM so that the HID bootloader stops rather than continuing to main application
+  setBackupRegister(LL_RTC_BKP_DR4, 0x424C);
+  NVIC_SystemReset();
+}
+
+static void cmd_set_brightness(char *args, char *response, size_t response_len) {
+  unsigned int brightness;
+  unsigned int auto_brightness;
+  int result;
+  result = sscanf(args, "%*s %u %u", &brightness, &auto_brightness);
+  if (result > 0 && result <= 2) {
+    if (brightness > MAX_BRIGHTNESS_LEVEL_6932) {
+      brightness = MAX_BRIGHTNESS_LEVEL_6932;
+    }
+    EepromData.brightness = brightness;
+    //only set auto-brightness if second argument is provided
+    if (result == 2) {
+      EepromData.autoBrightness = (auto_brightness == 0 ? 0 : 1);
+    }
+    if (!EepromData.autoBrightness) {
+      //force an update if auto-brightness is not enabled
+        setDisplayBrightness(EepromData.brightness);
+      }
+    snprintf(response, response_len, "Setting brightness to %u (auto = %u)", brightness, EepromData.autoBrightness);
+  } else {
+    strncpy(response, "Invalid argument", response_len);
+  }
+}
+
+static void cmd_set_alarm(char *args, char *response, size_t response_len) {
+  unsigned int hour;
+  unsigned int minute;
+  unsigned int enable;
+  int result;
+  bool valid;
+  result = sscanf(args, "%*s %u %u %u", &hour, &minute, &enable);
+  if ((result == 2 || result == 3) &&
+      hour < 24 &&
+      minute < 60) {
+        valid = true;
+      } else {
+        valid = false;
+      }
+  if (valid) {
+    EepromData.alarmHour = hour;
+    EepromData.alarmMinute = minute;
+    if (result == 3) {
+      EepromData.alarmEnable = enable == 0 ? 0 : 1;
+    }
+    snprintf(response, response_len, "Setting alarm to %02u:%02u (enabled = %u)", hour, minute, EepromData.alarmEnable);
+  } else {
+    strncpy(response, "Invalid argument", response_len);
+  }
+}
+
+static void cmd_save_settings(char *args, char *response, size_t response_len) {
+   writeEepromData();
+   strncpy(response, "Settings saved", response_len);
+}
+
+static void cmd_show_date(char *args, char *response, size_t response_len) {
+  switchToDateScreen();
+}
+
+static void cmd_get_date_time(char *args, char *response, size_t response_len) {
+  uint8_t day;
+  uint8_t month;
+  uint8_t year;
+  uint8_t hour;
+  uint8_t minute;
+  uint8_t second;
+  rtc.getDate(NULL, &day, &month, &year);
+  rtc.getTime(&hour, &minute, &second, NULL, NULL);
+  snprintf(response, response_len, "Current time is %02u:%02u:%02u\nCurrent date is %u-%02u-%02u\n",
+          (unsigned int)hour, (unsigned int)minute, (unsigned int)second,
+          (unsigned int)tmYearToCalendar(year), (unsigned int)month, (unsigned int)day);
+}
+
+static void cmd_set_time_format(char *args, char *response, size_t response_len) {
+  unsigned int time_format;
+  int result;
+  result = sscanf(args, "%*s %u", &time_format);
+  if (result == 1) {
+    EepromData.format12hr = time_format == 0 ? 0 : 1;
+    strncpy(response, "OK", response_len);
+  } else {
+    strncpy(response, "Invalid argument", response_len);
+  }
 }
