@@ -33,7 +33,7 @@ _estack = ORIGIN(RAM) + LENGTH(RAM);	/* end of "RAM" Ram type memory */
 _Min_Heap_Size = 0x200;	/* required amount of heap  */
 _Min_Stack_Size = 0x400;	/* required amount of stack */
 
-BOOTLOADER_SIZE = 0x2000;
+BOOTLOADER_SIZE = 0x800;
 EEPROM_SIZE = 0x400; /* 1K page at end of flash */
 
 /* Memories definition */
