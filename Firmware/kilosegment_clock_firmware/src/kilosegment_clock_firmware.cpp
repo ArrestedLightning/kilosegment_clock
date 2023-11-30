@@ -37,6 +37,7 @@
 #include <LTR303.h>
 #include <Temperature_LM75_Derived.h>
 #include <HardwareSerial.h>
+#include <IWatchdog.h>
 #include "Button.h"
 #include "Tunes.h"
 #include "Digits.h"
@@ -356,6 +357,7 @@ void setup()
 #ifdef WANT_CLI
   SerialUSB.begin();
 #endif
+  IWatchdog.begin(1000000);
 }
 
 void loop()
@@ -424,6 +426,7 @@ void loop()
       }
     }
   }
+  IWatchdog.reload();
 }
 
 #ifdef WANT_CLI
